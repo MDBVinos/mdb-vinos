@@ -1,0 +1,93 @@
+.form {
+  display: grid;
+  gap: 18px;
+  max-width: 920px;
+}
+
+.section {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 16px;
+  padding: 22px;
+}
+
+.section h2 {
+  font-size: 26px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.checkbox {
+  align-items: center;
+  display: flex;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  gap: 9px;
+}
+
+.checkbox input {
+  height: 18px;
+  width: 18px;
+}
+
+.fieldset {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin: 0;
+  padding: 16px;
+}
+
+.fieldset legend {
+  color: var(--muted);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 0 7px;
+}
+
+.checkGrid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.currentImage {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+}
+
+.currentImage img {
+  aspect-ratio: 1;
+  border-radius: 6px;
+  height: 72px;
+  object-fit: cover;
+  width: 72px;
+}
+
+.currentImage span {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 760px) {
+  .grid,
+  .checkGrid {
+    grid-template-columns: 1fr;
+  }
+}

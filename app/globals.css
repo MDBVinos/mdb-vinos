@@ -1,0 +1,130 @@
+:root {
+  --bg: #ede1d8;
+  --panel: #ffffff;
+  --panel-soft: #f7f1eb;
+  --text: #241134;
+  --muted: #6b625e;
+  --line: #d7c8bd;
+  --accent: #5d1417;
+  --accent-dark: #3f0d10;
+  --terracotta: #702c2c;
+  --olive: #7c8356;
+  --green: #29473a;
+  --danger: #702c2c;
+  --success: #29473a;
+  --shadow: 0 18px 48px rgba(36, 17, 52, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Cormorant Garamond", "Garamond", Georgia, serif;
+  font-size: 18px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.button,
+button {
+  align-items: center;
+  background: var(--accent);
+  border: 0;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  gap: 8px;
+  justify-content: center;
+  min-height: 40px;
+  padding: 10px 14px;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.button.secondary,
+button.secondary {
+  background: #f2e9e1;
+  color: var(--text);
+}
+
+.button.danger,
+button.danger {
+  background: var(--danger);
+}
+
+.field {
+  display: grid;
+  gap: 7px;
+}
+
+.field label {
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.field input,
+.field select,
+.field textarea {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text);
+  min-height: 42px;
+  padding: 10px 12px;
+  width: 100%;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--olive);
+  box-shadow: 0 0 0 3px rgba(124, 131, 86, 0.18);
+  outline: 0;
+}
+
+.field textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.alert {
+  border-radius: 6px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  padding: 12px 14px;
+}
+
+.alert.error {
+  background: rgba(112, 44, 44, 0.13);
+  color: var(--terracotta);
+}
+
+.alert.success {
+  background: rgba(41, 71, 58, 0.13);
+  color: var(--green);
+}

@@ -1,0 +1,28 @@
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 8px;
+  min-height: 140px;
+  padding: 22px;
+}
+
+.card:hover {
+  border-color: var(--olive);
+}
+
+.card span {
+  color: var(--accent);
+  font-size: 30px;
+  font-weight: 500;
+}
+
+.card p {
+  color: var(--muted);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+}

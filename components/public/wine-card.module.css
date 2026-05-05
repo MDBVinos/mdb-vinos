@@ -1,0 +1,70 @@
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  display: grid;
+  overflow: hidden;
+}
+
+.imageLink {
+  background: var(--panel-soft);
+  display: block;
+}
+
+.imageLink img,
+.placeholder {
+  aspect-ratio: 4 / 5;
+  display: grid;
+  height: auto;
+  object-fit: cover;
+  place-items: center;
+  width: 100%;
+}
+
+.placeholder {
+  color: var(--accent);
+  font-family: "Garamond", "Cormorant Garamond", Georgia, serif;
+  font-size: 34px;
+}
+
+.body {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+}
+
+.note {
+  color: var(--olive);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.body h3 {
+  font-size: 28px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.description {
+  color: var(--muted);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.footer {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.footer strong {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+}

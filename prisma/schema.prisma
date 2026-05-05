@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Wine {
+  id              String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name            String
+  description     String?
+  priceUnit       Decimal?           @map("price_unit") @db.Decimal(10, 2)
+  priceBox        Decimal?           @map("price_box") @db.Decimal(10, 2)
+  imageUrl        String?            @map("image_url")
+  active          Boolean            @default(true)
+  createdAt       DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime           @updatedAt @map("updated_at") @db.Timestamptz(6)
+  wineIntensities WineIntensity[]
+  wineMoments     WineMoment[]
+  wineTypes       WineTypeRelation[]
+
+  @@index([active])
+  @@index([name])
+  @@map("wines")
+}
+
+model Moment {
+  id          String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String       @unique
+  wineMoments WineMoment[]
+
+  @@map("moments")
+}
+
+model WineType {
+  id        String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String             @unique
+  wineTypes WineTypeRelation[]
+
+  @@map("wine_types")
+}
+
+model Intensity {
+  id              String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name            String          @unique
+  wineIntensities WineIntensity[]
+
+  @@map("intensities")
+}
+
+model WineMoment {
+  wineId   String @map("wine_id") @db.Uuid
+  momentId String @map("moment_id") @db.Uuid
+  moment   Moment @relation(fields: [momentId], references: [id], onDelete: Cascade)
+  wine     Wine   @relation(fields: [wineId], references: [id], onDelete: Cascade)
+
+  @@id([wineId, momentId])
+  @@index([momentId])
+  @@map("wine_moments")
+}
+
+model WineTypeRelation {
+  wineId   String   @map("wine_id") @db.Uuid
+  typeId   String   @map("type_id") @db.Uuid
+  wine     Wine     @relation(fields: [wineId], references: [id], onDelete: Cascade)
+  wineType WineType @relation(fields: [typeId], references: [id], onDelete: Cascade)
+
+  @@id([wineId, typeId])
+  @@index([typeId])
+  @@map("wine_types_relation")
+}
+
+model WineIntensity {
+  wineId      String    @map("wine_id") @db.Uuid
+  intensityId String    @map("intensity_id") @db.Uuid
+  intensity   Intensity @relation(fields: [intensityId], references: [id], onDelete: Cascade)
+  wine        Wine      @relation(fields: [wineId], references: [id], onDelete: Cascade)
+
+  @@id([wineId, intensityId])
+  @@index([intensityId])
+  @@map("wine_intensity")
+}
