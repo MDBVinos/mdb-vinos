@@ -8,8 +8,19 @@
 
 .table {
   border-collapse: collapse;
-  min-width: 720px;
+  min-width: 880px;
+  table-layout: auto;
   width: 100%;
+}
+
+.nameCol {
+  max-width: 200px;
+  width: 18%;
+}
+
+.actionsCol {
+  white-space: nowrap;
+  width: 1%;
 }
 
 .table th,
@@ -32,9 +43,36 @@
 }
 
 .actions {
+  align-items: center;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 8px;
+  justify-content: flex-end;
+}
+
+.toggleButton {
+  min-width: 112px;
+}
+
+.iconButton {
+  align-items: center;
+  display: inline-flex;
+  height: 40px;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0;
+  width: 40px;
+}
+
+.iconButton svg {
+  display: block;
+  height: 18px;
+  width: 18px;
+}
+
+.units {
+  color: var(--muted);
+  font-size: 13px;
 }
 
 .active,

@@ -19,6 +19,7 @@
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
     "dotenv": "^17.4.2",
+    "exceljs": "^4.4.0",
     "next": "latest",
     "pg": "^8.20.0",
     "react": "latest",

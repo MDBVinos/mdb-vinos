@@ -1,0 +1,54 @@
+.backdrop {
+  align-items: center;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  position: fixed;
+  z-index: 50;
+}
+
+.dialog {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  max-width: 420px;
+  padding: 28px;
+  width: 90%;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 10px;
+}
+
+.copy {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0 0 24px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.trigger {
+  align-items: center;
+  display: inline-flex;
+  height: 40px;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0;
+  width: 40px;
+}
+
+.trigger svg {
+  display: block;
+  height: 18px;
+  width: 18px;
+}

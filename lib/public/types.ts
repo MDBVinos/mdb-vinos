@@ -1,10 +1,13 @@
 export type PublicWine = {
   id: string;
   name: string;
+  winery: string | null;
   description: string | null;
   price_unit: number | null;
   price_box: number | null;
+  units_per_box: number | null;
   image_url: string | null;
+  featured: boolean;
   active: boolean;
 };
 

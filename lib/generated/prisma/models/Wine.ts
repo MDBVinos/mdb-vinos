@@ -29,20 +29,25 @@ export type AggregateWine = {
 export type WineAvgAggregateOutputType = {
   priceUnit: runtime.Decimal | null
   priceBox: runtime.Decimal | null
+  unitsPerBox: number | null
 }
 
 export type WineSumAggregateOutputType = {
   priceUnit: runtime.Decimal | null
   priceBox: runtime.Decimal | null
+  unitsPerBox: number | null
 }
 
 export type WineMinAggregateOutputType = {
   id: string | null
   name: string | null
+  winery: string | null
   description: string | null
   priceUnit: runtime.Decimal | null
   priceBox: runtime.Decimal | null
+  unitsPerBox: number | null
   imageUrl: string | null
+  featured: boolean | null
   active: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -51,10 +56,13 @@ export type WineMinAggregateOutputType = {
 export type WineMaxAggregateOutputType = {
   id: string | null
   name: string | null
+  winery: string | null
   description: string | null
   priceUnit: runtime.Decimal | null
   priceBox: runtime.Decimal | null
+  unitsPerBox: number | null
   imageUrl: string | null
+  featured: boolean | null
   active: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -63,10 +71,13 @@ export type WineMaxAggregateOutputType = {
 export type WineCountAggregateOutputType = {
   id: number
   name: number
+  winery: number
   description: number
   priceUnit: number
   priceBox: number
+  unitsPerBox: number
   imageUrl: number
+  featured: number
   active: number
   createdAt: number
   updatedAt: number
@@ -77,20 +88,25 @@ export type WineCountAggregateOutputType = {
 export type WineAvgAggregateInputType = {
   priceUnit?: true
   priceBox?: true
+  unitsPerBox?: true
 }
 
 export type WineSumAggregateInputType = {
   priceUnit?: true
   priceBox?: true
+  unitsPerBox?: true
 }
 
 export type WineMinAggregateInputType = {
   id?: true
   name?: true
+  winery?: true
   description?: true
   priceUnit?: true
   priceBox?: true
+  unitsPerBox?: true
   imageUrl?: true
+  featured?: true
   active?: true
   createdAt?: true
   updatedAt?: true
@@ -99,10 +115,13 @@ export type WineMinAggregateInputType = {
 export type WineMaxAggregateInputType = {
   id?: true
   name?: true
+  winery?: true
   description?: true
   priceUnit?: true
   priceBox?: true
+  unitsPerBox?: true
   imageUrl?: true
+  featured?: true
   active?: true
   createdAt?: true
   updatedAt?: true
@@ -111,10 +130,13 @@ export type WineMaxAggregateInputType = {
 export type WineCountAggregateInputType = {
   id?: true
   name?: true
+  winery?: true
   description?: true
   priceUnit?: true
   priceBox?: true
+  unitsPerBox?: true
   imageUrl?: true
+  featured?: true
   active?: true
   createdAt?: true
   updatedAt?: true
@@ -210,10 +232,13 @@ export type WineGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type WineGroupByOutputType = {
   id: string
   name: string
+  winery: string | null
   description: string | null
   priceUnit: runtime.Decimal | null
   priceBox: runtime.Decimal | null
+  unitsPerBox: number | null
   imageUrl: string | null
+  featured: boolean
   active: boolean
   createdAt: Date
   updatedAt: Date
@@ -245,10 +270,13 @@ export type WineWhereInput = {
   NOT?: Prisma.WineWhereInput | Prisma.WineWhereInput[]
   id?: Prisma.UuidFilter<"Wine"> | string
   name?: Prisma.StringFilter<"Wine"> | string
+  winery?: Prisma.StringNullableFilter<"Wine"> | string | null
   description?: Prisma.StringNullableFilter<"Wine"> | string | null
   priceUnit?: Prisma.DecimalNullableFilter<"Wine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: Prisma.DecimalNullableFilter<"Wine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: Prisma.IntNullableFilter<"Wine"> | number | null
   imageUrl?: Prisma.StringNullableFilter<"Wine"> | string | null
+  featured?: Prisma.BoolFilter<"Wine"> | boolean
   active?: Prisma.BoolFilter<"Wine"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Wine"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Wine"> | Date | string
@@ -260,10 +288,13 @@ export type WineWhereInput = {
 export type WineOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  winery?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   priceUnit?: Prisma.SortOrderInput | Prisma.SortOrder
   priceBox?: Prisma.SortOrderInput | Prisma.SortOrder
+  unitsPerBox?: Prisma.SortOrderInput | Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  featured?: Prisma.SortOrder
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -278,10 +309,13 @@ export type WineWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.WineWhereInput[]
   NOT?: Prisma.WineWhereInput | Prisma.WineWhereInput[]
   name?: Prisma.StringFilter<"Wine"> | string
+  winery?: Prisma.StringNullableFilter<"Wine"> | string | null
   description?: Prisma.StringNullableFilter<"Wine"> | string | null
   priceUnit?: Prisma.DecimalNullableFilter<"Wine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: Prisma.DecimalNullableFilter<"Wine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: Prisma.IntNullableFilter<"Wine"> | number | null
   imageUrl?: Prisma.StringNullableFilter<"Wine"> | string | null
+  featured?: Prisma.BoolFilter<"Wine"> | boolean
   active?: Prisma.BoolFilter<"Wine"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Wine"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Wine"> | Date | string
@@ -293,10 +327,13 @@ export type WineWhereUniqueInput = Prisma.AtLeast<{
 export type WineOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  winery?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   priceUnit?: Prisma.SortOrderInput | Prisma.SortOrder
   priceBox?: Prisma.SortOrderInput | Prisma.SortOrder
+  unitsPerBox?: Prisma.SortOrderInput | Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  featured?: Prisma.SortOrder
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -313,10 +350,13 @@ export type WineScalarWhereWithAggregatesInput = {
   NOT?: Prisma.WineScalarWhereWithAggregatesInput | Prisma.WineScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"Wine"> | string
   name?: Prisma.StringWithAggregatesFilter<"Wine"> | string
+  winery?: Prisma.StringNullableWithAggregatesFilter<"Wine"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"Wine"> | string | null
   priceUnit?: Prisma.DecimalNullableWithAggregatesFilter<"Wine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: Prisma.DecimalNullableWithAggregatesFilter<"Wine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: Prisma.IntNullableWithAggregatesFilter<"Wine"> | number | null
   imageUrl?: Prisma.StringNullableWithAggregatesFilter<"Wine"> | string | null
+  featured?: Prisma.BoolWithAggregatesFilter<"Wine"> | boolean
   active?: Prisma.BoolWithAggregatesFilter<"Wine"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Wine"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Wine"> | Date | string
@@ -325,10 +365,13 @@ export type WineScalarWhereWithAggregatesInput = {
 export type WineCreateInput = {
   id?: string
   name: string
+  winery?: string | null
   description?: string | null
   priceUnit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: number | null
   imageUrl?: string | null
+  featured?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -340,10 +383,13 @@ export type WineCreateInput = {
 export type WineUncheckedCreateInput = {
   id?: string
   name: string
+  winery?: string | null
   description?: string | null
   priceUnit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: number | null
   imageUrl?: string | null
+  featured?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -355,10 +401,13 @@ export type WineUncheckedCreateInput = {
 export type WineUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  winery?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -370,10 +419,13 @@ export type WineUpdateInput = {
 export type WineUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  winery?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -385,10 +437,13 @@ export type WineUncheckedUpdateInput = {
 export type WineCreateManyInput = {
   id?: string
   name: string
+  winery?: string | null
   description?: string | null
   priceUnit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: number | null
   imageUrl?: string | null
+  featured?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -397,10 +452,13 @@ export type WineCreateManyInput = {
 export type WineUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  winery?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -409,10 +467,13 @@ export type WineUpdateManyMutationInput = {
 export type WineUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  winery?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -421,10 +482,13 @@ export type WineUncheckedUpdateManyInput = {
 export type WineCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  winery?: Prisma.SortOrder
   description?: Prisma.SortOrder
   priceUnit?: Prisma.SortOrder
   priceBox?: Prisma.SortOrder
+  unitsPerBox?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
+  featured?: Prisma.SortOrder
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -433,15 +497,19 @@ export type WineCountOrderByAggregateInput = {
 export type WineAvgOrderByAggregateInput = {
   priceUnit?: Prisma.SortOrder
   priceBox?: Prisma.SortOrder
+  unitsPerBox?: Prisma.SortOrder
 }
 
 export type WineMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  winery?: Prisma.SortOrder
   description?: Prisma.SortOrder
   priceUnit?: Prisma.SortOrder
   priceBox?: Prisma.SortOrder
+  unitsPerBox?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
+  featured?: Prisma.SortOrder
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -450,10 +518,13 @@ export type WineMaxOrderByAggregateInput = {
 export type WineMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  winery?: Prisma.SortOrder
   description?: Prisma.SortOrder
   priceUnit?: Prisma.SortOrder
   priceBox?: Prisma.SortOrder
+  unitsPerBox?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
+  featured?: Prisma.SortOrder
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -462,6 +533,7 @@ export type WineMinOrderByAggregateInput = {
 export type WineSumOrderByAggregateInput = {
   priceUnit?: Prisma.SortOrder
   priceBox?: Prisma.SortOrder
+  unitsPerBox?: Prisma.SortOrder
 }
 
 export type WineScalarRelationFilter = {
@@ -483,6 +555,14 @@ export type NullableDecimalFieldUpdateOperationsInput = {
   decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
   multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
   divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type BoolFieldUpdateOperationsInput = {
@@ -538,10 +618,13 @@ export type WineUpdateOneRequiredWithoutWineIntensitiesNestedInput = {
 export type WineCreateWithoutWineMomentsInput = {
   id?: string
   name: string
+  winery?: string | null
   description?: string | null
   priceUnit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: number | null
   imageUrl?: string | null
+  featured?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -552,10 +635,13 @@ export type WineCreateWithoutWineMomentsInput = {
 export type WineUncheckedCreateWithoutWineMomentsInput = {
   id?: string
   name: string
+  winery?: string | null
   description?: string | null
   priceUnit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: number | null
   imageUrl?: string | null
+  featured?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -582,10 +668,13 @@ export type WineUpdateToOneWithWhereWithoutWineMomentsInput = {
 export type WineUpdateWithoutWineMomentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  winery?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -596,10 +685,13 @@ export type WineUpdateWithoutWineMomentsInput = {
 export type WineUncheckedUpdateWithoutWineMomentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  winery?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -610,10 +702,13 @@ export type WineUncheckedUpdateWithoutWineMomentsInput = {
 export type WineCreateWithoutWineTypesInput = {
   id?: string
   name: string
+  winery?: string | null
   description?: string | null
   priceUnit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: number | null
   imageUrl?: string | null
+  featured?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -624,10 +719,13 @@ export type WineCreateWithoutWineTypesInput = {
 export type WineUncheckedCreateWithoutWineTypesInput = {
   id?: string
   name: string
+  winery?: string | null
   description?: string | null
   priceUnit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: number | null
   imageUrl?: string | null
+  featured?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -654,10 +752,13 @@ export type WineUpdateToOneWithWhereWithoutWineTypesInput = {
 export type WineUpdateWithoutWineTypesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  winery?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -668,10 +769,13 @@ export type WineUpdateWithoutWineTypesInput = {
 export type WineUncheckedUpdateWithoutWineTypesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  winery?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -682,10 +786,13 @@ export type WineUncheckedUpdateWithoutWineTypesInput = {
 export type WineCreateWithoutWineIntensitiesInput = {
   id?: string
   name: string
+  winery?: string | null
   description?: string | null
   priceUnit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: number | null
   imageUrl?: string | null
+  featured?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -696,10 +803,13 @@ export type WineCreateWithoutWineIntensitiesInput = {
 export type WineUncheckedCreateWithoutWineIntensitiesInput = {
   id?: string
   name: string
+  winery?: string | null
   description?: string | null
   priceUnit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: number | null
   imageUrl?: string | null
+  featured?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -726,10 +836,13 @@ export type WineUpdateToOneWithWhereWithoutWineIntensitiesInput = {
 export type WineUpdateWithoutWineIntensitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  winery?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -740,10 +853,13 @@ export type WineUpdateWithoutWineIntensitiesInput = {
 export type WineUncheckedUpdateWithoutWineIntensitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  winery?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -803,10 +919,13 @@ export type WineCountOutputTypeCountWineTypesArgs<ExtArgs extends runtime.Types.
 export type WineSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  winery?: boolean
   description?: boolean
   priceUnit?: boolean
   priceBox?: boolean
+  unitsPerBox?: boolean
   imageUrl?: boolean
+  featured?: boolean
   active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -819,10 +938,13 @@ export type WineSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type WineSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  winery?: boolean
   description?: boolean
   priceUnit?: boolean
   priceBox?: boolean
+  unitsPerBox?: boolean
   imageUrl?: boolean
+  featured?: boolean
   active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -831,10 +953,13 @@ export type WineSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type WineSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  winery?: boolean
   description?: boolean
   priceUnit?: boolean
   priceBox?: boolean
+  unitsPerBox?: boolean
   imageUrl?: boolean
+  featured?: boolean
   active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -843,16 +968,19 @@ export type WineSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type WineSelectScalar = {
   id?: boolean
   name?: boolean
+  winery?: boolean
   description?: boolean
   priceUnit?: boolean
   priceBox?: boolean
+  unitsPerBox?: boolean
   imageUrl?: boolean
+  featured?: boolean
   active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type WineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "priceUnit" | "priceBox" | "imageUrl" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["wine"]>
+export type WineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "winery" | "description" | "priceUnit" | "priceBox" | "unitsPerBox" | "imageUrl" | "featured" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["wine"]>
 export type WineInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   wineIntensities?: boolean | Prisma.Wine$wineIntensitiesArgs<ExtArgs>
   wineMoments?: boolean | Prisma.Wine$wineMomentsArgs<ExtArgs>
@@ -872,10 +1000,13 @@ export type $WinePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
+    winery: string | null
     description: string | null
     priceUnit: runtime.Decimal | null
     priceBox: runtime.Decimal | null
+    unitsPerBox: number | null
     imageUrl: string | null
+    featured: boolean
     active: boolean
     createdAt: Date
     updatedAt: Date
@@ -1307,10 +1438,13 @@ export interface Prisma__WineClient<T, Null = never, ExtArgs extends runtime.Typ
 export interface WineFieldRefs {
   readonly id: Prisma.FieldRef<"Wine", 'String'>
   readonly name: Prisma.FieldRef<"Wine", 'String'>
+  readonly winery: Prisma.FieldRef<"Wine", 'String'>
   readonly description: Prisma.FieldRef<"Wine", 'String'>
   readonly priceUnit: Prisma.FieldRef<"Wine", 'Decimal'>
   readonly priceBox: Prisma.FieldRef<"Wine", 'Decimal'>
+  readonly unitsPerBox: Prisma.FieldRef<"Wine", 'Int'>
   readonly imageUrl: Prisma.FieldRef<"Wine", 'String'>
+  readonly featured: Prisma.FieldRef<"Wine", 'Boolean'>
   readonly active: Prisma.FieldRef<"Wine", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Wine", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Wine", 'DateTime'>

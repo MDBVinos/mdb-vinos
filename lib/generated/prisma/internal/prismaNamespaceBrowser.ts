@@ -79,10 +79,13 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const WineScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  winery: 'winery',
   description: 'description',
   priceUnit: 'priceUnit',
   priceBox: 'priceBox',
+  unitsPerBox: 'unitsPerBox',
   imageUrl: 'imageUrl',
+  featured: 'featured',
   active: 'active',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

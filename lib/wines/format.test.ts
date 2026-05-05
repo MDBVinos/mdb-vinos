@@ -14,20 +14,26 @@ test("toWineView exposes the existing snake_case app contract", () => {
     toWineView({
       active: true,
       description: "Reserva",
+      featured: true,
       id: "wine-id",
       imageUrl: "https://example.com/wine.jpg",
       name: "Malbec",
       priceBox: { toNumber: () => 60000 },
       priceUnit: { toNumber: () => 10000 },
+      unitsPerBox: 6,
+      winery: "Pascual Toso",
     }),
     {
       active: true,
       description: "Reserva",
+      featured: true,
       id: "wine-id",
       image_url: "https://example.com/wine.jpg",
       name: "Malbec",
       price_box: 60000,
       price_unit: 10000,
+      units_per_box: 6,
+      winery: "Pascual Toso",
     },
   );
 });

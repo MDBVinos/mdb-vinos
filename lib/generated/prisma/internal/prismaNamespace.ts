@@ -970,10 +970,13 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const WineScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  winery: 'winery',
   description: 'description',
   priceUnit: 'priceUnit',
   priceBox: 'priceBox',
+  unitsPerBox: 'unitsPerBox',
   imageUrl: 'imageUrl',
+  featured: 'featured',
   active: 'active',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1089,6 +1092,20 @@ export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMo
 
 
 /**
+ * Reference to a field of type 'Int'
+ */
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+/**
+ * Reference to a field of type 'Int[]'
+ */
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
@@ -1110,16 +1127,16 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
- * Reference to a field of type 'Int'
+ * Reference to a field of type 'Float'
  */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
     
 
 
 /**
- * Reference to a field of type 'Int[]'
+ * Reference to a field of type 'Float[]'
  */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 /**

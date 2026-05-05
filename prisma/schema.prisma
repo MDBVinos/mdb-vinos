@@ -10,10 +10,13 @@ datasource db {
 model Wine {
   id              String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name            String
+  winery          String?
   description     String?
   priceUnit       Decimal?           @map("price_unit") @db.Decimal(10, 2)
   priceBox        Decimal?           @map("price_box") @db.Decimal(10, 2)
+  unitsPerBox     Int?               @map("units_per_box")
   imageUrl        String?            @map("image_url")
+  featured        Boolean            @default(false)
   active          Boolean            @default(true)
   createdAt       DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt       DateTime           @updatedAt @map("updated_at") @db.Timestamptz(6)

@@ -35,6 +35,11 @@ export function WineForm({ action, mode, options, initialData }: WineFormProps) 
           </div>
 
           <div className="field">
+            <label htmlFor="winery">Bodega</label>
+            <input id="winery" name="winery" defaultValue={initialData?.winery ?? ""} />
+          </div>
+
+          <div className="field">
             <label htmlFor="price_unit">Precio unidad</label>
             <input
               id="price_unit"
@@ -57,6 +62,23 @@ export function WineForm({ action, mode, options, initialData }: WineFormProps) 
               defaultValue={initialData?.price_box ?? ""}
             />
           </div>
+
+          <div className="field">
+            <label htmlFor="units_per_box">Unidades por caja</label>
+            <input
+              id="units_per_box"
+              name="units_per_box"
+              type="number"
+              min="0"
+              step="1"
+              defaultValue={initialData?.units_per_box ?? ""}
+            />
+          </div>
+
+          <label className={styles.checkbox}>
+            <input name="featured" type="checkbox" defaultChecked={initialData?.featured ?? false} />
+            Destacado
+          </label>
 
           <label className={styles.checkbox}>
             <input name="active" type="checkbox" defaultChecked={initialData?.active ?? true} />
