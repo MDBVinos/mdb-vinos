@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "test": "tsx --test lib/**/*.test.ts",
     "prisma:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy",
@@ -14,6 +14,7 @@
     "db:check": "tsx prisma/check-connection.ts"
   },
   "dependencies": {
+    "@next/env": "^16.2.4",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "@supabase/ssr": "latest",

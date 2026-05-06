@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { type ChangeEvent, type DragEvent, useActionState, useEffect, useRef, useState } from "react";
 import type { ActionState, WineFormInitialData, WineFormOptions } from "@/lib/admin/types";
 import { SubmitButton } from "./submit-button";
 import styles from "./wine-form.module.css";
@@ -14,6 +14,64 @@ type WineFormProps = {
 
 export function WineForm({ action, mode, options, initialData }: WineFormProps) {
   const [state, formAction] = useActionState(action, {});
+  const [selectedImage, setSelectedImage] = useState<{ name: string; previewUrl: string; size: number } | null>(null);
+  const [isDraggingImage, setIsDraggingImage] = useState(false);
+  const imageInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    return () => {
+      if (selectedImage?.previewUrl) {
+        URL.revokeObjectURL(selectedImage.previewUrl);
+      }
+    };
+  }, [selectedImage]);
+
+  function setImageFile(file: File | null) {
+    if (selectedImage?.previewUrl) {
+      URL.revokeObjectURL(selectedImage.previewUrl);
+    }
+
+    if (!file || !file.type.startsWith("image/")) {
+      if (imageInputRef.current) {
+        imageInputRef.current.value = "";
+      }
+      setSelectedImage(null);
+      return;
+    }
+
+    setSelectedImage({
+      name: file.name,
+      previewUrl: URL.createObjectURL(file),
+      size: file.size,
+    });
+  }
+
+  function onImageChange(event: ChangeEvent<HTMLInputElement>) {
+    setImageFile(event.currentTarget.files?.[0] ?? null);
+  }
+
+  function onImageDrop(event: DragEvent<HTMLLabelElement>) {
+    event.preventDefault();
+    setIsDraggingImage(false);
+
+    const file = Array.from(event.dataTransfer.files).find((item) => item.type.startsWith("image/")) ?? null;
+    if (!file || !imageInputRef.current || typeof DataTransfer === "undefined") {
+      setImageFile(file);
+      return;
+    }
+
+    const transfer = new DataTransfer();
+    transfer.items.add(file);
+    imageInputRef.current.files = transfer.files;
+    setImageFile(file);
+  }
+
+  function clearSelectedImage() {
+    if (imageInputRef.current) {
+      imageInputRef.current.value = "";
+    }
+    setImageFile(null);
+  }
 
   return (
     <form action={formAction} className={styles.form}>
@@ -94,16 +152,48 @@ export function WineForm({ action, mode, options, initialData }: WineFormProps) 
 
       <section className={styles.section}>
         <h2>Imagen</h2>
-        {initialData?.image_url ? (
+        {selectedImage ? (
+          <div className={styles.currentImage}>
+            <img src={selectedImage.previewUrl} alt="" />
+            <span>
+              {selectedImage.name} · {Math.ceil(selectedImage.size / 1024)} KB
+            </span>
+          </div>
+        ) : initialData?.image_url ? (
           <div className={styles.currentImage}>
             <img src={initialData.image_url} alt={initialData.name} />
             <span>Imagen actual</span>
           </div>
         ) : null}
-        <div className="field">
-          <label htmlFor="image">Subir imagen</label>
-          <input id="image" name="image" type="file" accept="image/*" />
-        </div>
+
+        <label
+          className={`${styles.dropzone} ${isDraggingImage ? styles.dropzoneActive : ""}`.trim()}
+          htmlFor="image"
+          onDragEnter={() => setIsDraggingImage(true)}
+          onDragLeave={() => setIsDraggingImage(false)}
+          onDragOver={(event) => event.preventDefault()}
+          onDrop={onImageDrop}
+        >
+          <span className={styles.dropTitle}>Soltar imagen</span>
+          <span className={styles.dropCopy}>o seleccionar archivo</span>
+          <input
+            accept="image/*"
+            className={styles.fileInput}
+            id="image"
+            name="image"
+            onChange={onImageChange}
+            ref={imageInputRef}
+            type="file"
+          />
+        </label>
+
+        {selectedImage ? (
+          <div className={styles.imageActions}>
+            <button className="secondary" onClick={clearSelectedImage} type="button">
+              Quitar imagen
+            </button>
+          </div>
+        ) : null}
       </section>
 
       <section className={styles.section}>
@@ -120,19 +210,24 @@ export function WineForm({ action, mode, options, initialData }: WineFormProps) 
               ))}
             </select>
           </div>
-
-          <div className="field">
-            <label htmlFor="intensity_id">Intensidad</label>
-            <select id="intensity_id" name="intensity_id" defaultValue={initialData?.intensityId ?? ""}>
-              <option value="">Sin intensidad</option>
-              {options.intensities.map((intensity) => (
-                <option key={intensity.id} value={intensity.id}>
-                  {intensity.name}
-                </option>
-              ))}
-            </select>
-          </div>
         </div>
+
+        <fieldset className={styles.fieldset}>
+          <legend>Perfiles</legend>
+          <div className={styles.checkGrid}>
+            {options.intensities.map((intensity) => (
+              <label key={intensity.id} className={styles.checkbox}>
+                <input
+                  name="intensities"
+                  type="checkbox"
+                  value={intensity.id}
+                  defaultChecked={initialData?.intensityIds.includes(intensity.id) ?? false}
+                />
+                {intensity.name}
+              </label>
+            ))}
+          </div>
+        </fieldset>
 
         <fieldset className={styles.fieldset}>
           <legend>Momentos</legend>

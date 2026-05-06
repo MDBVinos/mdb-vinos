@@ -22,12 +22,9 @@ export function SearchBar() {
     const value = query.trim();
 
     if (value.length < 2) {
-      setResults([]);
-      setLoading(false);
       return;
     }
 
-    setLoading(true);
     const timer = window.setTimeout(async () => {
       lastQuery.current = value;
       try {
@@ -57,8 +54,17 @@ export function SearchBar() {
         aria-label="Buscar vino"
         onBlur={() => window.setTimeout(() => setTouched(false), 160)}
         onChange={(event) => {
-          setQuery(event.target.value);
+          const nextQuery = event.target.value;
+          setQuery(nextQuery);
           setTouched(true);
+
+          if (nextQuery.trim().length < 2) {
+            lastQuery.current = "";
+            setResults([]);
+            setLoading(false);
+          } else {
+            setLoading(true);
+          }
         }}
         onFocus={() => setTouched(true)}
         placeholder="Buscá por nombre: malbec, cabernet..."

@@ -33,9 +33,9 @@ export type WineFormOptions = {
 };
 
 export type WineFormInitialData = Wine & {
+  intensityIds: string[];
   momentIds: string[];
   wineTypeId: string;
-  intensityId: string;
 };
 
 export type ActionState = {

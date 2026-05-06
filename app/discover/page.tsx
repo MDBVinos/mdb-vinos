@@ -26,6 +26,7 @@ export default async function DiscoverPage({ searchParams }: DiscoverPageProps) 
           <RecommendationStepper
             initialMoment={moment}
             intensities={options.intensities}
+            moments={options.moments}
             wineTypes={options.wineTypes}
           />
         </section>

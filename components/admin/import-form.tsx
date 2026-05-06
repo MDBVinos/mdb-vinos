@@ -1,24 +1,108 @@
 "use client";
 
-import { useActionState } from "react";
+import { type ChangeEvent, type DragEvent, useActionState, useMemo, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import {
   confirmWineImportAction,
   previewWineImportAction,
+  uploadWineImagesAction,
   type WineImportActionState,
+  type WineImageImportActionState,
 } from "@/lib/admin/actions";
+import type { WineImageImportOption } from "@/lib/admin/image-import";
 import { SubmitButton } from "./submit-button";
 import styles from "./import-form.module.css";
 
 const initialState: WineImportActionState = {};
+const imageInitialState: WineImageImportActionState = {};
 
-export function ImportForm() {
+type ImportFormProps = {
+  imageWines: WineImageImportOption[];
+};
+
+type ImageRow = {
+  file: File;
+  id: string;
+  previewUrl: string;
+  replaceExisting: boolean;
+  wineId: string;
+};
+
+export function ImportForm({ imageWines }: ImportFormProps) {
   const [previewState, previewAction] = useActionState(previewWineImportAction, initialState);
   const [confirmState, confirmAction] = useActionState(confirmWineImportAction, initialState);
+  const [imageState, imageAction] = useActionState(uploadWineImagesAction, imageInitialState);
+  const [imageRows, setImageRows] = useState<ImageRow[]>([]);
+  const [isDragging, setIsDragging] = useState(false);
+  const imageInputRef = useRef<HTMLInputElement>(null);
+  const wineById = useMemo(() => new Map(imageWines.map((wine) => [wine.id, wine])), [imageWines]);
   const error = confirmState.error ?? previewState.error;
   const preview = previewState.preview;
   const canImport = Boolean(previewState.payload && preview && preview.summary.errors === 0);
   const validRowsToImport = preview ? preview.summary.creates + preview.summary.updates : 0;
+
+  function syncImageInput(nextRows: ImageRow[]) {
+    setImageRows(nextRows);
+
+    if (!imageInputRef.current || typeof DataTransfer === "undefined") {
+      return;
+    }
+
+    const transfer = new DataTransfer();
+    nextRows.forEach((row) => transfer.items.add(row.file));
+    imageInputRef.current.files = transfer.files;
+  }
+
+  function addImageFiles(files: FileList | null) {
+    if (!files || files.length === 0) {
+      return;
+    }
+
+    const nextRows = Array.from(files).map((file, index) => ({
+      file,
+      id:
+        typeof crypto !== "undefined" && "randomUUID" in crypto
+          ? crypto.randomUUID()
+          : `${file.name}-${file.size}-${file.lastModified}-${index}`,
+      previewUrl: file.type.startsWith("image/") ? URL.createObjectURL(file) : "",
+      replaceExisting: false,
+      wineId: "",
+    }));
+
+    syncImageInput([...imageRows, ...nextRows]);
+  }
+
+  function onImageInputChange(event: ChangeEvent<HTMLInputElement>) {
+    addImageFiles(event.currentTarget.files);
+  }
+
+  function onDrop(event: DragEvent<HTMLLabelElement>) {
+    event.preventDefault();
+    setIsDragging(false);
+    addImageFiles(event.dataTransfer.files);
+  }
+
+  function removeImageRow(id: string) {
+    const row = imageRows.find((item) => item.id === id);
+    if (row?.previewUrl) {
+      URL.revokeObjectURL(row.previewUrl);
+    }
+    syncImageInput(imageRows.filter((item) => item.id !== id));
+  }
+
+  function updateImageRow(id: string, patch: Partial<ImageRow>) {
+    syncImageInput(
+      imageRows.map((row) => {
+        if (row.id !== id) {
+          return row;
+        }
+
+        const nextRow = { ...row, ...patch };
+        const selectedWine = wineById.get(nextRow.wineId);
+        return selectedWine?.imageUrl ? nextRow : { ...nextRow, replaceExisting: false };
+      }),
+    );
+  }
 
   return (
     <div className={styles.wrap}>
@@ -50,6 +134,8 @@ export function ImportForm() {
             <SummaryItem label="Filas" value={preview.summary.rows} />
             <SummaryItem label="Nuevos" value={preview.summary.creates} />
             <SummaryItem label="Actualizados" value={preview.summary.updates} />
+            <SummaryItem label="Omitidos" tone={preview.summary.skips > 0 ? "warning" : "default"} value={preview.summary.skips} />
+            <SummaryItem label="Avisos" tone={preview.summary.warnings > 0 ? "warning" : "default"} value={preview.summary.warnings} />
             <SummaryItem
               label="Errores"
               tone={preview.summary.errors > 0 ? "error" : "default"}
@@ -68,6 +154,8 @@ export function ImportForm() {
                   <th>Tipo</th>
                   <th>Perfil</th>
                   <th>Momentos</th>
+                  <th>Activo</th>
+                  <th>Descripcion</th>
                   <th>Estado</th>
                 </tr>
               </thead>
@@ -75,11 +163,19 @@ export function ImportForm() {
                 {preview.rows.map((row) => (
                   <tr key={row.line}>
                     <td>{row.line}</td>
-                    <td>{row.action === "create" ? "Crear" : "Actualizar"}</td>
+                    <td>
+                      {row.action === "create" ? "Crear" : row.action === "update" ? "Actualizar" : "Omitir"}
+                    </td>
                     <td>{row.name || "-"}</td>
                     <td>{row.winery ?? "-"}</td>
                     <td>{row.typeName ?? (row.action === "update" ? "Preserva" : "-")}</td>
-                    <td>{row.intensityName ?? (row.action === "update" ? "Preserva" : "-")}</td>
+                    <td>
+                      {row.intensityNames.length > 0
+                        ? row.intensityNames.join(", ")
+                        : row.action === "update"
+                          ? "Preserva"
+                          : "-"}
+                    </td>
                     <td>
                       {row.momentNames.length > 0
                         ? row.momentNames.join(", ")
@@ -87,9 +183,13 @@ export function ImportForm() {
                           ? "Preserva"
                           : "-"}
                     </td>
+                    <td>{row.hasExplicitActive ? (row.active ? "Si" : "No") : row.action === "update" ? "Preserva" : "Si"}</td>
+                    <td>{row.description ? "Si" : row.action === "update" ? "Preserva" : "-"}</td>
                     <td>
                       {row.errors.length > 0 ? (
                         <span className={styles.error}>{row.errors.join(" ")}</span>
+                      ) : row.warnings.length > 0 ? (
+                        <span className={styles.warning}>{row.warnings.join(" ")}</span>
                       ) : (
                         <span className={styles.ok}>OK</span>
                       )}
@@ -120,6 +220,120 @@ export function ImportForm() {
           </form>
         </section>
       ) : null}
+
+      <section className={styles.panel}>
+        <div className={styles.panelHeader}>
+          <div>
+            <h3>Imagenes</h3>
+            <p>Asignacion manual para cargar varias fotos de productos.</p>
+          </div>
+        </div>
+
+        {imageState.error ? (
+          <p aria-live="polite" className="alert error" role="alert">
+            {imageState.error}
+          </p>
+        ) : null}
+
+        <form action={imageAction} className={styles.imageForm}>
+          <label
+            className={`${styles.dropzone} ${isDragging ? styles.dropzoneActive : ""}`.trim()}
+            htmlFor="images"
+            onDragEnter={() => setIsDragging(true)}
+            onDragLeave={() => setIsDragging(false)}
+            onDragOver={(event) => event.preventDefault()}
+            onDrop={onDrop}
+          >
+            <span className={styles.dropTitle}>Soltar imagenes</span>
+            <span className={styles.dropCopy}>o seleccionar archivos</span>
+            <input
+              accept="image/*"
+              className={styles.fileInput}
+              id="images"
+              multiple
+              name="images"
+              onChange={onImageInputChange}
+              ref={imageInputRef}
+              type="file"
+            />
+          </label>
+
+          {imageRows.length > 0 ? (
+            <div className={styles.imageRows}>
+              {imageRows.map((row, index) => {
+                const selectedWine = wineById.get(row.wineId);
+                return (
+                  <div className={styles.imageRow} key={row.id}>
+                    <div className={styles.thumb}>
+                      {row.previewUrl ? <img src={row.previewUrl} alt="" /> : <span>IMG</span>}
+                    </div>
+                    <div className={styles.imageMeta}>
+                      <strong>{row.file.name}</strong>
+                      <span>{Math.ceil(row.file.size / 1024)} KB</span>
+                    </div>
+                    <div className="field">
+                      <label htmlFor={`wine-image-${row.id}`}>Vino</label>
+                      <select
+                        id={`wine-image-${row.id}`}
+                        name="wine_ids"
+                        onChange={(event) => updateImageRow(row.id, { wineId: event.currentTarget.value })}
+                        required
+                        value={row.wineId}
+                      >
+                        <option value="">Elegir vino</option>
+                        {imageWines.map((wine) => (
+                          <option key={wine.id} value={wine.id}>
+                            {wine.name}
+                            {wine.imageUrl ? " (con imagen)" : ""}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <input name="replace_existing" type="hidden" value={String(row.replaceExisting)} />
+                    <div className={styles.replaceCell}>
+                      {selectedWine?.imageUrl ? (
+                        <label className={styles.checkbox}>
+                          <input
+                            checked={row.replaceExisting}
+                            onChange={(event) =>
+                              updateImageRow(row.id, { replaceExisting: event.currentTarget.checked })
+                            }
+                            type="checkbox"
+                          />
+                          Reemplazar actual
+                        </label>
+                      ) : (
+                        <span>{row.wineId ? "Sin imagen actual" : "Pendiente"}</span>
+                      )}
+                    </div>
+                    <button
+                      className={`secondary ${styles.removeButton}`}
+                      onClick={() => removeImageRow(row.id)}
+                      type="button"
+                    >
+                      Quitar
+                    </button>
+                    <span className={styles.rowNumber}>{index + 1}</span>
+                  </div>
+                );
+              })}
+            </div>
+          ) : null}
+
+          <PendingNotice
+            message={`Subiendo ${imageRows.length} ${imageRows.length === 1 ? "imagen" : "imagenes"}.`}
+            title="Subida en curso"
+          />
+
+          <div className={styles.footer}>
+            <SubmitButton
+              disabled={imageRows.length === 0}
+              label="Subir imagenes"
+              loadingLabel="Subiendo..."
+            />
+          </div>
+        </form>
+      </section>
     </div>
   );
 }
@@ -148,11 +362,14 @@ function SummaryItem({
   value,
 }: {
   label: string;
-  tone?: "default" | "error";
+  tone?: "default" | "error" | "warning";
   value: number;
 }) {
+  const className =
+    tone === "error" ? styles.summaryError : tone === "warning" ? styles.summaryWarning : styles.summaryItem;
+
   return (
-    <div className={tone === "error" ? styles.summaryError : styles.summaryItem}>
+    <div className={className}>
       <span>{label}</span>
       <strong>{value}</strong>
     </div>

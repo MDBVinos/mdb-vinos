@@ -77,7 +77,57 @@
 
 .currentImage span {
   color: var(--muted);
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 14px;
+}
+
+.dropzone {
+  align-items: center;
+  background:
+    linear-gradient(135deg, rgba(93, 20, 23, 0.08), transparent 44%),
+    var(--panel-soft);
+  border: 1px dashed rgba(93, 20, 23, 0.42);
+  border-radius: 8px;
+  cursor: pointer;
+  display: grid;
+  gap: 5px;
+  min-height: 118px;
+  padding: 22px;
+  place-items: center;
+  text-align: center;
+}
+
+.dropzoneActive {
+  background:
+    linear-gradient(135deg, rgba(93, 20, 23, 0.14), transparent 44%),
+    #fff;
+  border-color: var(--accent);
+}
+
+.dropTitle {
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.dropCopy {
+  color: var(--muted);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+}
+
+.fileInput {
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  width: 1px;
+}
+
+.imageActions {
+  display: flex;
+  justify-content: flex-start;
 }
 
 .footer {

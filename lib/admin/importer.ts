@@ -6,13 +6,18 @@ export type WineImportLookup = {
 };
 
 export type ParsedWineImportRow = {
+  active: boolean;
+  description: string | null;
   featured: boolean;
+  hasExplicitActive: boolean;
+  hasExplicitDescription: boolean;
+  hasExplicitFeatured: boolean;
   hasExplicitImage: boolean;
   hasExplicitIntensity: boolean;
   hasExplicitMoments: boolean;
   hasExplicitType: boolean;
   imageUrl: string | null;
-  intensityName: string | null;
+  intensityNames: string[];
   line: number;
   momentNames: string[];
   name: string;
@@ -24,9 +29,11 @@ export type ParsedWineImportRow = {
 };
 
 export type WineImportPreviewRow = ParsedWineImportRow & {
-  action: "create" | "update";
+  action: "create" | "skip" | "update";
   errors: string[];
-  intensityId: string | null;
+  intensityIds: string[];
+  missingIntensityNames: string[];
+  missingMomentNames: string[];
   momentIds: string[];
   typeId: string | null;
   warnings: string[];
@@ -39,12 +46,15 @@ export type WineImportPreview = {
     creates: number;
     errors: number;
     rows: number;
+    skips: number;
     updates: number;
     warnings: number;
   };
 };
 
 type WineImportColumn =
+  | "active"
+  | "description"
   | "featured"
   | "image"
   | "moments"
@@ -72,11 +82,11 @@ const REQUIRED_COLUMNS: WineImportColumn[] = [
   "type",
   "profile",
   "moments",
-  "image",
-  "featured",
 ];
 
 const COLUMN_LABELS: Record<WineImportColumn, string> = {
+  active: "active",
+  description: "Descripcion",
   featured: "featured",
   image: "image",
   moments: "moments",
@@ -95,6 +105,10 @@ const HEADER_ALIASES = new Map<string, WineImportColumn>(
     ["nombre", "name"],
     ["winery", "winery"],
     ["bodega", "winery"],
+    ["description", "description"],
+    ["descripcion", "description"],
+    ["descripción", "description"],
+    ["detalle", "description"],
     ["precio venta unidad", "priceUnit"],
     ["precio de venta unidad", "priceUnit"],
     ["precio unidad", "priceUnit"],
@@ -121,8 +135,13 @@ const HEADER_ALIASES = new Map<string, WineImportColumn>(
     ["imagen", "image"],
     ["image url", "image"],
     ["image_url", "image"],
+    ["active", "active"],
+    ["activo", "active"],
+    ["estado", "active"],
+    ["status", "active"],
     ["featured", "featured"],
     ["destacado", "featured"],
+    ["destacada", "featured"],
   ].map(([key, value]) => [normalizeImportKey(key), value as WineImportColumn]),
 );
 
@@ -197,9 +216,37 @@ function parseBoolean(value: string) {
   return ["1", "true", "si", "yes", "y", "x", "destacado"].includes(normalized);
 }
 
+function parseActiveValue(value: string) {
+  const normalized = normalizeImportKey(value);
+
+  if (["1", "true", "si", "yes", "y", "activo", "active", "habilitado", "alta"].includes(normalized)) {
+    return true;
+  }
+
+  if (["0", "false", "no", "n", "inactivo", "inactive", "desactivado", "deshabilitado", "baja"].includes(normalized)) {
+    return false;
+  }
+
+  return null;
+}
+
+function parseFeaturedColumnStatus(value: string) {
+  const normalized = normalizeImportKey(value);
+
+  if (["activo", "active", "habilitado", "alta"].includes(normalized)) {
+    return true;
+  }
+
+  if (["inactivo", "inactive", "desactivado", "deshabilitado", "baja"].includes(normalized)) {
+    return false;
+  }
+
+  return null;
+}
+
 function splitList(value: string) {
   return value
-    .split(/[;,|]/)
+    .split(/[;,|·•]/)
     .map((item) => item.trim())
     .filter(Boolean);
 }
@@ -274,25 +321,36 @@ export async function parseWineImportWorkbook(input: ArrayBuffer | Uint8Array) {
 
   for (let line = 2; line <= sheet.rowCount; line += 1) {
     const row = sheet.getRow(line);
-    const values = REQUIRED_COLUMNS.map((column) => text(row, column));
+    const values = [...foundColumns].map((column) => text(row, column));
 
     if (values.every((value) => value === "")) {
       continue;
     }
 
+    const activeText = text(row, "active");
+    const description = text(row, "description");
+    const featuredText = text(row, "featured");
     const typeName = text(row, "type");
-    const intensityName = text(row, "profile");
+    const intensityNames = uniqueNames(splitList(text(row, "profile")));
     const moments = text(row, "moments");
     const imageUrl = text(row, "image");
+    const featuredColumnStatus = parseFeaturedColumnStatus(featuredText);
+    const explicitActiveValue = activeText ? parseActiveValue(activeText) : featuredColumnStatus;
+    const hasExplicitFeatured = featuredText !== "" && featuredColumnStatus == null;
 
     rows.push({
+      active: explicitActiveValue ?? true,
+      description: description || null,
       featured: parseBoolean(text(row, "featured")),
+      hasExplicitActive: activeText !== "" || featuredColumnStatus != null,
+      hasExplicitDescription: description !== "",
+      hasExplicitFeatured,
       hasExplicitImage: imageUrl !== "",
-      hasExplicitIntensity: intensityName !== "",
+      hasExplicitIntensity: intensityNames.length > 0,
       hasExplicitMoments: moments !== "",
       hasExplicitType: typeName !== "",
       imageUrl: imageUrl || null,
-      intensityName: intensityName || null,
+      intensityNames,
       line,
       momentNames: uniqueNames(splitList(moments)),
       name: text(row, "name"),
@@ -318,11 +376,12 @@ export function buildWineImportPreview(rows: ParsedWineImportRow[], context: Pre
     const errors: string[] = [];
     const warnings: string[] = [];
     const nameKey = normalizeImportKey(row.name);
+    const isDuplicate = Boolean(row.name && seenNames.has(nameKey));
 
     if (!row.name) {
       errors.push("El nombre del vino es obligatorio.");
-    } else if (seenNames.has(nameKey)) {
-      errors.push("Nombre duplicado en el archivo.");
+    } else if (isDuplicate) {
+      warnings.push("Nombre duplicado en el archivo. Se omitira esta fila.");
     }
 
     if (nameKey) {
@@ -330,8 +389,26 @@ export function buildWineImportPreview(rows: ParsedWineImportRow[], context: Pre
     }
 
     const existingWine = existingByName.get(nameKey) ?? null;
+    if (isDuplicate) {
+      return {
+        ...row,
+        action: "skip",
+        errors,
+        intensityIds: [],
+        missingIntensityNames: [],
+        missingMomentNames: [],
+        momentIds: [],
+        typeId: null,
+        warnings,
+        wineId: existingWine?.id ?? null,
+      };
+    }
+
     const type = row.typeName ? typeByName.get(normalizeImportKey(row.typeName)) : null;
-    const intensity = row.intensityName ? intensityByName.get(normalizeImportKey(row.intensityName)) : null;
+    const intensities = row.intensityNames.map((name) => ({
+      item: intensityByName.get(normalizeImportKey(name)) ?? null,
+      name,
+    }));
     const moments = row.momentNames.map((name) => ({
       item: momentByName.get(normalizeImportKey(name)) ?? null,
       name,
@@ -341,13 +418,15 @@ export function buildWineImportPreview(rows: ParsedWineImportRow[], context: Pre
       errors.push(`Tipo de vino desconocido: "${row.typeName}".`);
     }
 
-    if (row.intensityName && !intensity) {
-      errors.push(`Intensidad desconocida: "${row.intensityName}".`);
+    for (const intensity of intensities) {
+      if (!intensity.item) {
+        warnings.push(`Se creara la intensidad "${intensity.name}".`);
+      }
     }
 
     for (const moment of moments) {
       if (!moment.item) {
-        errors.push(`Momento desconocido: "${moment.name}".`);
+        warnings.push(`Se creara el momento "${moment.name}".`);
       }
     }
 
@@ -359,7 +438,11 @@ export function buildWineImportPreview(rows: ParsedWineImportRow[], context: Pre
       ...row,
       action: existingWine ? "update" : "create",
       errors,
-      intensityId: intensity?.id ?? null,
+      intensityIds: intensities.map((intensity) => intensity.item?.id).filter((id): id is string => Boolean(id)),
+      missingIntensityNames: intensities
+        .filter((intensity) => !intensity.item)
+        .map((intensity) => intensity.name),
+      missingMomentNames: moments.filter((moment) => !moment.item).map((moment) => moment.name),
       momentIds: moments.map((moment) => moment.item?.id).filter((id): id is string => Boolean(id)),
       typeId: type?.id ?? null,
       warnings,
@@ -375,6 +458,7 @@ export function buildWineImportPreview(rows: ParsedWineImportRow[], context: Pre
       creates: validRows.filter((row) => row.action === "create").length,
       errors: previewRows.filter((row) => row.errors.length > 0).length,
       rows: previewRows.length,
+      skips: previewRows.filter((row) => row.action === "skip").length,
       updates: validRows.filter((row) => row.action === "update").length,
       warnings: previewRows.filter((row) => row.warnings.length > 0).length,
     },
