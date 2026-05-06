@@ -50,7 +50,6 @@ export async function getWineForEdit(id: string): Promise<WineFormInitialData> {
     include: {
       wineIntensities: {
         select: { intensityId: true },
-        take: 1,
       },
       wineMoments: {
         select: { momentId: true },
@@ -69,8 +68,21 @@ export async function getWineForEdit(id: string): Promise<WineFormInitialData> {
 
   return {
     ...toWineView(wine),
-    intensityId: wine.wineIntensities[0]?.intensityId ?? "",
+    intensityIds: wine.wineIntensities.map((row) => row.intensityId),
     momentIds: wine.wineMoments.map((row) => row.momentId),
     wineTypeId: wine.wineTypes[0]?.typeId ?? "",
   };
+}
+
+export async function getWineImageOptions() {
+  await requireUser();
+
+  return prisma.wine.findMany({
+    orderBy: { name: "asc" },
+    select: {
+      id: true,
+      imageUrl: true,
+      name: true,
+    },
+  });
 }

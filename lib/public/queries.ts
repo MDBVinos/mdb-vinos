@@ -163,7 +163,6 @@ export async function getWineDetails(id: string): Promise<WineDetails> {
     include: {
       wineIntensities: {
         include: { intensity: true },
-        take: 1,
       },
       wineMoments: {
         include: { moment: true },
@@ -185,7 +184,7 @@ export async function getWineDetails(id: string): Promise<WineDetails> {
 
   return {
     ...toWineView(wine),
-    intensity: wine.wineIntensities[0]?.intensity ?? null,
+    intensities: wine.wineIntensities.map((row) => row.intensity),
     moments: wine.wineMoments.map((row) => row.moment),
     wineType: wine.wineTypes[0]?.wineType ?? null,
   };

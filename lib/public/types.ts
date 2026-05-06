@@ -27,9 +27,9 @@ export type PublicIntensity = {
 };
 
 export type WineDetails = PublicWine & {
+  intensities: PublicIntensity[];
   moments: PublicMoment[];
   wineType: PublicWineType | null;
-  intensity: PublicIntensity | null;
 };
 
 export type CatalogFilters = {

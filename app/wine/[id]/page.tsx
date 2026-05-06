@@ -57,7 +57,9 @@ export default async function WinePage({ params }: WinePageProps) {
                 <span key={moment.id}>{moment.name}</span>
               ))}
               {wine.wineType ? <span>{wine.wineType.name}</span> : null}
-              {wine.intensity ? <span>{wine.intensity.name}</span> : null}
+              {wine.intensities.map((intensity) => (
+                <span key={intensity.id}>{intensity.name}</span>
+              ))}
             </div>
 
             <div className={styles.actions}>

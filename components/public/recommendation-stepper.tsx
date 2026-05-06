@@ -1,17 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import type { PublicIntensity, PublicWine, PublicWineType } from "@/lib/public/types";
+import type { PublicIntensity, PublicMoment, PublicWine, PublicWineType } from "@/lib/public/types";
 import { WineCard } from "./wine-card";
 import styles from "./recommendation-stepper.module.css";
 
 type RecommendationStepperProps = {
   initialMoment?: string;
+  moments: PublicMoment[];
   wineTypes: PublicWineType[];
   intensities: PublicIntensity[];
 };
 
-const moments = ["Asado", "Cita", "Regalo", "Juntada", "Comida"];
 const budgets = [
   { label: "Hasta $10.000", value: 10000 },
   { label: "Hasta $20.000", value: 20000 },
@@ -19,7 +19,7 @@ const budgets = [
   { label: "Sin filtro", value: 0 },
 ];
 
-export function RecommendationStepper({ initialMoment, wineTypes, intensities }: RecommendationStepperProps) {
+export function RecommendationStepper({ initialMoment, moments, wineTypes, intensities }: RecommendationStepperProps) {
   const [step, setStep] = useState(initialMoment ? 2 : 1);
   const [moment, setMoment] = useState(initialMoment ?? "");
   const [budget, setBudget] = useState(0);
@@ -58,15 +58,15 @@ export function RecommendationStepper({ initialMoment, wineTypes, intensities }:
           <div className={styles.options}>
             {moments.map((item) => (
               <button
-                className={moment === item ? styles.selected : "secondary"}
-                key={item}
+                className={moment === item.name ? styles.selected : "secondary"}
+                key={item.id}
                 onClick={() => {
-                  setMoment(item);
+                  setMoment(item.name);
                   setStep(2);
                 }}
                 type="button"
               >
-                {item}
+                {item.name}
               </button>
             ))}
           </div>
