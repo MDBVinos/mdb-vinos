@@ -38,9 +38,9 @@ export function WineCard({ wine, note = "Un vino que nunca falla" }: WineCardPro
         <div className={styles.footer}>
           <strong>{formatPrice(wine.price_unit)}</strong>
           <WhatsAppButton
-            className="button"
             items={[{ wine, quantity: 1, format: "unit" }]}
             label="Pedir por WhatsApp"
+            variant="wa"
           />
         </div>
       </div>

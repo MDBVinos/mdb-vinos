@@ -18,8 +18,8 @@ function formatPrice(price: number | null | undefined) {
   return price == null ? "precio a confirmar" : priceFormatter.format(price);
 }
 
-export function buildWhatsAppMessage(items: WhatsAppItem[]) {
-  const lines = items.map((item) => {
+function buildItemLines(items: WhatsAppItem[]) {
+  return items.map((item) => {
     const label = item.format === "box" ? "caja de" : "x";
     const price = item.format === "box" ? item.wine.price_box : item.wine.price_unit;
 
@@ -29,10 +29,26 @@ export function buildWhatsAppMessage(items: WhatsAppItem[]) {
 
     return `* ${item.quantity}${label} ${item.wine.name} (${formatPrice(price)})`;
   });
+}
 
+export function buildWhatsAppMessage(items: WhatsAppItem[]) {
+  const lines = buildItemLines(items);
   return `Hola! Quiero pedir:\n\n${lines.join("\n")}`;
 }
 
 export function buildWhatsAppLink(items: WhatsAppItem[]) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(buildWhatsAppMessage(items))}`;
+}
+
+export function buildKitWhatsAppMessage(kitTitle: string, items: WhatsAppItem[]) {
+  const lines = buildItemLines(items);
+  return `Hola! Quiero el ${kitTitle}:\n\n${lines.join("\n")}`;
+}
+
+export function buildKitWhatsAppLink(kitTitle: string, items: WhatsAppItem[]) {
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(buildKitWhatsAppMessage(kitTitle, items))}`;
+}
+
+export function buildAdvisorWhatsAppLink(message = "Hola! Necesito ayuda para elegir un vino.") {
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }

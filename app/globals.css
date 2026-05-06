@@ -25,7 +25,7 @@ body {
   min-height: 100%;
   background: var(--bg);
   color: var(--text);
-  font-family: "Cormorant Garamond", "Garamond", Georgia, serif;
+  font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
   font-size: 18px;
 }
 
@@ -73,6 +73,33 @@ button.secondary {
 .button.danger,
 button.danger {
   background: var(--danger);
+}
+
+.button.wa,
+button.wa {
+  background: var(--green);
+  color: #fff;
+}
+
+.button.wa:hover,
+button.wa:hover {
+  background: #1f3a2f;
+}
+
+.button.wa svg {
+  flex: 0 0 auto;
+  height: 16px;
+  width: 16px;
+}
+
+.eyebrow {
+  color: var(--olive);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  margin: 0;
+  text-transform: uppercase;
 }
 
 .field {
