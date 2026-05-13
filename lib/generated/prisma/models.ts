@@ -9,6 +9,9 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/Wine'
+export type * from './models/Winery'
+export type * from './models/WineLine'
+export type * from './models/Varietal'
 export type * from './models/Moment'
 export type * from './models/WineType'
 export type * from './models/Intensity'

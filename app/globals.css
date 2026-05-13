@@ -1,11 +1,11 @@
 :root {
-  --bg: #ede1d8;
+  --bg: #eaded4;
   --panel: #ffffff;
-  --panel-soft: #f7f1eb;
-  --text: #241134;
+  --panel-soft: #ded4ca;
+  --text: #2c1d3c;
   --muted: #6b625e;
-  --line: #d7c8bd;
-  --accent: #5d1417;
+  --line: #cbbfb5;
+  --accent: #742024;
   --accent-dark: #3f0d10;
   --terracotta: #702c2c;
   --olive: #7c8356;
@@ -27,6 +27,10 @@ body {
   color: var(--text);
   font-family: "Cormorant Garamond", "Garamond", Georgia, serif;
   font-size: 18px;
+}
+
+body {
+  padding-bottom: 104px;
 }
 
 a {

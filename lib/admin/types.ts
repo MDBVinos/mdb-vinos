@@ -2,6 +2,12 @@ export type Wine = {
   id: string;
   name: string;
   winery: string | null;
+  winery_id: string | null;
+  winery_name: string | null;
+  wine_line_id: string | null;
+  wine_line_name: string | null;
+  varietal_id: string | null;
+  varietal_name: string | null;
   description: string | null;
   price_unit: number | null;
   price_box: number | null;
@@ -26,10 +32,29 @@ export type Intensity = {
   name: string;
 };
 
+export type Winery = {
+  id: string;
+  name: string;
+};
+
+export type WineLine = {
+  id: string;
+  name: string;
+  wineryId: string;
+};
+
+export type Varietal = {
+  id: string;
+  name: string;
+};
+
 export type WineFormOptions = {
   moments: Moment[];
   wineTypes: WineType[];
   intensities: Intensity[];
+  wineries: Winery[];
+  wineLines: WineLine[];
+  varietals: Varietal[];
 };
 
 export type WineFormInitialData = Wine & {

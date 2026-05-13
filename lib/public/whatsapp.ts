@@ -1,6 +1,9 @@
 import type { PublicWine } from "./types";
 
 export const WHATSAPP_NUMBER = "5491159431923";
+export const GENERAL_WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+  "Hola! Quiero consultar por vinos MDB.",
+)}`;
 
 export type WhatsAppItem = {
   wine: Pick<PublicWine, "name" | "price_unit" | "price_box">;

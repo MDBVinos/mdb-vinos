@@ -19,9 +19,16 @@ export default async function DiscoverPage({ searchParams }: DiscoverPageProps) 
       <SiteHeader />
       <main className={styles.page}>
         <section className={styles.section}>
-          <div className={styles.sectionHeader}>
-            <p className={styles.kicker}>Elegí sin complicarte</p>
-            <h1>Encontramos el vino para tu plan</h1>
+          <div className={styles.introPanel}>
+            <div className={styles.sectionHeader}>
+              <div className={styles.sectionTitle}>
+                <p className={styles.kicker}>Recomendaciones</p>
+                <h1>Encontramos el vino para tu plan</h1>
+              </div>
+            </div>
+            <p className={styles.searchHint}>
+              Contanos el momento y te acercamos opciones comprables en tarjetas.
+            </p>
           </div>
           <RecommendationStepper
             initialMoment={moment}

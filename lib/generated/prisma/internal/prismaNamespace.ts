@@ -385,6 +385,9 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   Wine: 'Wine',
+  Winery: 'Winery',
+  WineLine: 'WineLine',
+  Varietal: 'Varietal',
   Moment: 'Moment',
   WineType: 'WineType',
   Intensity: 'Intensity',
@@ -406,7 +409,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "wine" | "moment" | "wineType" | "intensity" | "wineMoment" | "wineTypeRelation" | "wineIntensity"
+    modelProps: "wine" | "winery" | "wineLine" | "varietal" | "moment" | "wineType" | "intensity" | "wineMoment" | "wineTypeRelation" | "wineIntensity"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -481,6 +484,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.WineCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.WineCountAggregateOutputType> | number
+        }
+      }
+    }
+    Winery: {
+      payload: Prisma.$WineryPayload<ExtArgs>
+      fields: Prisma.WineryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WineryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WineryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WineryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WineryPayload>
+        }
+        findFirst: {
+          args: Prisma.WineryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WineryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WineryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WineryPayload>
+        }
+        findMany: {
+          args: Prisma.WineryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WineryPayload>[]
+        }
+        create: {
+          args: Prisma.WineryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WineryPayload>
+        }
+        createMany: {
+          args: Prisma.WineryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WineryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WineryPayload>[]
+        }
+        delete: {
+          args: Prisma.WineryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WineryPayload>
+        }
+        update: {
+          args: Prisma.WineryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WineryPayload>
+        }
+        deleteMany: {
+          args: Prisma.WineryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WineryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WineryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WineryPayload>[]
+        }
+        upsert: {
+          args: Prisma.WineryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WineryPayload>
+        }
+        aggregate: {
+          args: Prisma.WineryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWinery>
+        }
+        groupBy: {
+          args: Prisma.WineryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WineryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WineryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WineryCountAggregateOutputType> | number
+        }
+      }
+    }
+    WineLine: {
+      payload: Prisma.$WineLinePayload<ExtArgs>
+      fields: Prisma.WineLineFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WineLineFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WineLinePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WineLineFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WineLinePayload>
+        }
+        findFirst: {
+          args: Prisma.WineLineFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WineLinePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WineLineFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WineLinePayload>
+        }
+        findMany: {
+          args: Prisma.WineLineFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WineLinePayload>[]
+        }
+        create: {
+          args: Prisma.WineLineCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WineLinePayload>
+        }
+        createMany: {
+          args: Prisma.WineLineCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WineLineCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WineLinePayload>[]
+        }
+        delete: {
+          args: Prisma.WineLineDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WineLinePayload>
+        }
+        update: {
+          args: Prisma.WineLineUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WineLinePayload>
+        }
+        deleteMany: {
+          args: Prisma.WineLineDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WineLineUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WineLineUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WineLinePayload>[]
+        }
+        upsert: {
+          args: Prisma.WineLineUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WineLinePayload>
+        }
+        aggregate: {
+          args: Prisma.WineLineAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWineLine>
+        }
+        groupBy: {
+          args: Prisma.WineLineGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WineLineGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WineLineCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WineLineCountAggregateOutputType> | number
+        }
+      }
+    }
+    Varietal: {
+      payload: Prisma.$VarietalPayload<ExtArgs>
+      fields: Prisma.VarietalFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VarietalFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VarietalPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VarietalFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VarietalPayload>
+        }
+        findFirst: {
+          args: Prisma.VarietalFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VarietalPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VarietalFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VarietalPayload>
+        }
+        findMany: {
+          args: Prisma.VarietalFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VarietalPayload>[]
+        }
+        create: {
+          args: Prisma.VarietalCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VarietalPayload>
+        }
+        createMany: {
+          args: Prisma.VarietalCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VarietalCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VarietalPayload>[]
+        }
+        delete: {
+          args: Prisma.VarietalDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VarietalPayload>
+        }
+        update: {
+          args: Prisma.VarietalUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VarietalPayload>
+        }
+        deleteMany: {
+          args: Prisma.VarietalDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VarietalUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VarietalUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VarietalPayload>[]
+        }
+        upsert: {
+          args: Prisma.VarietalUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VarietalPayload>
+        }
+        aggregate: {
+          args: Prisma.VarietalAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVarietal>
+        }
+        groupBy: {
+          args: Prisma.VarietalGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VarietalGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VarietalCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VarietalCountAggregateOutputType> | number
         }
       }
     }
@@ -971,6 +1196,9 @@ export const WineScalarFieldEnum = {
   id: 'id',
   name: 'name',
   winery: 'winery',
+  wineryId: 'wineryId',
+  wineLineId: 'wineLineId',
+  varietalId: 'varietalId',
   description: 'description',
   priceUnit: 'priceUnit',
   priceBox: 'priceBox',
@@ -983,6 +1211,37 @@ export const WineScalarFieldEnum = {
 } as const
 
 export type WineScalarFieldEnum = (typeof WineScalarFieldEnum)[keyof typeof WineScalarFieldEnum]
+
+
+export const WineryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WineryScalarFieldEnum = (typeof WineryScalarFieldEnum)[keyof typeof WineryScalarFieldEnum]
+
+
+export const WineLineScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  wineryId: 'wineryId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WineLineScalarFieldEnum = (typeof WineLineScalarFieldEnum)[keyof typeof WineLineScalarFieldEnum]
+
+
+export const VarietalScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VarietalScalarFieldEnum = (typeof VarietalScalarFieldEnum)[keyof typeof VarietalScalarFieldEnum]
 
 
 export const MomentScalarFieldEnum = {
@@ -1250,6 +1509,9 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   wine?: Prisma.WineOmit
+  winery?: Prisma.WineryOmit
+  wineLine?: Prisma.WineLineOmit
+  varietal?: Prisma.VarietalOmit
   moment?: Prisma.MomentOmit
   wineType?: Prisma.WineTypeOmit
   intensity?: Prisma.IntensityOmit

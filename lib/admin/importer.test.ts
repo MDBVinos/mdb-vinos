@@ -21,15 +21,20 @@ const lookupContext = {
     { id: "moment-asado", name: "Asado" },
     { id: "moment-regalo", name: "Regalo" },
   ],
+  varietals: [{ id: "varietal-malbec", name: "Malbec" }],
+  wineLines: [{ id: "line-estate", name: "Estate", wineryId: "winery-toso" }],
   wineTypes: [
     { id: "type-tinto", name: "Tinto" },
     { id: "type-blanco", name: "Blanco" },
   ],
+  wineries: [{ id: "winery-toso", name: "Pascual Toso" }],
 };
 
 const headers = [
   "name",
   "winery",
+  "winery line",
+  "Line ID",
   "Precio Venta Unidad",
   "Precio de venta Caja",
   "Unidades x caja",
@@ -47,6 +52,8 @@ test("buildWineImportPreview maps a valid workbook row to a create preview", asy
       [
         "Estate Malbec",
         "Pascual Toso",
+        "Estate",
+        "Malbec",
         13700,
         75000,
         6,
@@ -68,6 +75,11 @@ test("buildWineImportPreview maps a valid workbook row to a create preview", asy
   assert.deepEqual(preview.rows[0].errors, []);
   assert.equal(preview.rows[0].name, "Estate Malbec");
   assert.equal(preview.rows[0].winery, "Pascual Toso");
+  assert.equal(preview.rows[0].wineryLineName, "Estate");
+  assert.equal(preview.rows[0].varietalName, "Malbec");
+  assert.equal(preview.rows[0].wineryId, "winery-toso");
+  assert.equal(preview.rows[0].wineLineId, "line-estate");
+  assert.equal(preview.rows[0].varietalId, "varietal-malbec");
   assert.equal(preview.rows[0].priceUnit, 13700);
   assert.equal(preview.rows[0].priceBox, 75000);
   assert.equal(preview.rows[0].unitsPerBox, 6);
@@ -83,7 +95,7 @@ test("buildWineImportPreview marks existing blank relations as preserved", async
   const parsed = await parseWineImportWorkbook(
     await workbookBuffer([
       headers,
-      ["Estate Malbec", "Pascual Toso", 14000, 80000, 6, "Tinto", "", "", "", ""],
+      ["Estate Malbec", "Pascual Toso", "Estate", "Malbec", 14000, 80000, 6, "Tinto", "", "", "", ""],
     ]),
   );
 
@@ -108,6 +120,8 @@ test("parseWineImportWorkbook accepts workbook data without an image column", as
       [
         "name",
         "winery",
+        "winery line",
+        "Line ID",
         "Precio Venta Unidad",
         "Precio de venta Caja",
         "Unidades x caja",
@@ -120,6 +134,8 @@ test("parseWineImportWorkbook accepts workbook data without an image column", as
       [
         "Estate Malbec",
         "Pascual Toso",
+        "Estate",
+        "Malbec",
         13700,
         75000,
         6,
@@ -149,6 +165,8 @@ test("buildWineImportPreview warns about lookup values that will be created", as
       [
         "name",
         "winery",
+        "winery line",
+        "Line ID",
         "Precio Venta Unidad",
         "Precio de venta Caja",
         "Unidades x caja",
@@ -160,6 +178,8 @@ test("buildWineImportPreview warns about lookup values that will be created", as
       [
         "Estate Malbec",
         "Pascual Toso",
+        "Estate",
+        "Malbec",
         13700,
         75000,
         6,
@@ -189,17 +209,18 @@ test("buildWineImportPreview reports unknown wine types and skips duplicate name
   const parsed = await parseWineImportWorkbook(
     await workbookBuffer([
       headers,
-      ["Estate Malbec", "Pascual Toso", 13700, 75000, 6, "Naranja", "", "Asado", "", ""],
-      ["estate malbec", "Pascual Toso", 13700, 75000, 6, "Tinto", "Potente", "", "", ""],
+      ["Estate Malbec", "Pascual Toso", "Estate", "Malbec", 13700, 75000, 6, "Naranja", "", "Asado", "", ""],
+      ["estate malbec", "Pascual Toso", "Estate", "Malbec", 13700, 75000, 6, "Tinto", "Potente", "", "", ""],
     ]),
   );
 
   const preview = buildWineImportPreview(parsed.rows, lookupContext);
 
-  assert.equal(preview.summary.errors, 1);
+  assert.equal(preview.summary.errors, 0);
   assert.equal(preview.summary.skips, 1);
-  assert.equal(preview.summary.warnings, 1);
-  assert.deepEqual(preview.rows[0].errors, ['Tipo de vino desconocido: "Naranja".']);
+  assert.equal(preview.summary.warnings, 2);
+  assert.deepEqual(preview.rows[0].errors, []);
+  assert.deepEqual(preview.rows[0].warnings, ['Se creara el tipo de vino "Naranja".']);
   assert.equal(preview.rows[1].action, "skip");
   assert.deepEqual(preview.rows[1].errors, []);
   assert.deepEqual(preview.rows[1].missingIntensityNames, []);

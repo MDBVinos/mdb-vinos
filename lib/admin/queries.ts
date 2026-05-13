@@ -21,6 +21,11 @@ export async function getAdminWines(): Promise<Wine[]> {
   await requireUser();
 
   const wines = await prisma.wine.findMany({
+    include: {
+      normalizedWinery: true,
+      varietal: true,
+      wineLine: true,
+    },
     orderBy: { name: "asc" },
   });
 
@@ -30,16 +35,22 @@ export async function getAdminWines(): Promise<Wine[]> {
 export async function getWineFormOptions(): Promise<WineFormOptions> {
   await requireUser();
 
-  const [moments, wineTypes, intensities] = await Promise.all([
+  const [moments, wineTypes, intensities, wineries, wineLines, varietals] = await Promise.all([
     prisma.moment.findMany({ orderBy: { name: "asc" } }),
     prisma.wineType.findMany({ orderBy: { name: "asc" } }),
     prisma.intensity.findMany({ orderBy: { name: "asc" } }),
+    prisma.winery.findMany({ orderBy: { name: "asc" } }),
+    prisma.wineLine.findMany({ orderBy: { name: "asc" } }),
+    prisma.varietal.findMany({ orderBy: { name: "asc" } }),
   ]);
 
   return {
     moments,
     wineTypes,
     intensities,
+    wineries,
+    wineLines,
+    varietals,
   };
 }
 
@@ -48,6 +59,9 @@ export async function getWineForEdit(id: string): Promise<WineFormInitialData> {
 
   const wine = await prisma.wine.findUnique({
     include: {
+      normalizedWinery: true,
+      varietal: true,
+      wineLine: true,
       wineIntensities: {
         select: { intensityId: true },
       },

@@ -69,6 +69,8 @@
 }
 
 .result strong,
+.result em,
+.result span,
 .result small {
   display: block;
   font-family: Arial, Helvetica, sans-serif;
@@ -82,4 +84,19 @@
   color: var(--muted);
   font-size: 13px;
   margin-top: 3px;
+}
+
+.result span {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 800;
+  margin-top: 2px;
+}
+
+.result em {
+  color: var(--green);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 800;
+  margin-top: 2px;
 }

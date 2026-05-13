@@ -33,7 +33,13 @@ test("toWineView exposes the existing snake_case app contract", () => {
       price_box: 60000,
       price_unit: 10000,
       units_per_box: 6,
+      varietal_id: null,
+      varietal_name: null,
       winery: "Pascual Toso",
+      winery_id: null,
+      winery_name: "Pascual Toso",
+      wine_line_id: null,
+      wine_line_name: null,
     },
   );
 });

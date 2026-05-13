@@ -1,42 +1,248 @@
 .header {
-  align-items: center;
-  display: flex;
-  gap: 18px;
-  justify-content: space-between;
-  margin: 0 auto;
-  max-width: 1180px;
-  padding: 22px;
+  align-items: stretch;
+  background: var(--bg);
+  border-bottom: 1px solid rgba(44, 29, 60, 0.16);
+  display: grid;
+  grid-template-columns: minmax(210px, 320px) minmax(0, 1fr);
+  min-height: 112px;
+  position: sticky;
+  top: 0;
   width: 100%;
+  z-index: 30;
 }
 
 .logo {
+  align-items: center;
+  display: flex;
+  gap: 18px;
+  padding-left: clamp(20px, 4vw, 58px);
+}
+
+.logoMark {
+  align-items: center;
+  color: var(--olive);
+  display: flex;
+  font-size: 11px;
+  height: 76px;
+  justify-content: center;
+  line-height: 1;
+  position: relative;
+  text-align: center;
+  width: 76px;
+}
+
+.logoMark::before {
+  background-image: url("/brand/mdb-wines-landing.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  content: "";
+  inset: -18px;
+  opacity: 0.65;
+  position: absolute;
+}
+
+.logo strong {
   color: var(--accent);
-  font-size: 28px;
+  font-size: clamp(28px, 3vw, 36px);
   font-weight: 500;
+  line-height: 1;
 }
 
 .header nav {
+  align-items: stretch;
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  justify-content: flex-end;
 }
 
-.header nav a {
-  border-radius: 6px;
+.header nav a,
+.navButton {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-left: 1px solid transparent;
   color: var(--text);
+  cursor: pointer;
+  display: flex;
+  font-family: "Cormorant Garamond", "Garamond", Georgia, serif;
+  font-size: clamp(24px, 2.35vw, 30px);
+  font-weight: 500;
+  min-height: 100%;
+  padding: 0 clamp(14px, 2vw, 26px);
+}
+
+.header nav a:hover,
+.navButton:hover,
+.navButton[aria-expanded="true"] {
+  background: rgba(210, 199, 188, 0.62);
+}
+
+.dropdownWrap {
+  display: flex;
+  position: relative;
+}
+
+.dropdownWrap .navButton {
+  width: 100%;
+}
+
+.dropdown {
+  background: rgba(211, 202, 192, 0.96);
+  box-shadow: none;
+  display: grid;
+  gap: 8px;
+  max-height: min(440px, calc(100vh - 150px));
+  min-width: 245px;
+  overflow: auto;
+  padding: 22px 30px 34px;
+  position: absolute;
+  right: 0;
+  top: 100%;
+}
+
+.dropdownIntro {
+  display: none;
+}
+
+.wineryMenu {
+  display: grid;
+  gap: 12px;
+}
+
+.wineryMenuGroup {
+  display: grid;
+  gap: 7px;
+}
+
+.wineryMenuGroup > a {
+  color: #fff !important;
+  font-size: 22px !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+}
+
+.wineryMenuGroup div {
+  display: grid;
+  gap: 3px;
+  padding-left: 12px;
+}
+
+.wineryMenuGroup div a {
+  color: rgba(255, 255, 255, 0.82) !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 13px !important;
+  min-height: 0 !important;
+  padding: 2px 0 !important;
+}
+
+.emptyMenu {
+  color: #fff;
+  font-size: 20px;
+  margin: 0;
+}
+
+.cartLink {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--text);
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  min-width: 76px;
+  padding: 0 22px !important;
+  position: relative;
+}
+
+.cartLink:hover {
+  background: rgba(210, 199, 188, 0.62);
+}
+
+.cartLink svg {
+  fill: none;
+  height: 44px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 4;
+  width: 44px;
+}
+
+.cartLink span {
+  align-items: center;
+  background: var(--accent);
+  border-radius: 999px;
+  color: #fff;
+  display: flex;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  padding: 9px 10px;
+  font-size: 12px;
+  font-weight: 800;
+  height: 22px;
+  justify-content: center;
+  position: absolute;
+  right: 12px;
+  top: 28px;
+  width: 22px;
 }
 
-.header nav a:hover {
-  background: rgba(124, 131, 86, 0.14);
-}
-
-@media (max-width: 640px) {
+@media (max-width: 900px) {
   .header {
-    align-items: flex-start;
-    flex-direction: column;
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .logo {
+    justify-content: center;
+    padding: 18px 22px;
+  }
+
+  .header nav {
+    border-top: 1px solid rgba(44, 29, 60, 0.16);
+    display: flex;
+    justify-content: flex-start;
+    overflow-x: auto;
+    overflow-y: visible;
+    scrollbar-width: thin;
+    width: 100%;
+  }
+
+  .dropdownWrap {
+    position: static;
+  }
+
+  .header nav a,
+  .navButton {
+    flex: 0 0 auto;
+    font-size: 24px;
+    justify-content: center;
+    min-height: 62px;
+    padding: 0 18px;
+    white-space: nowrap;
+  }
+
+  .cartLink {
+    flex: 0 0 58px;
+    min-width: 58px;
+    padding: 0 !important;
+  }
+
+  .cartLink svg {
+    height: 40px;
+    width: 40px;
+  }
+
+  .cartLink span {
+    right: 2px;
+    top: 12px;
+  }
+
+  .dropdown {
+    position: fixed;
+    left: 12px;
+    max-height: calc(100dvh - 190px);
+    min-width: 0;
+    right: 12px;
+    top: 182px;
+    z-index: 90;
   }
 }

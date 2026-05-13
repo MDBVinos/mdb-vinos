@@ -14,8 +14,11 @@ export type ParsedWineImportRow = {
   hasExplicitFeatured: boolean;
   hasExplicitImage: boolean;
   hasExplicitIntensity: boolean;
+  hasExplicitVarietal: boolean;
+  hasExplicitWineLine: boolean;
   hasExplicitMoments: boolean;
   hasExplicitType: boolean;
+  hasExplicitWinery: boolean;
   imageUrl: string | null;
   intensityNames: string[];
   line: number;
@@ -25,7 +28,9 @@ export type ParsedWineImportRow = {
   priceUnit: number | null;
   typeName: string | null;
   unitsPerBox: number | null;
+  varietalName: string | null;
   winery: string | null;
+  wineryLineName: string | null;
 };
 
 export type WineImportPreviewRow = ParsedWineImportRow & {
@@ -34,10 +39,17 @@ export type WineImportPreviewRow = ParsedWineImportRow & {
   intensityIds: string[];
   missingIntensityNames: string[];
   missingMomentNames: string[];
+  missingTypeName: string | null;
+  missingVarietalName: string | null;
+  missingWineLineName: string | null;
+  missingWineryName: string | null;
   momentIds: string[];
   typeId: string | null;
+  varietalId: string | null;
   warnings: string[];
   wineId: string | null;
+  wineLineId: string | null;
+  wineryId: string | null;
 };
 
 export type WineImportPreview = {
@@ -57,6 +69,8 @@ type WineImportColumn =
   | "description"
   | "featured"
   | "image"
+  | "line"
+  | "lineId"
   | "moments"
   | "name"
   | "priceBox"
@@ -70,7 +84,10 @@ type PreviewContext = {
   existingWines: WineImportLookup[];
   intensities: WineImportLookup[];
   moments: WineImportLookup[];
+  varietals: WineImportLookup[];
+  wineLines: Array<WineImportLookup & { wineryId: string }>;
   wineTypes: WineImportLookup[];
+  wineries: WineImportLookup[];
 };
 
 const REQUIRED_COLUMNS: WineImportColumn[] = [
@@ -89,6 +106,8 @@ const COLUMN_LABELS: Record<WineImportColumn, string> = {
   description: "Descripcion",
   featured: "featured",
   image: "image",
+  line: "winery line",
+  lineId: "Line ID",
   moments: "moments",
   name: "name",
   priceBox: "Precio de venta Caja",
@@ -105,6 +124,15 @@ const HEADER_ALIASES = new Map<string, WineImportColumn>(
     ["nombre", "name"],
     ["winery", "winery"],
     ["bodega", "winery"],
+    ["winery line", "line"],
+    ["linea bodega", "line"],
+    ["línea bodega", "line"],
+    ["linea de vino", "line"],
+    ["línea de vino", "line"],
+    ["line", "line"],
+    ["line id", "lineId"],
+    ["varietal", "lineId"],
+    ["variedad", "lineId"],
     ["description", "description"],
     ["descripcion", "description"],
     ["descripción", "description"],
@@ -244,6 +272,30 @@ function parseFeaturedColumnStatus(value: string) {
   return null;
 }
 
+function normalizeWineTypeName(value: string) {
+  const normalized = normalizeImportKey(value);
+  const known = new Map([
+    ["tinto", "Tinto"],
+    ["blanco", "Blanco"],
+    ["rosado", "Rosado"],
+    ["rose", "Rosado"],
+    ["espumante", "Espumante"],
+  ]);
+
+  return known.get(normalized) ?? value.trim();
+}
+
+function normalizeVarietalName(value: string) {
+  const normalized = normalizeImportKey(value);
+  const known = new Map([
+    ["cabernet suavignon", "Cabernet Sauvignon"],
+    ["rose", "Rosé"],
+    ["rose champenoise", "Rosé Champenoise"],
+  ]);
+
+  return known.get(normalized) ?? value.trim();
+}
+
 function splitList(value: string) {
   return value
     .split(/[;,|·•]/)
@@ -330,7 +382,11 @@ export async function parseWineImportWorkbook(input: ArrayBuffer | Uint8Array) {
     const activeText = text(row, "active");
     const description = text(row, "description");
     const featuredText = text(row, "featured");
-    const typeName = text(row, "type");
+    const lineName = text(row, "line");
+    const lineId = text(row, "lineId");
+    const winery = text(row, "winery");
+    const typeText = text(row, "type");
+    const typeName = typeText ? normalizeWineTypeName(typeText) : "";
     const intensityNames = uniqueNames(splitList(text(row, "profile")));
     const moments = text(row, "moments");
     const imageUrl = text(row, "image");
@@ -348,7 +404,10 @@ export async function parseWineImportWorkbook(input: ArrayBuffer | Uint8Array) {
       hasExplicitImage: imageUrl !== "",
       hasExplicitIntensity: intensityNames.length > 0,
       hasExplicitMoments: moments !== "",
+      hasExplicitVarietal: lineId !== "",
+      hasExplicitWineLine: lineName !== "",
       hasExplicitType: typeName !== "",
+      hasExplicitWinery: winery !== "",
       imageUrl: imageUrl || null,
       intensityNames,
       line,
@@ -358,7 +417,9 @@ export async function parseWineImportWorkbook(input: ArrayBuffer | Uint8Array) {
       priceUnit: parseNumber(text(row, "priceUnit")),
       typeName: typeName || null,
       unitsPerBox: parseInteger(text(row, "unitsPerBox")),
-      winery: text(row, "winery") || null,
+      varietalName: lineId ? normalizeVarietalName(lineId) : null,
+      winery: winery || null,
+      wineryLineName: lineName || null,
     });
   }
 
@@ -370,6 +431,11 @@ export function buildWineImportPreview(rows: ParsedWineImportRow[], context: Pre
   const intensityByName = lookupByName(context.intensities);
   const momentByName = lookupByName(context.moments);
   const typeByName = lookupByName(context.wineTypes);
+  const varietalByName = lookupByName(context.varietals);
+  const wineryByName = lookupByName(context.wineries);
+  const wineLineByWineryAndName = new Map(
+    context.wineLines.map((line) => [`${line.wineryId}:${normalizeImportKey(line.name)}`, line]),
+  );
   const seenNames = new Set<string>();
 
   const previewRows = rows.map<WineImportPreviewRow>((row) => {
@@ -389,6 +455,12 @@ export function buildWineImportPreview(rows: ParsedWineImportRow[], context: Pre
     }
 
     const existingWine = existingByName.get(nameKey) ?? null;
+    const winery = row.winery ? wineryByName.get(normalizeImportKey(row.winery)) : null;
+    const line =
+      winery && row.wineryLineName
+        ? (wineLineByWineryAndName.get(`${winery.id}:${normalizeImportKey(row.wineryLineName)}`) ?? null)
+        : null;
+    const varietal = row.varietalName ? (varietalByName.get(normalizeImportKey(row.varietalName)) ?? null) : null;
     if (isDuplicate) {
       return {
         ...row,
@@ -397,10 +469,17 @@ export function buildWineImportPreview(rows: ParsedWineImportRow[], context: Pre
         intensityIds: [],
         missingIntensityNames: [],
         missingMomentNames: [],
+        missingTypeName: null,
+        missingVarietalName: null,
+        missingWineLineName: null,
+        missingWineryName: null,
         momentIds: [],
         typeId: null,
+        varietalId: null,
         warnings,
         wineId: existingWine?.id ?? null,
+        wineLineId: null,
+        wineryId: null,
       };
     }
 
@@ -414,8 +493,24 @@ export function buildWineImportPreview(rows: ParsedWineImportRow[], context: Pre
       name,
     }));
 
+    if (row.wineryLineName && !row.winery) {
+      errors.push("La línea de vino requiere una bodega.");
+    }
+
     if (row.typeName && !type) {
-      errors.push(`Tipo de vino desconocido: "${row.typeName}".`);
+      warnings.push(`Se creara el tipo de vino "${row.typeName}".`);
+    }
+
+    if (row.winery && !winery) {
+      warnings.push(`Se creara la bodega "${row.winery}".`);
+    }
+
+    if (row.wineryLineName && !line) {
+      warnings.push(`Se creara la línea "${row.wineryLineName}".`);
+    }
+
+    if (row.varietalName && !varietal) {
+      warnings.push(`Se creara el varietal "${row.varietalName}".`);
     }
 
     for (const intensity of intensities) {
@@ -443,10 +538,17 @@ export function buildWineImportPreview(rows: ParsedWineImportRow[], context: Pre
         .filter((intensity) => !intensity.item)
         .map((intensity) => intensity.name),
       missingMomentNames: moments.filter((moment) => !moment.item).map((moment) => moment.name),
+      missingTypeName: row.typeName && !type ? row.typeName : null,
+      missingVarietalName: row.varietalName && !varietal ? row.varietalName : null,
+      missingWineLineName: row.wineryLineName && !line ? row.wineryLineName : null,
+      missingWineryName: row.winery && !winery ? row.winery : null,
       momentIds: moments.map((moment) => moment.item?.id).filter((id): id is string => Boolean(id)),
       typeId: type?.id ?? null,
+      varietalId: varietal?.id ?? null,
       warnings,
       wineId: existingWine?.id ?? null,
+      wineLineId: line?.id ?? null,
+      wineryId: winery?.id ?? null,
     };
   });
 

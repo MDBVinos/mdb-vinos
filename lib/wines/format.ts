@@ -11,6 +11,12 @@ export type PrismaWineView = {
   priceUnit: DecimalInput;
   unitsPerBox: number | null;
   winery: string | null;
+  wineryId?: string | null;
+  wineLineId?: string | null;
+  varietalId?: string | null;
+  normalizedWinery?: { id: string; name: string } | null;
+  wineLine?: { id: string; name: string } | null;
+  varietal?: { id: string; name: string } | null;
 };
 
 export function priceToNumber(value: DecimalInput) {
@@ -41,6 +47,12 @@ export function toWineView(wine: PrismaWineView) {
     price_unit: priceToNumber(wine.priceUnit),
     units_per_box: wine.unitsPerBox,
     winery: wine.winery,
+    winery_id: wine.normalizedWinery?.id ?? wine.wineryId ?? null,
+    winery_name: wine.normalizedWinery?.name ?? wine.winery ?? null,
+    wine_line_id: wine.wineLine?.id ?? wine.wineLineId ?? null,
+    wine_line_name: wine.wineLine?.name ?? null,
+    varietal_id: wine.varietal?.id ?? wine.varietalId ?? null,
+    varietal_name: wine.varietal?.name ?? null,
   };
 }
 

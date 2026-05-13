@@ -42,6 +42,9 @@ export type WineMinAggregateOutputType = {
   id: string | null
   name: string | null
   winery: string | null
+  wineryId: string | null
+  wineLineId: string | null
+  varietalId: string | null
   description: string | null
   priceUnit: runtime.Decimal | null
   priceBox: runtime.Decimal | null
@@ -57,6 +60,9 @@ export type WineMaxAggregateOutputType = {
   id: string | null
   name: string | null
   winery: string | null
+  wineryId: string | null
+  wineLineId: string | null
+  varietalId: string | null
   description: string | null
   priceUnit: runtime.Decimal | null
   priceBox: runtime.Decimal | null
@@ -72,6 +78,9 @@ export type WineCountAggregateOutputType = {
   id: number
   name: number
   winery: number
+  wineryId: number
+  wineLineId: number
+  varietalId: number
   description: number
   priceUnit: number
   priceBox: number
@@ -101,6 +110,9 @@ export type WineMinAggregateInputType = {
   id?: true
   name?: true
   winery?: true
+  wineryId?: true
+  wineLineId?: true
+  varietalId?: true
   description?: true
   priceUnit?: true
   priceBox?: true
@@ -116,6 +128,9 @@ export type WineMaxAggregateInputType = {
   id?: true
   name?: true
   winery?: true
+  wineryId?: true
+  wineLineId?: true
+  varietalId?: true
   description?: true
   priceUnit?: true
   priceBox?: true
@@ -131,6 +146,9 @@ export type WineCountAggregateInputType = {
   id?: true
   name?: true
   winery?: true
+  wineryId?: true
+  wineLineId?: true
+  varietalId?: true
   description?: true
   priceUnit?: true
   priceBox?: true
@@ -233,6 +251,9 @@ export type WineGroupByOutputType = {
   id: string
   name: string
   winery: string | null
+  wineryId: string | null
+  wineLineId: string | null
+  varietalId: string | null
   description: string | null
   priceUnit: runtime.Decimal | null
   priceBox: runtime.Decimal | null
@@ -271,6 +292,9 @@ export type WineWhereInput = {
   id?: Prisma.UuidFilter<"Wine"> | string
   name?: Prisma.StringFilter<"Wine"> | string
   winery?: Prisma.StringNullableFilter<"Wine"> | string | null
+  wineryId?: Prisma.UuidNullableFilter<"Wine"> | string | null
+  wineLineId?: Prisma.UuidNullableFilter<"Wine"> | string | null
+  varietalId?: Prisma.UuidNullableFilter<"Wine"> | string | null
   description?: Prisma.StringNullableFilter<"Wine"> | string | null
   priceUnit?: Prisma.DecimalNullableFilter<"Wine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: Prisma.DecimalNullableFilter<"Wine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -280,6 +304,9 @@ export type WineWhereInput = {
   active?: Prisma.BoolFilter<"Wine"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Wine"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Wine"> | Date | string
+  normalizedWinery?: Prisma.XOR<Prisma.WineryNullableScalarRelationFilter, Prisma.WineryWhereInput> | null
+  varietal?: Prisma.XOR<Prisma.VarietalNullableScalarRelationFilter, Prisma.VarietalWhereInput> | null
+  wineLine?: Prisma.XOR<Prisma.WineLineNullableScalarRelationFilter, Prisma.WineLineWhereInput> | null
   wineIntensities?: Prisma.WineIntensityListRelationFilter
   wineMoments?: Prisma.WineMomentListRelationFilter
   wineTypes?: Prisma.WineTypeRelationListRelationFilter
@@ -289,6 +316,9 @@ export type WineOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   winery?: Prisma.SortOrderInput | Prisma.SortOrder
+  wineryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  wineLineId?: Prisma.SortOrderInput | Prisma.SortOrder
+  varietalId?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   priceUnit?: Prisma.SortOrderInput | Prisma.SortOrder
   priceBox?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -298,6 +328,9 @@ export type WineOrderByWithRelationInput = {
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  normalizedWinery?: Prisma.WineryOrderByWithRelationInput
+  varietal?: Prisma.VarietalOrderByWithRelationInput
+  wineLine?: Prisma.WineLineOrderByWithRelationInput
   wineIntensities?: Prisma.WineIntensityOrderByRelationAggregateInput
   wineMoments?: Prisma.WineMomentOrderByRelationAggregateInput
   wineTypes?: Prisma.WineTypeRelationOrderByRelationAggregateInput
@@ -310,6 +343,9 @@ export type WineWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.WineWhereInput | Prisma.WineWhereInput[]
   name?: Prisma.StringFilter<"Wine"> | string
   winery?: Prisma.StringNullableFilter<"Wine"> | string | null
+  wineryId?: Prisma.UuidNullableFilter<"Wine"> | string | null
+  wineLineId?: Prisma.UuidNullableFilter<"Wine"> | string | null
+  varietalId?: Prisma.UuidNullableFilter<"Wine"> | string | null
   description?: Prisma.StringNullableFilter<"Wine"> | string | null
   priceUnit?: Prisma.DecimalNullableFilter<"Wine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: Prisma.DecimalNullableFilter<"Wine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -319,6 +355,9 @@ export type WineWhereUniqueInput = Prisma.AtLeast<{
   active?: Prisma.BoolFilter<"Wine"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Wine"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Wine"> | Date | string
+  normalizedWinery?: Prisma.XOR<Prisma.WineryNullableScalarRelationFilter, Prisma.WineryWhereInput> | null
+  varietal?: Prisma.XOR<Prisma.VarietalNullableScalarRelationFilter, Prisma.VarietalWhereInput> | null
+  wineLine?: Prisma.XOR<Prisma.WineLineNullableScalarRelationFilter, Prisma.WineLineWhereInput> | null
   wineIntensities?: Prisma.WineIntensityListRelationFilter
   wineMoments?: Prisma.WineMomentListRelationFilter
   wineTypes?: Prisma.WineTypeRelationListRelationFilter
@@ -328,6 +367,9 @@ export type WineOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   winery?: Prisma.SortOrderInput | Prisma.SortOrder
+  wineryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  wineLineId?: Prisma.SortOrderInput | Prisma.SortOrder
+  varietalId?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   priceUnit?: Prisma.SortOrderInput | Prisma.SortOrder
   priceBox?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -351,6 +393,9 @@ export type WineScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"Wine"> | string
   name?: Prisma.StringWithAggregatesFilter<"Wine"> | string
   winery?: Prisma.StringNullableWithAggregatesFilter<"Wine"> | string | null
+  wineryId?: Prisma.UuidNullableWithAggregatesFilter<"Wine"> | string | null
+  wineLineId?: Prisma.UuidNullableWithAggregatesFilter<"Wine"> | string | null
+  varietalId?: Prisma.UuidNullableWithAggregatesFilter<"Wine"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"Wine"> | string | null
   priceUnit?: Prisma.DecimalNullableWithAggregatesFilter<"Wine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: Prisma.DecimalNullableWithAggregatesFilter<"Wine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -375,6 +420,9 @@ export type WineCreateInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  normalizedWinery?: Prisma.WineryCreateNestedOneWithoutWinesInput
+  varietal?: Prisma.VarietalCreateNestedOneWithoutWinesInput
+  wineLine?: Prisma.WineLineCreateNestedOneWithoutWinesInput
   wineIntensities?: Prisma.WineIntensityCreateNestedManyWithoutWineInput
   wineMoments?: Prisma.WineMomentCreateNestedManyWithoutWineInput
   wineTypes?: Prisma.WineTypeRelationCreateNestedManyWithoutWineInput
@@ -384,6 +432,9 @@ export type WineUncheckedCreateInput = {
   id?: string
   name: string
   winery?: string | null
+  wineryId?: string | null
+  wineLineId?: string | null
+  varietalId?: string | null
   description?: string | null
   priceUnit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -411,6 +462,9 @@ export type WineUpdateInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  normalizedWinery?: Prisma.WineryUpdateOneWithoutWinesNestedInput
+  varietal?: Prisma.VarietalUpdateOneWithoutWinesNestedInput
+  wineLine?: Prisma.WineLineUpdateOneWithoutWinesNestedInput
   wineIntensities?: Prisma.WineIntensityUpdateManyWithoutWineNestedInput
   wineMoments?: Prisma.WineMomentUpdateManyWithoutWineNestedInput
   wineTypes?: Prisma.WineTypeRelationUpdateManyWithoutWineNestedInput
@@ -420,6 +474,9 @@ export type WineUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   winery?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wineryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wineLineId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  varietalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -438,6 +495,9 @@ export type WineCreateManyInput = {
   id?: string
   name: string
   winery?: string | null
+  wineryId?: string | null
+  wineLineId?: string | null
+  varietalId?: string | null
   description?: string | null
   priceUnit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -468,6 +528,9 @@ export type WineUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   winery?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wineryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wineLineId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  varietalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -483,6 +546,9 @@ export type WineCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   winery?: Prisma.SortOrder
+  wineryId?: Prisma.SortOrder
+  wineLineId?: Prisma.SortOrder
+  varietalId?: Prisma.SortOrder
   description?: Prisma.SortOrder
   priceUnit?: Prisma.SortOrder
   priceBox?: Prisma.SortOrder
@@ -504,6 +570,9 @@ export type WineMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   winery?: Prisma.SortOrder
+  wineryId?: Prisma.SortOrder
+  wineLineId?: Prisma.SortOrder
+  varietalId?: Prisma.SortOrder
   description?: Prisma.SortOrder
   priceUnit?: Prisma.SortOrder
   priceBox?: Prisma.SortOrder
@@ -519,6 +588,9 @@ export type WineMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   winery?: Prisma.SortOrder
+  wineryId?: Prisma.SortOrder
+  wineLineId?: Prisma.SortOrder
+  varietalId?: Prisma.SortOrder
   description?: Prisma.SortOrder
   priceUnit?: Prisma.SortOrder
   priceBox?: Prisma.SortOrder
@@ -534,6 +606,16 @@ export type WineSumOrderByAggregateInput = {
   priceUnit?: Prisma.SortOrder
   priceBox?: Prisma.SortOrder
   unitsPerBox?: Prisma.SortOrder
+}
+
+export type WineListRelationFilter = {
+  every?: Prisma.WineWhereInput
+  some?: Prisma.WineWhereInput
+  none?: Prisma.WineWhereInput
+}
+
+export type WineOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type WineScalarRelationFilter = {
@@ -571,6 +653,132 @@ export type BoolFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type WineCreateNestedManyWithoutNormalizedWineryInput = {
+  create?: Prisma.XOR<Prisma.WineCreateWithoutNormalizedWineryInput, Prisma.WineUncheckedCreateWithoutNormalizedWineryInput> | Prisma.WineCreateWithoutNormalizedWineryInput[] | Prisma.WineUncheckedCreateWithoutNormalizedWineryInput[]
+  connectOrCreate?: Prisma.WineCreateOrConnectWithoutNormalizedWineryInput | Prisma.WineCreateOrConnectWithoutNormalizedWineryInput[]
+  createMany?: Prisma.WineCreateManyNormalizedWineryInputEnvelope
+  connect?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+}
+
+export type WineUncheckedCreateNestedManyWithoutNormalizedWineryInput = {
+  create?: Prisma.XOR<Prisma.WineCreateWithoutNormalizedWineryInput, Prisma.WineUncheckedCreateWithoutNormalizedWineryInput> | Prisma.WineCreateWithoutNormalizedWineryInput[] | Prisma.WineUncheckedCreateWithoutNormalizedWineryInput[]
+  connectOrCreate?: Prisma.WineCreateOrConnectWithoutNormalizedWineryInput | Prisma.WineCreateOrConnectWithoutNormalizedWineryInput[]
+  createMany?: Prisma.WineCreateManyNormalizedWineryInputEnvelope
+  connect?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+}
+
+export type WineUpdateManyWithoutNormalizedWineryNestedInput = {
+  create?: Prisma.XOR<Prisma.WineCreateWithoutNormalizedWineryInput, Prisma.WineUncheckedCreateWithoutNormalizedWineryInput> | Prisma.WineCreateWithoutNormalizedWineryInput[] | Prisma.WineUncheckedCreateWithoutNormalizedWineryInput[]
+  connectOrCreate?: Prisma.WineCreateOrConnectWithoutNormalizedWineryInput | Prisma.WineCreateOrConnectWithoutNormalizedWineryInput[]
+  upsert?: Prisma.WineUpsertWithWhereUniqueWithoutNormalizedWineryInput | Prisma.WineUpsertWithWhereUniqueWithoutNormalizedWineryInput[]
+  createMany?: Prisma.WineCreateManyNormalizedWineryInputEnvelope
+  set?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+  disconnect?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+  delete?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+  connect?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+  update?: Prisma.WineUpdateWithWhereUniqueWithoutNormalizedWineryInput | Prisma.WineUpdateWithWhereUniqueWithoutNormalizedWineryInput[]
+  updateMany?: Prisma.WineUpdateManyWithWhereWithoutNormalizedWineryInput | Prisma.WineUpdateManyWithWhereWithoutNormalizedWineryInput[]
+  deleteMany?: Prisma.WineScalarWhereInput | Prisma.WineScalarWhereInput[]
+}
+
+export type WineUncheckedUpdateManyWithoutNormalizedWineryNestedInput = {
+  create?: Prisma.XOR<Prisma.WineCreateWithoutNormalizedWineryInput, Prisma.WineUncheckedCreateWithoutNormalizedWineryInput> | Prisma.WineCreateWithoutNormalizedWineryInput[] | Prisma.WineUncheckedCreateWithoutNormalizedWineryInput[]
+  connectOrCreate?: Prisma.WineCreateOrConnectWithoutNormalizedWineryInput | Prisma.WineCreateOrConnectWithoutNormalizedWineryInput[]
+  upsert?: Prisma.WineUpsertWithWhereUniqueWithoutNormalizedWineryInput | Prisma.WineUpsertWithWhereUniqueWithoutNormalizedWineryInput[]
+  createMany?: Prisma.WineCreateManyNormalizedWineryInputEnvelope
+  set?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+  disconnect?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+  delete?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+  connect?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+  update?: Prisma.WineUpdateWithWhereUniqueWithoutNormalizedWineryInput | Prisma.WineUpdateWithWhereUniqueWithoutNormalizedWineryInput[]
+  updateMany?: Prisma.WineUpdateManyWithWhereWithoutNormalizedWineryInput | Prisma.WineUpdateManyWithWhereWithoutNormalizedWineryInput[]
+  deleteMany?: Prisma.WineScalarWhereInput | Prisma.WineScalarWhereInput[]
+}
+
+export type WineCreateNestedManyWithoutWineLineInput = {
+  create?: Prisma.XOR<Prisma.WineCreateWithoutWineLineInput, Prisma.WineUncheckedCreateWithoutWineLineInput> | Prisma.WineCreateWithoutWineLineInput[] | Prisma.WineUncheckedCreateWithoutWineLineInput[]
+  connectOrCreate?: Prisma.WineCreateOrConnectWithoutWineLineInput | Prisma.WineCreateOrConnectWithoutWineLineInput[]
+  createMany?: Prisma.WineCreateManyWineLineInputEnvelope
+  connect?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+}
+
+export type WineUncheckedCreateNestedManyWithoutWineLineInput = {
+  create?: Prisma.XOR<Prisma.WineCreateWithoutWineLineInput, Prisma.WineUncheckedCreateWithoutWineLineInput> | Prisma.WineCreateWithoutWineLineInput[] | Prisma.WineUncheckedCreateWithoutWineLineInput[]
+  connectOrCreate?: Prisma.WineCreateOrConnectWithoutWineLineInput | Prisma.WineCreateOrConnectWithoutWineLineInput[]
+  createMany?: Prisma.WineCreateManyWineLineInputEnvelope
+  connect?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+}
+
+export type WineUpdateManyWithoutWineLineNestedInput = {
+  create?: Prisma.XOR<Prisma.WineCreateWithoutWineLineInput, Prisma.WineUncheckedCreateWithoutWineLineInput> | Prisma.WineCreateWithoutWineLineInput[] | Prisma.WineUncheckedCreateWithoutWineLineInput[]
+  connectOrCreate?: Prisma.WineCreateOrConnectWithoutWineLineInput | Prisma.WineCreateOrConnectWithoutWineLineInput[]
+  upsert?: Prisma.WineUpsertWithWhereUniqueWithoutWineLineInput | Prisma.WineUpsertWithWhereUniqueWithoutWineLineInput[]
+  createMany?: Prisma.WineCreateManyWineLineInputEnvelope
+  set?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+  disconnect?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+  delete?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+  connect?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+  update?: Prisma.WineUpdateWithWhereUniqueWithoutWineLineInput | Prisma.WineUpdateWithWhereUniqueWithoutWineLineInput[]
+  updateMany?: Prisma.WineUpdateManyWithWhereWithoutWineLineInput | Prisma.WineUpdateManyWithWhereWithoutWineLineInput[]
+  deleteMany?: Prisma.WineScalarWhereInput | Prisma.WineScalarWhereInput[]
+}
+
+export type WineUncheckedUpdateManyWithoutWineLineNestedInput = {
+  create?: Prisma.XOR<Prisma.WineCreateWithoutWineLineInput, Prisma.WineUncheckedCreateWithoutWineLineInput> | Prisma.WineCreateWithoutWineLineInput[] | Prisma.WineUncheckedCreateWithoutWineLineInput[]
+  connectOrCreate?: Prisma.WineCreateOrConnectWithoutWineLineInput | Prisma.WineCreateOrConnectWithoutWineLineInput[]
+  upsert?: Prisma.WineUpsertWithWhereUniqueWithoutWineLineInput | Prisma.WineUpsertWithWhereUniqueWithoutWineLineInput[]
+  createMany?: Prisma.WineCreateManyWineLineInputEnvelope
+  set?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+  disconnect?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+  delete?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+  connect?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+  update?: Prisma.WineUpdateWithWhereUniqueWithoutWineLineInput | Prisma.WineUpdateWithWhereUniqueWithoutWineLineInput[]
+  updateMany?: Prisma.WineUpdateManyWithWhereWithoutWineLineInput | Prisma.WineUpdateManyWithWhereWithoutWineLineInput[]
+  deleteMany?: Prisma.WineScalarWhereInput | Prisma.WineScalarWhereInput[]
+}
+
+export type WineCreateNestedManyWithoutVarietalInput = {
+  create?: Prisma.XOR<Prisma.WineCreateWithoutVarietalInput, Prisma.WineUncheckedCreateWithoutVarietalInput> | Prisma.WineCreateWithoutVarietalInput[] | Prisma.WineUncheckedCreateWithoutVarietalInput[]
+  connectOrCreate?: Prisma.WineCreateOrConnectWithoutVarietalInput | Prisma.WineCreateOrConnectWithoutVarietalInput[]
+  createMany?: Prisma.WineCreateManyVarietalInputEnvelope
+  connect?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+}
+
+export type WineUncheckedCreateNestedManyWithoutVarietalInput = {
+  create?: Prisma.XOR<Prisma.WineCreateWithoutVarietalInput, Prisma.WineUncheckedCreateWithoutVarietalInput> | Prisma.WineCreateWithoutVarietalInput[] | Prisma.WineUncheckedCreateWithoutVarietalInput[]
+  connectOrCreate?: Prisma.WineCreateOrConnectWithoutVarietalInput | Prisma.WineCreateOrConnectWithoutVarietalInput[]
+  createMany?: Prisma.WineCreateManyVarietalInputEnvelope
+  connect?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+}
+
+export type WineUpdateManyWithoutVarietalNestedInput = {
+  create?: Prisma.XOR<Prisma.WineCreateWithoutVarietalInput, Prisma.WineUncheckedCreateWithoutVarietalInput> | Prisma.WineCreateWithoutVarietalInput[] | Prisma.WineUncheckedCreateWithoutVarietalInput[]
+  connectOrCreate?: Prisma.WineCreateOrConnectWithoutVarietalInput | Prisma.WineCreateOrConnectWithoutVarietalInput[]
+  upsert?: Prisma.WineUpsertWithWhereUniqueWithoutVarietalInput | Prisma.WineUpsertWithWhereUniqueWithoutVarietalInput[]
+  createMany?: Prisma.WineCreateManyVarietalInputEnvelope
+  set?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+  disconnect?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+  delete?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+  connect?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+  update?: Prisma.WineUpdateWithWhereUniqueWithoutVarietalInput | Prisma.WineUpdateWithWhereUniqueWithoutVarietalInput[]
+  updateMany?: Prisma.WineUpdateManyWithWhereWithoutVarietalInput | Prisma.WineUpdateManyWithWhereWithoutVarietalInput[]
+  deleteMany?: Prisma.WineScalarWhereInput | Prisma.WineScalarWhereInput[]
+}
+
+export type WineUncheckedUpdateManyWithoutVarietalNestedInput = {
+  create?: Prisma.XOR<Prisma.WineCreateWithoutVarietalInput, Prisma.WineUncheckedCreateWithoutVarietalInput> | Prisma.WineCreateWithoutVarietalInput[] | Prisma.WineUncheckedCreateWithoutVarietalInput[]
+  connectOrCreate?: Prisma.WineCreateOrConnectWithoutVarietalInput | Prisma.WineCreateOrConnectWithoutVarietalInput[]
+  upsert?: Prisma.WineUpsertWithWhereUniqueWithoutVarietalInput | Prisma.WineUpsertWithWhereUniqueWithoutVarietalInput[]
+  createMany?: Prisma.WineCreateManyVarietalInputEnvelope
+  set?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+  disconnect?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+  delete?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+  connect?: Prisma.WineWhereUniqueInput | Prisma.WineWhereUniqueInput[]
+  update?: Prisma.WineUpdateWithWhereUniqueWithoutVarietalInput | Prisma.WineUpdateWithWhereUniqueWithoutVarietalInput[]
+  updateMany?: Prisma.WineUpdateManyWithWhereWithoutVarietalInput | Prisma.WineUpdateManyWithWhereWithoutVarietalInput[]
+  deleteMany?: Prisma.WineScalarWhereInput | Prisma.WineScalarWhereInput[]
 }
 
 export type WineCreateNestedOneWithoutWineMomentsInput = {
@@ -615,6 +823,225 @@ export type WineUpdateOneRequiredWithoutWineIntensitiesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.WineUpdateToOneWithWhereWithoutWineIntensitiesInput, Prisma.WineUpdateWithoutWineIntensitiesInput>, Prisma.WineUncheckedUpdateWithoutWineIntensitiesInput>
 }
 
+export type WineCreateWithoutNormalizedWineryInput = {
+  id?: string
+  name: string
+  winery?: string | null
+  description?: string | null
+  priceUnit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceBox?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: number | null
+  imageUrl?: string | null
+  featured?: boolean
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  varietal?: Prisma.VarietalCreateNestedOneWithoutWinesInput
+  wineLine?: Prisma.WineLineCreateNestedOneWithoutWinesInput
+  wineIntensities?: Prisma.WineIntensityCreateNestedManyWithoutWineInput
+  wineMoments?: Prisma.WineMomentCreateNestedManyWithoutWineInput
+  wineTypes?: Prisma.WineTypeRelationCreateNestedManyWithoutWineInput
+}
+
+export type WineUncheckedCreateWithoutNormalizedWineryInput = {
+  id?: string
+  name: string
+  winery?: string | null
+  wineLineId?: string | null
+  varietalId?: string | null
+  description?: string | null
+  priceUnit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceBox?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: number | null
+  imageUrl?: string | null
+  featured?: boolean
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  wineIntensities?: Prisma.WineIntensityUncheckedCreateNestedManyWithoutWineInput
+  wineMoments?: Prisma.WineMomentUncheckedCreateNestedManyWithoutWineInput
+  wineTypes?: Prisma.WineTypeRelationUncheckedCreateNestedManyWithoutWineInput
+}
+
+export type WineCreateOrConnectWithoutNormalizedWineryInput = {
+  where: Prisma.WineWhereUniqueInput
+  create: Prisma.XOR<Prisma.WineCreateWithoutNormalizedWineryInput, Prisma.WineUncheckedCreateWithoutNormalizedWineryInput>
+}
+
+export type WineCreateManyNormalizedWineryInputEnvelope = {
+  data: Prisma.WineCreateManyNormalizedWineryInput | Prisma.WineCreateManyNormalizedWineryInput[]
+  skipDuplicates?: boolean
+}
+
+export type WineUpsertWithWhereUniqueWithoutNormalizedWineryInput = {
+  where: Prisma.WineWhereUniqueInput
+  update: Prisma.XOR<Prisma.WineUpdateWithoutNormalizedWineryInput, Prisma.WineUncheckedUpdateWithoutNormalizedWineryInput>
+  create: Prisma.XOR<Prisma.WineCreateWithoutNormalizedWineryInput, Prisma.WineUncheckedCreateWithoutNormalizedWineryInput>
+}
+
+export type WineUpdateWithWhereUniqueWithoutNormalizedWineryInput = {
+  where: Prisma.WineWhereUniqueInput
+  data: Prisma.XOR<Prisma.WineUpdateWithoutNormalizedWineryInput, Prisma.WineUncheckedUpdateWithoutNormalizedWineryInput>
+}
+
+export type WineUpdateManyWithWhereWithoutNormalizedWineryInput = {
+  where: Prisma.WineScalarWhereInput
+  data: Prisma.XOR<Prisma.WineUpdateManyMutationInput, Prisma.WineUncheckedUpdateManyWithoutNormalizedWineryInput>
+}
+
+export type WineScalarWhereInput = {
+  AND?: Prisma.WineScalarWhereInput | Prisma.WineScalarWhereInput[]
+  OR?: Prisma.WineScalarWhereInput[]
+  NOT?: Prisma.WineScalarWhereInput | Prisma.WineScalarWhereInput[]
+  id?: Prisma.UuidFilter<"Wine"> | string
+  name?: Prisma.StringFilter<"Wine"> | string
+  winery?: Prisma.StringNullableFilter<"Wine"> | string | null
+  wineryId?: Prisma.UuidNullableFilter<"Wine"> | string | null
+  wineLineId?: Prisma.UuidNullableFilter<"Wine"> | string | null
+  varietalId?: Prisma.UuidNullableFilter<"Wine"> | string | null
+  description?: Prisma.StringNullableFilter<"Wine"> | string | null
+  priceUnit?: Prisma.DecimalNullableFilter<"Wine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceBox?: Prisma.DecimalNullableFilter<"Wine"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: Prisma.IntNullableFilter<"Wine"> | number | null
+  imageUrl?: Prisma.StringNullableFilter<"Wine"> | string | null
+  featured?: Prisma.BoolFilter<"Wine"> | boolean
+  active?: Prisma.BoolFilter<"Wine"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"Wine"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Wine"> | Date | string
+}
+
+export type WineCreateWithoutWineLineInput = {
+  id?: string
+  name: string
+  winery?: string | null
+  description?: string | null
+  priceUnit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceBox?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: number | null
+  imageUrl?: string | null
+  featured?: boolean
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  normalizedWinery?: Prisma.WineryCreateNestedOneWithoutWinesInput
+  varietal?: Prisma.VarietalCreateNestedOneWithoutWinesInput
+  wineIntensities?: Prisma.WineIntensityCreateNestedManyWithoutWineInput
+  wineMoments?: Prisma.WineMomentCreateNestedManyWithoutWineInput
+  wineTypes?: Prisma.WineTypeRelationCreateNestedManyWithoutWineInput
+}
+
+export type WineUncheckedCreateWithoutWineLineInput = {
+  id?: string
+  name: string
+  winery?: string | null
+  wineryId?: string | null
+  varietalId?: string | null
+  description?: string | null
+  priceUnit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceBox?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: number | null
+  imageUrl?: string | null
+  featured?: boolean
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  wineIntensities?: Prisma.WineIntensityUncheckedCreateNestedManyWithoutWineInput
+  wineMoments?: Prisma.WineMomentUncheckedCreateNestedManyWithoutWineInput
+  wineTypes?: Prisma.WineTypeRelationUncheckedCreateNestedManyWithoutWineInput
+}
+
+export type WineCreateOrConnectWithoutWineLineInput = {
+  where: Prisma.WineWhereUniqueInput
+  create: Prisma.XOR<Prisma.WineCreateWithoutWineLineInput, Prisma.WineUncheckedCreateWithoutWineLineInput>
+}
+
+export type WineCreateManyWineLineInputEnvelope = {
+  data: Prisma.WineCreateManyWineLineInput | Prisma.WineCreateManyWineLineInput[]
+  skipDuplicates?: boolean
+}
+
+export type WineUpsertWithWhereUniqueWithoutWineLineInput = {
+  where: Prisma.WineWhereUniqueInput
+  update: Prisma.XOR<Prisma.WineUpdateWithoutWineLineInput, Prisma.WineUncheckedUpdateWithoutWineLineInput>
+  create: Prisma.XOR<Prisma.WineCreateWithoutWineLineInput, Prisma.WineUncheckedCreateWithoutWineLineInput>
+}
+
+export type WineUpdateWithWhereUniqueWithoutWineLineInput = {
+  where: Prisma.WineWhereUniqueInput
+  data: Prisma.XOR<Prisma.WineUpdateWithoutWineLineInput, Prisma.WineUncheckedUpdateWithoutWineLineInput>
+}
+
+export type WineUpdateManyWithWhereWithoutWineLineInput = {
+  where: Prisma.WineScalarWhereInput
+  data: Prisma.XOR<Prisma.WineUpdateManyMutationInput, Prisma.WineUncheckedUpdateManyWithoutWineLineInput>
+}
+
+export type WineCreateWithoutVarietalInput = {
+  id?: string
+  name: string
+  winery?: string | null
+  description?: string | null
+  priceUnit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceBox?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: number | null
+  imageUrl?: string | null
+  featured?: boolean
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  normalizedWinery?: Prisma.WineryCreateNestedOneWithoutWinesInput
+  wineLine?: Prisma.WineLineCreateNestedOneWithoutWinesInput
+  wineIntensities?: Prisma.WineIntensityCreateNestedManyWithoutWineInput
+  wineMoments?: Prisma.WineMomentCreateNestedManyWithoutWineInput
+  wineTypes?: Prisma.WineTypeRelationCreateNestedManyWithoutWineInput
+}
+
+export type WineUncheckedCreateWithoutVarietalInput = {
+  id?: string
+  name: string
+  winery?: string | null
+  wineryId?: string | null
+  wineLineId?: string | null
+  description?: string | null
+  priceUnit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceBox?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: number | null
+  imageUrl?: string | null
+  featured?: boolean
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  wineIntensities?: Prisma.WineIntensityUncheckedCreateNestedManyWithoutWineInput
+  wineMoments?: Prisma.WineMomentUncheckedCreateNestedManyWithoutWineInput
+  wineTypes?: Prisma.WineTypeRelationUncheckedCreateNestedManyWithoutWineInput
+}
+
+export type WineCreateOrConnectWithoutVarietalInput = {
+  where: Prisma.WineWhereUniqueInput
+  create: Prisma.XOR<Prisma.WineCreateWithoutVarietalInput, Prisma.WineUncheckedCreateWithoutVarietalInput>
+}
+
+export type WineCreateManyVarietalInputEnvelope = {
+  data: Prisma.WineCreateManyVarietalInput | Prisma.WineCreateManyVarietalInput[]
+  skipDuplicates?: boolean
+}
+
+export type WineUpsertWithWhereUniqueWithoutVarietalInput = {
+  where: Prisma.WineWhereUniqueInput
+  update: Prisma.XOR<Prisma.WineUpdateWithoutVarietalInput, Prisma.WineUncheckedUpdateWithoutVarietalInput>
+  create: Prisma.XOR<Prisma.WineCreateWithoutVarietalInput, Prisma.WineUncheckedCreateWithoutVarietalInput>
+}
+
+export type WineUpdateWithWhereUniqueWithoutVarietalInput = {
+  where: Prisma.WineWhereUniqueInput
+  data: Prisma.XOR<Prisma.WineUpdateWithoutVarietalInput, Prisma.WineUncheckedUpdateWithoutVarietalInput>
+}
+
+export type WineUpdateManyWithWhereWithoutVarietalInput = {
+  where: Prisma.WineScalarWhereInput
+  data: Prisma.XOR<Prisma.WineUpdateManyMutationInput, Prisma.WineUncheckedUpdateManyWithoutVarietalInput>
+}
+
 export type WineCreateWithoutWineMomentsInput = {
   id?: string
   name: string
@@ -628,6 +1055,9 @@ export type WineCreateWithoutWineMomentsInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  normalizedWinery?: Prisma.WineryCreateNestedOneWithoutWinesInput
+  varietal?: Prisma.VarietalCreateNestedOneWithoutWinesInput
+  wineLine?: Prisma.WineLineCreateNestedOneWithoutWinesInput
   wineIntensities?: Prisma.WineIntensityCreateNestedManyWithoutWineInput
   wineTypes?: Prisma.WineTypeRelationCreateNestedManyWithoutWineInput
 }
@@ -636,6 +1066,9 @@ export type WineUncheckedCreateWithoutWineMomentsInput = {
   id?: string
   name: string
   winery?: string | null
+  wineryId?: string | null
+  wineLineId?: string | null
+  varietalId?: string | null
   description?: string | null
   priceUnit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -678,6 +1111,9 @@ export type WineUpdateWithoutWineMomentsInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  normalizedWinery?: Prisma.WineryUpdateOneWithoutWinesNestedInput
+  varietal?: Prisma.VarietalUpdateOneWithoutWinesNestedInput
+  wineLine?: Prisma.WineLineUpdateOneWithoutWinesNestedInput
   wineIntensities?: Prisma.WineIntensityUpdateManyWithoutWineNestedInput
   wineTypes?: Prisma.WineTypeRelationUpdateManyWithoutWineNestedInput
 }
@@ -686,6 +1122,9 @@ export type WineUncheckedUpdateWithoutWineMomentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   winery?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wineryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wineLineId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  varietalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -712,6 +1151,9 @@ export type WineCreateWithoutWineTypesInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  normalizedWinery?: Prisma.WineryCreateNestedOneWithoutWinesInput
+  varietal?: Prisma.VarietalCreateNestedOneWithoutWinesInput
+  wineLine?: Prisma.WineLineCreateNestedOneWithoutWinesInput
   wineIntensities?: Prisma.WineIntensityCreateNestedManyWithoutWineInput
   wineMoments?: Prisma.WineMomentCreateNestedManyWithoutWineInput
 }
@@ -720,6 +1162,9 @@ export type WineUncheckedCreateWithoutWineTypesInput = {
   id?: string
   name: string
   winery?: string | null
+  wineryId?: string | null
+  wineLineId?: string | null
+  varietalId?: string | null
   description?: string | null
   priceUnit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -762,6 +1207,9 @@ export type WineUpdateWithoutWineTypesInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  normalizedWinery?: Prisma.WineryUpdateOneWithoutWinesNestedInput
+  varietal?: Prisma.VarietalUpdateOneWithoutWinesNestedInput
+  wineLine?: Prisma.WineLineUpdateOneWithoutWinesNestedInput
   wineIntensities?: Prisma.WineIntensityUpdateManyWithoutWineNestedInput
   wineMoments?: Prisma.WineMomentUpdateManyWithoutWineNestedInput
 }
@@ -770,6 +1218,9 @@ export type WineUncheckedUpdateWithoutWineTypesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   winery?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wineryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wineLineId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  varietalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -796,6 +1247,9 @@ export type WineCreateWithoutWineIntensitiesInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  normalizedWinery?: Prisma.WineryCreateNestedOneWithoutWinesInput
+  varietal?: Prisma.VarietalCreateNestedOneWithoutWinesInput
+  wineLine?: Prisma.WineLineCreateNestedOneWithoutWinesInput
   wineMoments?: Prisma.WineMomentCreateNestedManyWithoutWineInput
   wineTypes?: Prisma.WineTypeRelationCreateNestedManyWithoutWineInput
 }
@@ -804,6 +1258,9 @@ export type WineUncheckedCreateWithoutWineIntensitiesInput = {
   id?: string
   name: string
   winery?: string | null
+  wineryId?: string | null
+  wineLineId?: string | null
+  varietalId?: string | null
   description?: string | null
   priceUnit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceBox?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -846,11 +1303,51 @@ export type WineUpdateWithoutWineIntensitiesInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  normalizedWinery?: Prisma.WineryUpdateOneWithoutWinesNestedInput
+  varietal?: Prisma.VarietalUpdateOneWithoutWinesNestedInput
+  wineLine?: Prisma.WineLineUpdateOneWithoutWinesNestedInput
   wineMoments?: Prisma.WineMomentUpdateManyWithoutWineNestedInput
   wineTypes?: Prisma.WineTypeRelationUpdateManyWithoutWineNestedInput
 }
 
 export type WineUncheckedUpdateWithoutWineIntensitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  winery?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wineryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wineLineId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  varietalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priceUnit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceBox?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  wineMoments?: Prisma.WineMomentUncheckedUpdateManyWithoutWineNestedInput
+  wineTypes?: Prisma.WineTypeRelationUncheckedUpdateManyWithoutWineNestedInput
+}
+
+export type WineCreateManyNormalizedWineryInput = {
+  id?: string
+  name: string
+  winery?: string | null
+  wineLineId?: string | null
+  varietalId?: string | null
+  description?: string | null
+  priceUnit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceBox?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: number | null
+  imageUrl?: string | null
+  featured?: boolean
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type WineUpdateWithoutNormalizedWineryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   winery?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -863,8 +1360,196 @@ export type WineUncheckedUpdateWithoutWineIntensitiesInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  varietal?: Prisma.VarietalUpdateOneWithoutWinesNestedInput
+  wineLine?: Prisma.WineLineUpdateOneWithoutWinesNestedInput
+  wineIntensities?: Prisma.WineIntensityUpdateManyWithoutWineNestedInput
+  wineMoments?: Prisma.WineMomentUpdateManyWithoutWineNestedInput
+  wineTypes?: Prisma.WineTypeRelationUpdateManyWithoutWineNestedInput
+}
+
+export type WineUncheckedUpdateWithoutNormalizedWineryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  winery?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wineLineId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  varietalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priceUnit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceBox?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  wineIntensities?: Prisma.WineIntensityUncheckedUpdateManyWithoutWineNestedInput
   wineMoments?: Prisma.WineMomentUncheckedUpdateManyWithoutWineNestedInput
   wineTypes?: Prisma.WineTypeRelationUncheckedUpdateManyWithoutWineNestedInput
+}
+
+export type WineUncheckedUpdateManyWithoutNormalizedWineryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  winery?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wineLineId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  varietalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priceUnit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceBox?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type WineCreateManyWineLineInput = {
+  id?: string
+  name: string
+  winery?: string | null
+  wineryId?: string | null
+  varietalId?: string | null
+  description?: string | null
+  priceUnit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceBox?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: number | null
+  imageUrl?: string | null
+  featured?: boolean
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type WineUpdateWithoutWineLineInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  winery?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priceUnit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceBox?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  normalizedWinery?: Prisma.WineryUpdateOneWithoutWinesNestedInput
+  varietal?: Prisma.VarietalUpdateOneWithoutWinesNestedInput
+  wineIntensities?: Prisma.WineIntensityUpdateManyWithoutWineNestedInput
+  wineMoments?: Prisma.WineMomentUpdateManyWithoutWineNestedInput
+  wineTypes?: Prisma.WineTypeRelationUpdateManyWithoutWineNestedInput
+}
+
+export type WineUncheckedUpdateWithoutWineLineInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  winery?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wineryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  varietalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priceUnit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceBox?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  wineIntensities?: Prisma.WineIntensityUncheckedUpdateManyWithoutWineNestedInput
+  wineMoments?: Prisma.WineMomentUncheckedUpdateManyWithoutWineNestedInput
+  wineTypes?: Prisma.WineTypeRelationUncheckedUpdateManyWithoutWineNestedInput
+}
+
+export type WineUncheckedUpdateManyWithoutWineLineInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  winery?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wineryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  varietalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priceUnit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceBox?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type WineCreateManyVarietalInput = {
+  id?: string
+  name: string
+  winery?: string | null
+  wineryId?: string | null
+  wineLineId?: string | null
+  description?: string | null
+  priceUnit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceBox?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: number | null
+  imageUrl?: string | null
+  featured?: boolean
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type WineUpdateWithoutVarietalInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  winery?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priceUnit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceBox?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  normalizedWinery?: Prisma.WineryUpdateOneWithoutWinesNestedInput
+  wineLine?: Prisma.WineLineUpdateOneWithoutWinesNestedInput
+  wineIntensities?: Prisma.WineIntensityUpdateManyWithoutWineNestedInput
+  wineMoments?: Prisma.WineMomentUpdateManyWithoutWineNestedInput
+  wineTypes?: Prisma.WineTypeRelationUpdateManyWithoutWineNestedInput
+}
+
+export type WineUncheckedUpdateWithoutVarietalInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  winery?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wineryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wineLineId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priceUnit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceBox?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  wineIntensities?: Prisma.WineIntensityUncheckedUpdateManyWithoutWineNestedInput
+  wineMoments?: Prisma.WineMomentUncheckedUpdateManyWithoutWineNestedInput
+  wineTypes?: Prisma.WineTypeRelationUncheckedUpdateManyWithoutWineNestedInput
+}
+
+export type WineUncheckedUpdateManyWithoutVarietalInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  winery?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wineryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wineLineId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priceUnit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceBox?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsPerBox?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -920,6 +1605,9 @@ export type WineSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   id?: boolean
   name?: boolean
   winery?: boolean
+  wineryId?: boolean
+  wineLineId?: boolean
+  varietalId?: boolean
   description?: boolean
   priceUnit?: boolean
   priceBox?: boolean
@@ -929,6 +1617,9 @@ export type WineSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  normalizedWinery?: boolean | Prisma.Wine$normalizedWineryArgs<ExtArgs>
+  varietal?: boolean | Prisma.Wine$varietalArgs<ExtArgs>
+  wineLine?: boolean | Prisma.Wine$wineLineArgs<ExtArgs>
   wineIntensities?: boolean | Prisma.Wine$wineIntensitiesArgs<ExtArgs>
   wineMoments?: boolean | Prisma.Wine$wineMomentsArgs<ExtArgs>
   wineTypes?: boolean | Prisma.Wine$wineTypesArgs<ExtArgs>
@@ -939,6 +1630,9 @@ export type WineSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   id?: boolean
   name?: boolean
   winery?: boolean
+  wineryId?: boolean
+  wineLineId?: boolean
+  varietalId?: boolean
   description?: boolean
   priceUnit?: boolean
   priceBox?: boolean
@@ -948,12 +1642,18 @@ export type WineSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  normalizedWinery?: boolean | Prisma.Wine$normalizedWineryArgs<ExtArgs>
+  varietal?: boolean | Prisma.Wine$varietalArgs<ExtArgs>
+  wineLine?: boolean | Prisma.Wine$wineLineArgs<ExtArgs>
 }, ExtArgs["result"]["wine"]>
 
 export type WineSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   winery?: boolean
+  wineryId?: boolean
+  wineLineId?: boolean
+  varietalId?: boolean
   description?: boolean
   priceUnit?: boolean
   priceBox?: boolean
@@ -963,12 +1663,18 @@ export type WineSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  normalizedWinery?: boolean | Prisma.Wine$normalizedWineryArgs<ExtArgs>
+  varietal?: boolean | Prisma.Wine$varietalArgs<ExtArgs>
+  wineLine?: boolean | Prisma.Wine$wineLineArgs<ExtArgs>
 }, ExtArgs["result"]["wine"]>
 
 export type WineSelectScalar = {
   id?: boolean
   name?: boolean
   winery?: boolean
+  wineryId?: boolean
+  wineLineId?: boolean
+  varietalId?: boolean
   description?: boolean
   priceUnit?: boolean
   priceBox?: boolean
@@ -980,19 +1686,33 @@ export type WineSelectScalar = {
   updatedAt?: boolean
 }
 
-export type WineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "winery" | "description" | "priceUnit" | "priceBox" | "unitsPerBox" | "imageUrl" | "featured" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["wine"]>
+export type WineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "winery" | "wineryId" | "wineLineId" | "varietalId" | "description" | "priceUnit" | "priceBox" | "unitsPerBox" | "imageUrl" | "featured" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["wine"]>
 export type WineInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  normalizedWinery?: boolean | Prisma.Wine$normalizedWineryArgs<ExtArgs>
+  varietal?: boolean | Prisma.Wine$varietalArgs<ExtArgs>
+  wineLine?: boolean | Prisma.Wine$wineLineArgs<ExtArgs>
   wineIntensities?: boolean | Prisma.Wine$wineIntensitiesArgs<ExtArgs>
   wineMoments?: boolean | Prisma.Wine$wineMomentsArgs<ExtArgs>
   wineTypes?: boolean | Prisma.Wine$wineTypesArgs<ExtArgs>
   _count?: boolean | Prisma.WineCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type WineIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type WineIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type WineIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  normalizedWinery?: boolean | Prisma.Wine$normalizedWineryArgs<ExtArgs>
+  varietal?: boolean | Prisma.Wine$varietalArgs<ExtArgs>
+  wineLine?: boolean | Prisma.Wine$wineLineArgs<ExtArgs>
+}
+export type WineIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  normalizedWinery?: boolean | Prisma.Wine$normalizedWineryArgs<ExtArgs>
+  varietal?: boolean | Prisma.Wine$varietalArgs<ExtArgs>
+  wineLine?: boolean | Prisma.Wine$wineLineArgs<ExtArgs>
+}
 
 export type $WinePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Wine"
   objects: {
+    normalizedWinery: Prisma.$WineryPayload<ExtArgs> | null
+    varietal: Prisma.$VarietalPayload<ExtArgs> | null
+    wineLine: Prisma.$WineLinePayload<ExtArgs> | null
     wineIntensities: Prisma.$WineIntensityPayload<ExtArgs>[]
     wineMoments: Prisma.$WineMomentPayload<ExtArgs>[]
     wineTypes: Prisma.$WineTypeRelationPayload<ExtArgs>[]
@@ -1001,6 +1721,9 @@ export type $WinePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     id: string
     name: string
     winery: string | null
+    wineryId: string | null
+    wineLineId: string | null
+    varietalId: string | null
     description: string | null
     priceUnit: runtime.Decimal | null
     priceBox: runtime.Decimal | null
@@ -1404,6 +2127,9 @@ readonly fields: WineFieldRefs;
  */
 export interface Prisma__WineClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  normalizedWinery<T extends Prisma.Wine$normalizedWineryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Wine$normalizedWineryArgs<ExtArgs>>): Prisma.Prisma__WineryClient<runtime.Types.Result.GetResult<Prisma.$WineryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  varietal<T extends Prisma.Wine$varietalArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Wine$varietalArgs<ExtArgs>>): Prisma.Prisma__VarietalClient<runtime.Types.Result.GetResult<Prisma.$VarietalPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  wineLine<T extends Prisma.Wine$wineLineArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Wine$wineLineArgs<ExtArgs>>): Prisma.Prisma__WineLineClient<runtime.Types.Result.GetResult<Prisma.$WineLinePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   wineIntensities<T extends Prisma.Wine$wineIntensitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Wine$wineIntensitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WineIntensityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   wineMoments<T extends Prisma.Wine$wineMomentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Wine$wineMomentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WineMomentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   wineTypes<T extends Prisma.Wine$wineTypesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Wine$wineTypesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WineTypeRelationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1439,6 +2165,9 @@ export interface WineFieldRefs {
   readonly id: Prisma.FieldRef<"Wine", 'String'>
   readonly name: Prisma.FieldRef<"Wine", 'String'>
   readonly winery: Prisma.FieldRef<"Wine", 'String'>
+  readonly wineryId: Prisma.FieldRef<"Wine", 'String'>
+  readonly wineLineId: Prisma.FieldRef<"Wine", 'String'>
+  readonly varietalId: Prisma.FieldRef<"Wine", 'String'>
   readonly description: Prisma.FieldRef<"Wine", 'String'>
   readonly priceUnit: Prisma.FieldRef<"Wine", 'Decimal'>
   readonly priceBox: Prisma.FieldRef<"Wine", 'Decimal'>
@@ -1702,6 +2431,10 @@ export type WineCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    */
   data: Prisma.WineCreateManyInput | Prisma.WineCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WineIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1772,6 +2505,10 @@ export type WineUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many Wines to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WineIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1838,6 +2575,63 @@ export type WineDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Wines to delete.
    */
   limit?: number
+}
+
+/**
+ * Wine.normalizedWinery
+ */
+export type Wine$normalizedWineryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Winery
+   */
+  select?: Prisma.WinerySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Winery
+   */
+  omit?: Prisma.WineryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WineryInclude<ExtArgs> | null
+  where?: Prisma.WineryWhereInput
+}
+
+/**
+ * Wine.varietal
+ */
+export type Wine$varietalArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Varietal
+   */
+  select?: Prisma.VarietalSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Varietal
+   */
+  omit?: Prisma.VarietalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VarietalInclude<ExtArgs> | null
+  where?: Prisma.VarietalWhereInput
+}
+
+/**
+ * Wine.wineLine
+ */
+export type Wine$wineLineArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WineLine
+   */
+  select?: Prisma.WineLineSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WineLine
+   */
+  omit?: Prisma.WineLineOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WineLineInclude<ExtArgs> | null
+  where?: Prisma.WineLineWhereInput
 }
 
 /**

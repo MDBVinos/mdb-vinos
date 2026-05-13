@@ -151,6 +151,8 @@ export function ImportForm({ imageWines }: ImportFormProps) {
                   <th>Accion</th>
                   <th>Nombre</th>
                   <th>Bodega</th>
+                  <th>Línea</th>
+                  <th>Varietal</th>
                   <th>Tipo</th>
                   <th>Perfil</th>
                   <th>Momentos</th>
@@ -168,6 +170,8 @@ export function ImportForm({ imageWines }: ImportFormProps) {
                     </td>
                     <td>{row.name || "-"}</td>
                     <td>{row.winery ?? "-"}</td>
+                    <td>{row.wineryLineName ?? (row.action === "update" ? "Preserva" : "-")}</td>
+                    <td>{row.varietalName ?? (row.action === "update" ? "Preserva" : "-")}</td>
                     <td>{row.typeName ?? (row.action === "update" ? "Preserva" : "-")}</td>
                     <td>
                       {row.intensityNames.length > 0
@@ -246,6 +250,7 @@ export function ImportForm({ imageWines }: ImportFormProps) {
           >
             <span className={styles.dropTitle}>Soltar imagenes</span>
             <span className={styles.dropCopy}>o seleccionar archivos</span>
+            <span className={styles.dropCopy}>Usá imágenes verticales de botella, con fondo limpio, para que entren completas en las tarjetas.</span>
             <input
               accept="image/*"
               className={styles.fileInput}

@@ -67,7 +67,7 @@ export function SearchBar() {
           }
         }}
         onFocus={() => setTouched(true)}
-        placeholder="Buscá por nombre: malbec, cabernet..."
+        placeholder="Buscá por nombre.... Bodega, cepa, etiqueta"
         type="search"
         value={query}
       />
@@ -84,6 +84,10 @@ export function SearchBar() {
                   {wine.image_url ? <img src={wine.image_url} alt="" /> : <span>MDB</span>}
                   <div>
                     <strong>{wine.name}</strong>
+                    {wine.winery_name ? <span>{wine.winery_name}</span> : null}
+                    {wine.wine_line_name || wine.varietal_name ? (
+                      <em>{[wine.wine_line_name, wine.varietal_name].filter(Boolean).join(" · ")}</em>
+                    ) : null}
                     <small>
                       {wine.price_unit == null ? "Consultar precio" : priceFormatter.format(wine.price_unit)}
                     </small>

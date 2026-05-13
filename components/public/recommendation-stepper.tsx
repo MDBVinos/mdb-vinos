@@ -13,9 +13,9 @@ type RecommendationStepperProps = {
 };
 
 const budgets = [
-  { label: "Hasta $10.000", value: 10000 },
   { label: "Hasta $20.000", value: 20000 },
-  { label: "Hasta $35.000", value: 35000 },
+  { label: "Hasta $40.000", value: 40000 },
+  { label: "Hasta $50.000", value: 50000 },
   { label: "Sin filtro", value: 0 },
 ];
 
@@ -172,7 +172,7 @@ export function RecommendationStepper({ initialMoment, moments, wineTypes, inten
           {!loading && wines && wines.length > 0 ? (
             <div className={styles.grid}>
               {wines.map((wine) => (
-                <WineCard key={wine.id} note={`Ideal para ${moment.toLowerCase()}`} wine={wine} />
+                <WineCard key={wine.id} note={moment} wine={wine} />
               ))}
             </div>
           ) : null}

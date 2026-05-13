@@ -52,6 +52,9 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Wine: 'Wine',
+  Winery: 'Winery',
+  WineLine: 'WineLine',
+  Varietal: 'Varietal',
   Moment: 'Moment',
   WineType: 'WineType',
   Intensity: 'Intensity',
@@ -80,6 +83,9 @@ export const WineScalarFieldEnum = {
   id: 'id',
   name: 'name',
   winery: 'winery',
+  wineryId: 'wineryId',
+  wineLineId: 'wineLineId',
+  varietalId: 'varietalId',
   description: 'description',
   priceUnit: 'priceUnit',
   priceBox: 'priceBox',
@@ -92,6 +98,37 @@ export const WineScalarFieldEnum = {
 } as const
 
 export type WineScalarFieldEnum = (typeof WineScalarFieldEnum)[keyof typeof WineScalarFieldEnum]
+
+
+export const WineryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WineryScalarFieldEnum = (typeof WineryScalarFieldEnum)[keyof typeof WineryScalarFieldEnum]
+
+
+export const WineLineScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  wineryId: 'wineryId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WineLineScalarFieldEnum = (typeof WineLineScalarFieldEnum)[keyof typeof WineLineScalarFieldEnum]
+
+
+export const VarietalScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VarietalScalarFieldEnum = (typeof VarietalScalarFieldEnum)[keyof typeof VarietalScalarFieldEnum]
 
 
 export const MomentScalarFieldEnum = {

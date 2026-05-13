@@ -7,12 +7,22 @@ import type {
   PublicMoment,
   PublicWine,
   PublicWineType,
+  HeaderWinery,
   RecommendationFilters,
   WineDetails,
+  WineryCatalog,
+  WineLineDetails,
 } from "./types";
+
+const wineCatalogInclude = {
+  normalizedWinery: true,
+  varietal: true,
+  wineLine: true,
+};
 
 export async function getActiveWines(limit = 6): Promise<PublicWine[]> {
   const wines = await prisma.wine.findMany({
+    include: wineCatalogInclude,
     orderBy: { name: "asc" },
     take: limit,
     where: { active: true },
@@ -21,18 +31,91 @@ export async function getActiveWines(limit = 6): Promise<PublicWine[]> {
   return wines.map(toWineView);
 }
 
+export async function getFeaturedWines(limit = 6): Promise<PublicWine[]> {
+  const featured = await prisma.wine.findMany({
+    include: wineCatalogInclude,
+    orderBy: { name: "asc" },
+    take: limit,
+    where: {
+      active: true,
+      featured: true,
+    },
+  });
+
+  if (featured.length >= limit) {
+    return featured.map(toWineView);
+  }
+
+  const fallback = await prisma.wine.findMany({
+    include: wineCatalogInclude,
+    orderBy: { name: "asc" },
+    take: limit - featured.length,
+    where: {
+      active: true,
+      id: { notIn: featured.map((wine) => wine.id) },
+    },
+  });
+
+  return [...featured, ...fallback].map(toWineView);
+}
+
 export async function getPublicOptions() {
-  const [moments, wineTypes, intensities] = await Promise.all([
+  const [moments, wineTypes, intensities, wineries, wineLines, varietals] = await Promise.all([
     prisma.moment.findMany({ orderBy: { name: "asc" } }),
     prisma.wineType.findMany({ orderBy: { name: "asc" } }),
     prisma.intensity.findMany({ orderBy: { name: "asc" } }),
+    prisma.winery.findMany({ orderBy: { name: "asc" } }),
+    prisma.wineLine.findMany({ orderBy: { name: "asc" } }),
+    prisma.varietal.findMany({ orderBy: { name: "asc" } }),
   ]);
 
   return {
     moments,
+    varietals,
     wineTypes,
+    wineLines,
+    wineries,
     intensities,
   };
+}
+
+export async function getHeaderWineries(): Promise<HeaderWinery[]> {
+  const wineries = await prisma.winery.findMany({
+    include: {
+      wineLines: {
+        orderBy: { name: "asc" },
+        where: {
+          wines: {
+            some: {
+              active: true,
+            },
+          },
+        },
+      },
+    },
+    orderBy: { name: "asc" },
+    where: {
+      wineLines: {
+        some: {
+          wines: {
+            some: {
+              active: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  return wineries.map((winery) => ({
+    id: winery.id,
+    name: winery.name,
+    lines: winery.wineLines.map((line) => ({
+      id: line.id,
+      name: line.name,
+      wineryId: line.wineryId,
+    })),
+  }));
 }
 
 async function wineIdsForType(typeId: string) {
@@ -96,6 +179,7 @@ export async function getCatalogWines(filters: CatalogFilters = {}): Promise<Pub
   }
 
   const wines = await prisma.wine.findMany({
+    include: wineCatalogInclude,
     orderBy: { name: "asc" },
     where: {
       active: true,
@@ -107,20 +191,62 @@ export async function getCatalogWines(filters: CatalogFilters = {}): Promise<Pub
   return wines.map(toWineView);
 }
 
-export async function searchWinesByName(search: string): Promise<PublicWine[]> {
+export async function searchWines(search: string): Promise<PublicWine[]> {
   if (search.trim().length < 2) {
     return [];
   }
 
+  const query = search.trim();
   const wines = await prisma.wine.findMany({
+    include: wineCatalogInclude,
     orderBy: { name: "asc" },
     take: 8,
     where: {
       active: true,
-      name: {
-        contains: search.trim(),
-        mode: "insensitive",
-      },
+      OR: [
+        {
+          name: {
+            contains: query,
+            mode: "insensitive",
+          },
+        },
+        {
+          winery: {
+            contains: query,
+            mode: "insensitive",
+          },
+        },
+        {
+          normalizedWinery: {
+            is: {
+              name: {
+                contains: query,
+                mode: "insensitive",
+              },
+            },
+          },
+        },
+        {
+          wineLine: {
+            is: {
+              name: {
+                contains: query,
+                mode: "insensitive",
+              },
+            },
+          },
+        },
+        {
+          varietal: {
+            is: {
+              name: {
+                contains: query,
+                mode: "insensitive",
+              },
+            },
+          },
+        },
+      ],
     },
   });
 
@@ -146,6 +272,7 @@ export async function getRecommendedWines(filters: RecommendationFilters): Promi
   }
 
   const wines = await prisma.wine.findMany({
+    include: wineCatalogInclude,
     orderBy: { priceUnit: "asc" },
     take: 4,
     where: {
@@ -161,6 +288,7 @@ export async function getRecommendedWines(filters: RecommendationFilters): Promi
 export async function getWineDetails(id: string): Promise<WineDetails> {
   const wine = await prisma.wine.findFirst({
     include: {
+      ...wineCatalogInclude,
       wineIntensities: {
         include: { intensity: true },
       },
@@ -187,5 +315,64 @@ export async function getWineDetails(id: string): Promise<WineDetails> {
     intensities: wine.wineIntensities.map((row) => row.intensity),
     moments: wine.wineMoments.map((row) => row.moment),
     wineType: wine.wineTypes[0]?.wineType ?? null,
+  };
+}
+
+export async function getWineryCatalog(): Promise<WineryCatalog[]> {
+  const wineries = await prisma.winery.findMany({
+    include: {
+      wineLines: {
+        include: {
+          wines: {
+            include: wineCatalogInclude,
+            orderBy: [{ varietal: { name: "asc" } }, { name: "asc" }],
+            where: { active: true },
+          },
+        },
+        orderBy: { name: "asc" },
+      },
+    },
+    orderBy: { name: "asc" },
+  });
+
+  return wineries
+    .map((winery) => ({
+      id: winery.id,
+      name: winery.name,
+      lines: winery.wineLines
+        .map((line) => ({
+          id: line.id,
+          name: line.name,
+          wineryId: line.wineryId,
+          wines: line.wines.map(toWineView),
+        }))
+        .filter((line) => line.wines.length > 0),
+    }))
+    .filter((winery) => winery.lines.length > 0);
+}
+
+export async function getWineLineDetails(id: string): Promise<WineLineDetails> {
+  const line = await prisma.wineLine.findFirst({
+    include: {
+      winery: true,
+      wines: {
+        include: wineCatalogInclude,
+        orderBy: [{ varietal: { name: "asc" } }, { name: "asc" }],
+        where: { active: true },
+      },
+    },
+    where: { id },
+  });
+
+  if (!line || line.wines.length === 0) {
+    notFound();
+  }
+
+  return {
+    id: line.id,
+    name: line.name,
+    wineryId: line.wineryId,
+    winery: line.winery ? { id: line.winery.id, name: line.winery.name } : null,
+    wines: line.wines.map(toWineView),
   };
 }

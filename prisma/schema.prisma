@@ -11,6 +11,9 @@ model Wine {
   id              String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name            String
   winery          String?
+  wineryId        String?            @map("winery_id") @db.Uuid
+  wineLineId      String?            @map("wine_line_id") @db.Uuid
+  varietalId      String?            @map("varietal_id") @db.Uuid
   description     String?
   priceUnit       Decimal?           @map("price_unit") @db.Decimal(10, 2)
   priceBox        Decimal?           @map("price_box") @db.Decimal(10, 2)
@@ -20,13 +23,54 @@ model Wine {
   active          Boolean            @default(true)
   createdAt       DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt       DateTime           @updatedAt @map("updated_at") @db.Timestamptz(6)
+  normalizedWinery Winery?           @relation(fields: [wineryId], references: [id], onDelete: SetNull)
+  varietal        Varietal?          @relation(fields: [varietalId], references: [id], onDelete: SetNull)
+  wineLine        WineLine?          @relation(fields: [wineLineId], references: [id], onDelete: SetNull)
   wineIntensities WineIntensity[]
   wineMoments     WineMoment[]
   wineTypes       WineTypeRelation[]
 
   @@index([active])
   @@index([name])
+  @@index([varietalId])
+  @@index([wineLineId])
+  @@index([wineryId])
   @@map("wines")
+}
+
+model Winery {
+  id        String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String     @unique
+  createdAt DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime   @updatedAt @map("updated_at") @db.Timestamptz(6)
+  wineLines WineLine[]
+  wines     Wine[]
+
+  @@map("wineries")
+}
+
+model WineLine {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String
+  wineryId  String   @map("winery_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  winery    Winery   @relation(fields: [wineryId], references: [id], onDelete: Cascade)
+  wines     Wine[]
+
+  @@unique([wineryId, name])
+  @@index([name])
+  @@map("wine_lines")
+}
+
+model Varietal {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String   @unique
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  wines     Wine[]
+
+  @@map("varietals")
 }
 
 model Moment {

@@ -4,67 +4,218 @@
   border-radius: 8px;
   box-shadow: var(--shadow);
   display: grid;
+  grid-template-rows: auto 1fr;
+  min-width: 0;
   overflow: hidden;
 }
 
 .imageLink {
-  background: var(--panel-soft);
+  background:
+    linear-gradient(135deg, rgba(93, 20, 23, 0.08), rgba(124, 131, 86, 0.1)),
+    var(--panel-soft);
+  align-items: end;
+  display: flex;
+  justify-content: center;
+  min-height: 220px;
+  overflow: hidden;
+  padding: 18px 16px 0;
+}
+
+.imageLink img {
   display: block;
-}
-
-.imageLink img,
-.placeholder {
-  aspect-ratio: 4 / 5;
-  display: grid;
-  height: auto;
-  object-fit: cover;
-  place-items: center;
-  width: 100%;
+  height: 205px;
+  max-width: 100%;
+  object-fit: contain;
+  width: auto;
 }
 
 .placeholder {
+  align-items: center;
   color: var(--accent);
+  display: flex;
   font-family: "Garamond", "Cormorant Garamond", Georgia, serif;
   font-size: 34px;
+  height: 205px;
+  justify-content: center;
 }
 
 .body {
   display: grid;
-  gap: 10px;
-  padding: 18px;
+  gap: 7px;
+  padding: 12px;
+  min-width: 0;
 }
 
-.note {
-  color: var(--olive);
-  font-family: Arial, Helvetica, sans-serif;
+.winery,
+.wineName,
+.prices,
+.quantities,
+.momentDescription,
+.added {
+  margin: 0;
+}
+
+.wineName {
+  color: var(--text);
+  display: block;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.05;
+  text-align: center;
+  text-decoration: none;
+}
+
+.winery {
+  color: var(--muted);
   font-size: 13px;
+  font-weight: 600;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.prices {
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 6px;
+  padding-top: 9px;
+}
+
+.priceRow {
+  align-items: baseline;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  min-width: 0;
+}
+
+.priceRow strong {
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.priceRow span {
+  color: var(--green);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
   font-weight: 800;
-  margin: 0;
+  line-height: 1;
+  text-align: right;
+  white-space: nowrap;
 }
 
-.body h3 {
-  font-size: 28px;
-  font-weight: 500;
-  margin: 0;
+.quantities {
+  display: grid;
+  gap: 7px;
+  margin-top: 2px;
 }
 
-.description {
+.quantityRow {
+  align-items: center;
+  display: grid;
+  gap: 7px;
+  grid-template-columns: minmax(0, 1fr) 24px 24px;
+  min-width: 0;
+}
+
+.quantityRow button {
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--olive);
+  display: flex;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  height: 24px;
+  justify-content: center;
+  line-height: 1;
+  min-height: 24px;
+  padding: 0 0 2px;
+  position: relative;
+  touch-action: manipulation;
+  width: 24px;
+  z-index: 2;
+}
+
+.quantityRow button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
+.quantityRow span {
   color: var(--muted);
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
-  margin: 0;
+  font-size: 11px;
+  font-weight: 800;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.footer {
-  align-items: center;
-  display: flex;
-  gap: 12px;
-  justify-content: space-between;
-  margin-top: 4px;
+.momentDescription {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.25;
+  text-align: center;
 }
 
-.footer strong {
+.added {
+  color: var(--green);
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 16px;
+  font-size: 12px;
+  font-weight: 800;
+  text-align: right;
+}
+
+@media (max-width: 420px) {
+  .imageLink {
+    min-height: 152px;
+    padding: 12px 8px 0;
+  }
+
+  .imageLink img,
+  .placeholder {
+    height: 142px;
+  }
+
+  .body {
+    gap: 5px;
+    padding: 8px;
+  }
+
+  .wineName {
+    font-size: 15px;
+  }
+
+  .winery {
+    font-size: 12px;
+  }
+
+  .priceRow strong {
+    font-size: 12px;
+  }
+
+  .priceRow span,
+  .quantityRow span {
+    font-size: 10px;
+  }
+
+  .quantityRow {
+    gap: 4px;
+    grid-template-columns: minmax(0, 1fr) 22px 22px;
+  }
+
+  .quantityRow button {
+    font-size: 15px;
+    height: 22px;
+    min-height: 22px;
+    width: 22px;
+  }
+
+  .momentDescription {
+    font-size: 10px;
+  }
 }

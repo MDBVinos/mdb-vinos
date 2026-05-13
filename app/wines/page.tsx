@@ -31,11 +31,19 @@ export default async function WinesPage({ searchParams }: WinesPageProps) {
       <SiteHeader />
       <main className={styles.page}>
         <section className={styles.section}>
-          <div className={styles.sectionHeader}>
-            <p className={styles.kicker}>Catálogo</p>
-            <h1>{params.moment ? `Vinos para ${params.moment}` : "Todos los vinos MDB"}</h1>
+          <div className={styles.introPanel}>
+            <div className={styles.sectionHeader}>
+              <div className={styles.sectionTitle}>
+                <p className={styles.kicker}>Catálogo</p>
+                <h1>{params.moment ? `Vinos para ${params.moment}` : "Todos los vinos MDB"}</h1>
+              </div>
+              <Link className="button secondary" href="/bodegas">
+                Ver bodegas
+              </Link>
+            </div>
+            <SearchBar />
+            <p className={styles.searchHint}>Buscá por vino, bodega, línea o varietal y sumá al carrito desde cada tarjeta.</p>
           </div>
-          <SearchBar />
         </section>
 
         <form className={styles.filters}>

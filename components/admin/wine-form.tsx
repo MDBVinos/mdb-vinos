@@ -14,9 +14,13 @@ type WineFormProps = {
 
 export function WineForm({ action, mode, options, initialData }: WineFormProps) {
   const [state, formAction] = useActionState(action, {});
+  const [selectedWineryId, setSelectedWineryId] = useState(initialData?.winery_id ?? "");
   const [selectedImage, setSelectedImage] = useState<{ name: string; previewUrl: string; size: number } | null>(null);
   const [isDraggingImage, setIsDraggingImage] = useState(false);
   const imageInputRef = useRef<HTMLInputElement>(null);
+  const availableWineLines = selectedWineryId
+    ? options.wineLines.filter((line) => line.wineryId === selectedWineryId)
+    : options.wineLines;
 
   useEffect(() => {
     return () => {
@@ -176,6 +180,7 @@ export function WineForm({ action, mode, options, initialData }: WineFormProps) 
         >
           <span className={styles.dropTitle}>Soltar imagen</span>
           <span className={styles.dropCopy}>o seleccionar archivo</span>
+          <span className={styles.dropCopy}>Usá una imagen vertical de botella, con fondo limpio, para que entre completa en la tarjeta.</span>
           <input
             accept="image/*"
             className={styles.fileInput}
@@ -199,6 +204,47 @@ export function WineForm({ action, mode, options, initialData }: WineFormProps) 
       <section className={styles.section}>
         <h2>Clasificacion</h2>
         <div className={styles.grid}>
+          <div className="field">
+            <label htmlFor="winery_id">Bodega normalizada</label>
+            <select
+              id="winery_id"
+              name="winery_id"
+              onChange={(event) => setSelectedWineryId(event.currentTarget.value)}
+              value={selectedWineryId}
+            >
+              <option value="">Sin bodega</option>
+              {options.wineries.map((winery) => (
+                <option key={winery.id} value={winery.id}>
+                  {winery.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="field">
+            <label htmlFor="wine_line_id">Línea</label>
+            <select id="wine_line_id" name="wine_line_id" defaultValue={initialData?.wine_line_id ?? ""}>
+              <option value="">Sin línea</option>
+              {availableWineLines.map((line) => (
+                <option key={line.id} value={line.id}>
+                  {line.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="field">
+            <label htmlFor="varietal_id">Varietal</label>
+            <select id="varietal_id" name="varietal_id" defaultValue={initialData?.varietal_id ?? ""}>
+              <option value="">Sin varietal</option>
+              {options.varietals.map((varietal) => (
+                <option key={varietal.id} value={varietal.id}>
+                  {varietal.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <div className="field">
             <label htmlFor="wine_type_id">Tipo de vino</label>
             <select id="wine_type_id" name="wine_type_id" defaultValue={initialData?.wineTypeId ?? ""}>

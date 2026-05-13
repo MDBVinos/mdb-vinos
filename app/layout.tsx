@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { CartProvider } from "@/components/public/cart-context";
+import { FloatingCart } from "@/components/public/floating-cart";
+import { FloatingWhatsApp } from "@/components/public/floating-whatsapp";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -13,7 +16,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body>{children}</body>
+      <body>
+        <CartProvider>
+          {children}
+          <FloatingCart />
+          <FloatingWhatsApp />
+        </CartProvider>
+      </body>
     </html>
   );
 }

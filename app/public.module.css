@@ -1,137 +1,288 @@
 .page {
   display: grid;
-  gap: 48px;
+  gap: 70px;
   margin: 0 auto;
-  max-width: 1180px;
-  padding: 12px 22px 56px;
+  max-width: none;
+  padding: 0 0 90px;
 }
 
 .hero {
-  align-items: stretch;
+  align-content: start;
   display: grid;
-  gap: 22px;
-  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
-  min-height: 560px;
+  justify-items: center;
+  min-height: 512px;
+  padding: 28px 24px 12px;
+  text-align: center;
 }
 
 .heroCopy {
-  align-content: center;
-  background:
-    linear-gradient(135deg, rgba(93, 20, 23, 0.94), rgba(36, 17, 52, 0.9)),
-    var(--accent);
-  border-radius: 8px;
-  color: #fff;
   display: grid;
-  gap: 18px;
-  padding: 44px;
+  justify-items: center;
 }
 
 .heroCopy h1 {
-  font-size: clamp(48px, 8vw, 86px);
+  color: var(--accent);
+  font-size: clamp(64px, 7.7vw, 112px);
   font-weight: 500;
-  line-height: 0.95;
+  line-height: 0.98;
   margin: 0;
-  max-width: 760px;
 }
 
-.heroCopy p {
-  color: #f6eee8;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 17px;
-  line-height: 1.6;
-  margin: 0;
-  max-width: 610px;
+.heroSubhead {
+  color: var(--text);
+  font-size: clamp(44px, 4.8vw, 68px);
+  font-weight: 500;
+  line-height: 1.08;
+  margin: 24px 0 0;
 }
 
-.heroPanel {
-  align-content: center;
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  box-shadow: var(--shadow);
+.heroText {
+  color: #1f1721;
+  font-size: clamp(24px, 2.35vw, 35px);
+  line-height: 1.25;
+  margin: 28px 0 0;
+}
+
+.heroActions {
+  align-items: center;
+  display: flex;
+  gap: 72px;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.smartButton {
+  background: transparent;
+  border: 2px solid var(--green);
+  border-radius: 999px;
+  color: var(--green);
+  font-size: 32px;
+  line-height: 1;
+  padding: 20px 32px 22px;
+}
+
+.heroActions a:not(.smartButton) {
+  border-bottom: 2px solid currentColor;
+  color: var(--text);
+  font-size: 34px;
+  line-height: 1;
+}
+
+.heroSearch {
+  margin-top: 58px;
+  width: min(700px, calc(100vw - 44px));
+}
+
+.section {
   display: grid;
-  gap: 14px;
-  padding: 26px;
+  gap: 32px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1306px;
+  padding-left: 34px;
+  padding-right: 34px;
+  width: 100%;
 }
 
-.heroPanel p {
-  color: var(--muted);
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 14px;
+.sectionHeader {
+  align-items: end;
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+}
+
+.sectionTitle {
+  display: grid;
+}
+
+.sectionHeader h1,
+.sectionHeader h2 {
+  color: var(--text);
+  font-size: clamp(38px, 3.4vw, 48px);
+  font-weight: 500;
+  line-height: 1;
   margin: 0;
 }
 
 .kicker {
   color: var(--olive);
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0;
   margin: 0;
   text-transform: uppercase;
 }
 
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.section {
-  display: grid;
-  gap: 18px;
-}
-
-.sectionHeader {
-  display: grid;
-  gap: 4px;
-}
-
-.sectionHeader h1,
-.sectionHeader h2 {
-  font-size: 42px;
-  font-weight: 500;
-  margin: 0;
-}
-
 .grid,
-.momentGrid {
+.recommendationRail,
+.momentGrid,
+.wineryChipGrid {
   display: grid;
-  gap: 18px;
+  gap: 36px;
 }
 
 .grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.recommendationRail {
+  grid-auto-columns: minmax(240px, 280px);
+  grid-auto-flow: column;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  padding-bottom: 14px;
+  scroll-snap-type: inline mandatory;
+}
+
+.recommendationRail > * {
+  scroll-snap-align: start;
+}
+
+.recommendationRail::-webkit-scrollbar {
+  height: 8px;
+}
+
+.recommendationRail::-webkit-scrollbar-thumb {
+  background: rgba(44, 29, 60, 0.28);
+  border-radius: 999px;
 }
 
 .momentGrid {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+.wineryChipGrid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.introPanel,
+.filters,
+.wineryHeader {
+  background: rgba(255, 255, 255, 0.42);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+}
+
+.searchHint,
+.emptyText {
+  color: var(--muted);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+}
+
 .filters {
   align-items: end;
+  grid-template-columns: 1fr 1fr auto;
+}
+
+.wineryChip {
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 8px;
-  box-shadow: var(--shadow);
+  color: var(--accent);
+  display: grid;
+  font-size: 24px;
+  font-weight: 500;
+  min-height: 86px;
+  padding: 16px;
+}
+
+.wineryChip span {
+  align-self: end;
+  color: var(--muted);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.wineryList {
+  display: grid;
+  gap: 32px;
+}
+
+.winerySection {
+  scroll-margin-top: 150px;
+  display: grid;
+  gap: 18px;
+}
+
+.wineryHeader h2 {
+  color: var(--accent);
+  font-size: clamp(42px, 6vw, 72px);
+  font-weight: 500;
+  line-height: 0.95;
+  margin: 0;
+}
+
+.linePills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.linePills a {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--green);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 8px 12px;
+}
+
+.lineList {
+  display: grid;
+  gap: 24px;
+}
+
+.lineSection {
+  scroll-margin-top: 150px;
   display: grid;
   gap: 14px;
-  grid-template-columns: 1fr 1fr auto;
-  padding: 18px;
+}
+
+.lineHeader {
+  align-items: end;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  padding-bottom: 10px;
+}
+
+.lineHeader h3 {
+  color: var(--accent);
+  font-size: clamp(30px, 4vw, 44px);
+  font-weight: 500;
+  line-height: 1;
+  margin: 0;
+}
+
+.lineHeader span {
+  color: var(--muted);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  font-weight: 800;
 }
 
 .product {
   align-items: start;
   display: grid;
   gap: 28px;
-  grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
+  grid-template-columns: minmax(280px, 0.82fr) minmax(0, 1.18fr);
 }
 
 .productImage {
-  background: var(--panel);
+  background: var(--panel-soft);
   border: 1px solid var(--line);
   border-radius: 8px;
-  box-shadow: var(--shadow);
   overflow: hidden;
 }
 
@@ -139,14 +290,14 @@
 .productPlaceholder {
   aspect-ratio: 4 / 5;
   display: grid;
-  object-fit: cover;
+  object-fit: contain;
   place-items: center;
   width: 100%;
 }
 
 .productPlaceholder {
   color: var(--accent);
-  font-size: 48px;
+  font-size: 54px;
 }
 
 .productInfo {
@@ -155,9 +306,9 @@
 }
 
 .productInfo h1 {
-  font-size: 64px;
+  font-size: clamp(46px, 6vw, 76px);
   font-weight: 500;
-  line-height: 1;
+  line-height: 0.95;
   margin: 0;
 }
 
@@ -173,9 +324,49 @@
   margin: 0;
 }
 
+.productWinery {
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.productWinery span {
+  color: var(--text);
+  font-family: "Cormorant Garamond", "Garamond", Georgia, serif;
+  font-weight: 700;
+}
+
+.productTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.productTags span {
+  background: rgba(124, 131, 86, 0.14);
+  border: 1px solid rgba(124, 131, 86, 0.3);
+  border-radius: 999px;
+  color: var(--olive);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.1;
+  padding: 7px 10px;
+}
+
+.productLineage {
+  color: var(--green) !important;
+  font-weight: 800;
+}
+
 .priceList {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
   display: grid;
   gap: 8px;
+  padding: 14px;
 }
 
 .chips {
@@ -193,14 +384,25 @@
   padding: 7px 10px;
 }
 
-@media (max-width: 920px) {
-  .hero,
-  .product {
-    grid-template-columns: 1fr;
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .hero {
+    min-height: auto;
+  }
+
+  .heroActions {
+    flex-direction: column;
+    gap: 22px;
   }
 
   .grid,
-  .momentGrid {
+  .momentGrid,
+  .wineryChipGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -210,20 +412,102 @@
 }
 
 @media (max-width: 640px) {
-  .hero {
-    min-height: auto;
+  .page {
+    gap: 46px;
   }
 
-  .heroCopy {
-    padding: 28px;
+  .hero {
+    padding-inline: 16px;
+  }
+
+  .heroCopy h1 {
+    font-size: 52px;
+  }
+
+  .heroSubhead {
+    font-size: 36px;
+  }
+
+  .heroText,
+  .smartButton,
+  .heroActions a {
+    font-size: 24px;
+  }
+
+  .section {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .sectionHeader,
+  .lineHeader {
+    align-items: start;
+    flex-direction: column;
   }
 
   .grid,
-  .momentGrid {
+  .momentGrid,
+  .wineryChipGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .product {
+    gap: 20px;
     grid-template-columns: 1fr;
+  }
+
+  .productImage {
+    justify-self: center;
+    width: min(300px, 100%);
+  }
+
+  .productImage img,
+  .productPlaceholder {
+    aspect-ratio: 3 / 4;
+  }
+
+  .productInfo {
+    gap: 14px;
   }
 
   .productInfo h1 {
     font-size: 44px;
+    text-align: center;
+  }
+
+  .productWinery {
+    justify-content: center;
+  }
+
+  .productTags {
+    justify-content: center;
+  }
+
+  .productInfo > p:not(.productWinery):not(.productLineage) {
+    font-size: 18px;
+    line-height: 1.45;
+    text-align: center;
+  }
+
+  .recommendationRail {
+    gap: 18px;
+    grid-auto-columns: minmax(220px, 74vw);
+  }
+}
+
+@media (max-width: 420px) {
+  .section {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .grid {
+    gap: 12px;
+  }
+
+  .momentGrid,
+  .wineryChipGrid,
+  .product {
+    grid-template-columns: 1fr;
   }
 }

@@ -3,7 +3,7 @@ import { MomentCard } from "@/components/public/moment-card";
 import { SearchBar } from "@/components/public/search-bar";
 import { SiteHeader } from "@/components/public/site-header";
 import { WineCard } from "@/components/public/wine-card";
-import { getActiveWines } from "@/lib/public/queries";
+import { getActiveWines, getFeaturedWines } from "@/lib/public/queries";
 import styles from "./public.module.css";
 
 export const dynamic = "force-dynamic";
@@ -16,7 +16,7 @@ const moments = [
 ];
 
 export default async function HomePage() {
-  const wines = await getActiveWines(6);
+  const [recommendedWines, catalogWines] = await Promise.all([getFeaturedWines(4), getActiveWines(12)]);
 
   return (
     <>
@@ -24,47 +24,58 @@ export default async function HomePage() {
       <main className={styles.page}>
         <section className={styles.hero}>
           <div className={styles.heroCopy}>
-            <p className={styles.kicker}>Cada momento marida con un vino</p>
-            <h1>Encontrá el vino perfecto para cada momento</h1>
-            <p>
-              MDB te ayuda a elegir sin complicarte. Decinos el plan, el presupuesto y te acercamos
-              opciones listas para pedir por WhatsApp.
+            <h1>Descubrí el vino perfecto,</h1>
+            <p className={styles.heroSubhead}>Para el momento perfecto.</p>
+            <p className={styles.heroText}>
+              Asesorate con nuestra busqueda inteligente y encontrá el vino que estas buscando.
             </p>
-            <div className={styles.actions}>
-              <Link className="button" href="/discover">
-                Elegí tu vino
+            <div className={styles.heroActions}>
+              <Link className={styles.smartButton} href="/discover">
+                Busqueda Inteligente
               </Link>
-              <Link className="button secondary" href="/wines">
-                Ver catálogo
-              </Link>
+              <Link href="/wines">Ver catálogo</Link>
             </div>
           </div>
-          <div className={styles.heroPanel}>
+          <div className={styles.heroSearch}>
             <SearchBar />
-            <p>Si ya sabés qué querés, buscalo por nombre.</p>
           </div>
         </section>
 
-        <section className={styles.section}>
+        <section className={styles.section} id="recomendaciones">
           <div className={styles.sectionHeader}>
-            <p className={styles.kicker}>Recomendador</p>
-            <h2>Elegí por momento</h2>
+            <div className={styles.sectionTitle}>
+              <h2>Recomendaciones</h2>
+            </div>
           </div>
-          <div className={styles.momentGrid}>
-            {moments.map((moment) => (
-              <MomentCard copy={moment.copy} key={moment.name} name={moment.name} />
+          <div className={styles.recommendationRail}>
+            {recommendedWines.map((wine) => (
+              <WineCard key={wine.id} wine={wine} />
             ))}
           </div>
         </section>
 
         <section className={styles.section}>
           <div className={styles.sectionHeader}>
-            <p className={styles.kicker}>Destacados</p>
-            <h2>Vinos para resolver bien</h2>
+            <div className={styles.sectionTitle}>
+              <h2>Catálogo</h2>
+            </div>
           </div>
           <div className={styles.grid}>
-            {wines.map((wine) => (
-              <WineCard key={wine.id} note="Perfecto para sorprender" wine={wine} />
+            {catalogWines.map((wine) => (
+              <WineCard key={wine.id} wine={wine} />
+            ))}
+          </div>
+        </section>
+
+        <section className={styles.section}>
+          <div className={styles.sectionHeader}>
+            <div className={styles.sectionTitle}>
+              <h2>Momentos</h2>
+            </div>
+          </div>
+          <div className={styles.momentGrid}>
+            {moments.map((moment) => (
+              <MomentCard copy={moment.copy} key={moment.name} name={moment.name} />
             ))}
           </div>
         </section>

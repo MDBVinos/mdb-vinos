@@ -78,7 +78,10 @@ function winePayload(formData: FormData, imageUrl: string | null) {
     priceBox: numberValue(formData, "price_box"),
     priceUnit: numberValue(formData, "price_unit"),
     unitsPerBox: integerValue(formData, "units_per_box"),
+    varietalId: stringValue(formData, "varietal_id") || null,
+    wineLineId: stringValue(formData, "wine_line_id") || null,
     winery: stringValue(formData, "winery") || null,
+    wineryId: stringValue(formData, "winery_id") || null,
   };
 }
 
@@ -165,18 +168,24 @@ export type WineImageImportActionState = {
 };
 
 async function wineImportContext() {
-  const [existingWines, moments, wineTypes, intensities] = await Promise.all([
+  const [existingWines, moments, wineTypes, intensities, wineries, wineLines, varietals] = await Promise.all([
     prisma.wine.findMany({ select: { id: true, name: true } }),
     prisma.moment.findMany({ select: { id: true, name: true } }),
     prisma.wineType.findMany({ select: { id: true, name: true } }),
     prisma.intensity.findMany({ select: { id: true, name: true } }),
+    prisma.winery.findMany({ select: { id: true, name: true } }),
+    prisma.wineLine.findMany({ select: { id: true, name: true, wineryId: true } }),
+    prisma.varietal.findMany({ select: { id: true, name: true } }),
   ]);
 
   return {
     existingWines,
     intensities,
     moments,
+    varietals,
+    wineLines,
     wineTypes,
+    wineries,
   };
 }
 
@@ -195,14 +204,29 @@ async function ensureImportLookups(rows: WineImportPreviewRow[]) {
   const intensityNames = uniqueImportNames(
     rows.flatMap((row) => (row.hasExplicitIntensity ? row.intensityNames : [])),
   );
+  const typeNames = uniqueImportNames(rows.flatMap((row) => (row.hasExplicitType && row.typeName ? [row.typeName] : [])));
+  const wineryNames = uniqueImportNames(rows.flatMap((row) => (row.hasExplicitWinery && row.winery ? [row.winery] : [])));
+  const varietalNames = uniqueImportNames(
+    rows.flatMap((row) => (row.hasExplicitVarietal && row.varietalName ? [row.varietalName] : [])),
+  );
 
-  const [moments, intensities] = await Promise.all([
+  const [moments, intensities, wineTypes, wineries, wineLines, varietals] = await Promise.all([
     prisma.moment.findMany({ select: { id: true, name: true } }),
     prisma.intensity.findMany({ select: { id: true, name: true } }),
+    prisma.wineType.findMany({ select: { id: true, name: true } }),
+    prisma.winery.findMany({ select: { id: true, name: true } }),
+    prisma.wineLine.findMany({ select: { id: true, name: true, wineryId: true } }),
+    prisma.varietal.findMany({ select: { id: true, name: true } }),
   ]);
 
   const momentByName = new Map(moments.map((moment) => [normalizeImportKey(moment.name), moment]));
   const intensityByName = new Map(intensities.map((intensity) => [normalizeImportKey(intensity.name), intensity]));
+  const wineTypeByName = new Map(wineTypes.map((type) => [normalizeImportKey(type.name), type]));
+  const wineryByName = new Map(wineries.map((winery) => [normalizeImportKey(winery.name), winery]));
+  const wineLineByWineryAndName = new Map(
+    wineLines.map((line) => [`${line.wineryId}:${normalizeImportKey(line.name)}`, line]),
+  );
+  const varietalByName = new Map(varietals.map((varietal) => [normalizeImportKey(varietal.name), varietal]));
 
   for (const name of momentNames) {
     const key = normalizeImportKey(name);
@@ -220,7 +244,54 @@ async function ensureImportLookups(rows: WineImportPreviewRow[]) {
     }
   }
 
-  return { intensityByName, momentByName };
+  for (const name of typeNames) {
+    const key = normalizeImportKey(name);
+    if (!wineTypeByName.has(key)) {
+      const wineType = await prisma.wineType.create({ data: { name }, select: { id: true, name: true } });
+      wineTypeByName.set(key, wineType);
+    }
+  }
+
+  for (const name of wineryNames) {
+    const key = normalizeImportKey(name);
+    if (!wineryByName.has(key)) {
+      const winery = await prisma.winery.create({ data: { name }, select: { id: true, name: true } });
+      wineryByName.set(key, winery);
+    }
+  }
+
+  for (const name of varietalNames) {
+    const key = normalizeImportKey(name);
+    if (!varietalByName.has(key)) {
+      const varietal = await prisma.varietal.create({ data: { name }, select: { id: true, name: true } });
+      varietalByName.set(key, varietal);
+    }
+  }
+
+  for (const row of rows) {
+    if (!row.winery || !row.wineryLineName) {
+      continue;
+    }
+
+    const winery = wineryByName.get(normalizeImportKey(row.winery));
+    if (!winery) {
+      continue;
+    }
+
+    const key = `${winery.id}:${normalizeImportKey(row.wineryLineName)}`;
+    if (!wineLineByWineryAndName.has(key)) {
+      const line = await prisma.wineLine.create({
+        data: {
+          name: row.wineryLineName,
+          wineryId: winery.id,
+        },
+        select: { id: true, name: true, wineryId: true },
+      });
+      wineLineByWineryAndName.set(key, line);
+    }
+  }
+
+  return { intensityByName, momentByName, varietalByName, wineLineByWineryAndName, wineTypeByName, wineryByName };
 }
 
 function uniqueImportNames(names: string[]) {
@@ -309,6 +380,18 @@ async function applyWineImportRows(rows: WineImportPreviewRow[]) {
       priceBox: row.priceBox,
       priceUnit: row.priceUnit,
       unitsPerBox: row.unitsPerBox,
+      varietalId: row.varietalName
+        ? (lookupIds.varietalByName.get(normalizeImportKey(row.varietalName))?.id ?? null)
+        : null,
+      wineLineId:
+        row.winery && row.wineryLineName
+          ? (lookupIds.wineLineByWineryAndName.get(
+              `${lookupIds.wineryByName.get(normalizeImportKey(row.winery))?.id ?? ""}:${normalizeImportKey(
+                row.wineryLineName,
+              )}`,
+            )?.id ?? null)
+          : null,
+      wineryId: row.winery ? (lookupIds.wineryByName.get(normalizeImportKey(row.winery))?.id ?? null) : null,
       winery: row.winery,
     };
     const updatePayload = {
@@ -319,6 +402,7 @@ async function applyWineImportRows(rows: WineImportPreviewRow[]) {
     };
     const momentIds = idsForNames(row.momentNames, lookupIds.momentByName);
     const intensityIds = idsForNames(row.intensityNames, lookupIds.intensityByName);
+    const typeId = row.typeName ? (lookupIds.wineTypeByName.get(normalizeImportKey(row.typeName))?.id ?? null) : null;
 
     try {
       if (currentWineId) {
@@ -330,7 +414,7 @@ async function applyWineImportRows(rows: WineImportPreviewRow[]) {
             });
 
             if (row.hasExplicitType) {
-              await replaceWineType(tx, currentWineId, row.typeId);
+              await replaceWineType(tx, currentWineId, typeId);
             }
 
             if (row.hasExplicitIntensity) {
@@ -362,8 +446,8 @@ async function applyWineImportRows(rows: WineImportPreviewRow[]) {
             select: { id: true, name: true },
           });
 
-          if (row.typeId) {
-            await replaceWineType(tx, created.id, row.typeId);
+          if (typeId) {
+            await replaceWineType(tx, created.id, typeId);
           }
 
           if (intensityIds.length > 0) {

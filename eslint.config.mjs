@@ -1,10 +1,17 @@
 import nextVitals from "eslint-config-next/core-web-vitals";
 
+const nextVitalsWithoutReactRules = nextVitals.map((config) => ({
+  ...config,
+  rules: Object.fromEntries(
+    Object.entries(config.rules ?? {}).filter(([rule]) => !rule.startsWith("react/")),
+  ),
+}));
+
 const eslintConfig = [
   {
-    ignores: ["lib/generated/**"],
+    ignores: [".cache/**", ".codex/**", ".next/**", "lib/generated/**"],
   },
-  ...nextVitals,
+  ...nextVitalsWithoutReactRules,
 ];
 
 export default eslintConfig;

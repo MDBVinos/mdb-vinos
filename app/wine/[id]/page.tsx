@@ -1,16 +1,10 @@
 import Link from "next/link";
+import { ProductBuyBox } from "@/components/public/product-buy-box";
 import { SiteHeader } from "@/components/public/site-header";
-import { WhatsAppButton } from "@/components/public/whatsapp-button";
 import { getWineDetails } from "@/lib/public/queries";
 import styles from "../../public.module.css";
 
 export const dynamic = "force-dynamic";
-
-type WinePageProps = {
-  params: Promise<{
-    id: string;
-  }>;
-};
 
 const priceFormatter = new Intl.NumberFormat("es-AR", {
   currency: "ARS",
@@ -18,21 +12,29 @@ const priceFormatter = new Intl.NumberFormat("es-AR", {
   style: "currency",
 });
 
-function formatPrice(price: number | null) {
-  return price == null ? "Consultar precio" : priceFormatter.format(price);
-}
+type WinePageProps = {
+  params: Promise<{
+    id: string;
+  }>;
+};
 
 export default async function WinePage({ params }: WinePageProps) {
   const { id } = await params;
   const wine = await getWineDetails(id);
+  const title = [wine.wine_line_name, wine.varietal_name ?? wine.name].filter(Boolean).join(" - ") || wine.name;
+  const wineryName = wine.winery_name ?? wine.winery ?? "Bodega";
+  const filterTags = [
+    ...wine.moments.map((moment) => `Momento: ${moment.name}`),
+    wine.wineType ? `Tipo: ${wine.wineType.name}` : null,
+    ...wine.intensities.map((intensity) => `Intensidad: ${intensity.name}`),
+    wine.price_unit ? `Unidad: ${priceFormatter.format(wine.price_unit)}` : null,
+    wine.price_box ? `Caja: ${priceFormatter.format(wine.price_box)}` : null,
+  ].filter((tag): tag is string => Boolean(tag));
 
   return (
     <>
       <SiteHeader />
       <main className={styles.page}>
-        <Link className="button secondary" href="/wines">
-          Volver al catálogo
-        </Link>
         <section className={styles.product}>
           <div className={styles.productImage}>
             {wine.image_url ? (
@@ -43,36 +45,21 @@ export default async function WinePage({ params }: WinePageProps) {
           </div>
 
           <div className={styles.productInfo}>
-            <p className={styles.kicker}>MDB Wines</p>
-            <h1>{wine.name}</h1>
-            <p>{wine.description ?? "Un vino pensado para disfrutar sin complicarte."}</p>
-
-            <div className={styles.priceList}>
-              <strong>Unidad: {formatPrice(wine.price_unit)}</strong>
-              <strong>Caja: {formatPrice(wine.price_box)}</strong>
+            <h1>{title}</h1>
+            <p className={styles.productWinery}>
+              <span>Bodega</span>
+              {wineryName}
+            </p>
+            <div className={styles.productTags} aria-label="Etiquetas de busqueda inteligente">
+              {filterTags.length > 0 ? filterTags.map((tag) => <span key={tag}>{tag}</span>) : <span>Etiqueta</span>}
             </div>
+            <p>{wine.description ?? "Descripcion completa"}</p>
 
-            <div className={styles.chips}>
-              {wine.moments.map((moment) => (
-                <span key={moment.id}>{moment.name}</span>
-              ))}
-              {wine.wineType ? <span>{wine.wineType.name}</span> : null}
-              {wine.intensities.map((intensity) => (
-                <span key={intensity.id}>{intensity.name}</span>
-              ))}
-            </div>
+            <ProductBuyBox wine={wine} />
 
-            <div className={styles.actions}>
-              <WhatsAppButton
-                items={[{ wine, quantity: 1, format: "unit" }]}
-                label="Comprar unidad"
-              />
-              <WhatsAppButton
-                className="button secondary"
-                items={[{ wine, quantity: 1, format: "box" }]}
-                label="Comprar caja"
-              />
-            </div>
+            <Link className="button secondary" href="/wines">
+              Seguir viendo catálogo
+            </Link>
           </div>
         </section>
       </main>

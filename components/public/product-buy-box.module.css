@@ -1,0 +1,105 @@
+.box {
+  display: grid;
+  gap: 18px;
+  margin-top: 80px;
+  width: min(760px, 100%);
+}
+
+.row {
+  align-items: center;
+  display: grid;
+  gap: 28px;
+  grid-template-columns: minmax(240px, 1fr) 60px minmax(120px, auto) 60px;
+}
+
+.row strong {
+  color: #050304;
+  font-size: clamp(34px, 3.5vw, 54px);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.row strong span {
+  color: #8f8883;
+  display: inline-block;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: clamp(14px, 1.4vw, 18px);
+  font-weight: 700;
+  margin-left: 8px;
+  white-space: nowrap;
+}
+
+.quantity {
+  color: #8f8883;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: clamp(24px, 2.3vw, 34px);
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.row button {
+  align-items: center;
+  background: transparent;
+  border: 3px solid var(--olive);
+  border-radius: 999px;
+  color: var(--olive);
+  display: flex;
+  font-size: 44px;
+  height: 60px;
+  justify-content: center;
+  line-height: 1;
+  min-height: 60px;
+  padding: 0 0 7px;
+  width: 60px;
+}
+
+.row button:last-child {
+  padding-bottom: 0;
+}
+
+.row button:disabled {
+  opacity: 0.52;
+}
+
+.box p {
+  color: var(--green);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  margin: 0;
+  text-align: right;
+}
+
+@media (max-width: 760px) {
+  .box {
+    margin-top: 24px;
+  }
+
+  .row {
+    gap: 12px;
+    grid-template-columns: minmax(0, 1fr) 44px minmax(82px, auto) 44px;
+  }
+
+  .row strong {
+    font-size: 28px;
+  }
+
+  .row strong span {
+    display: block;
+    font-size: 12px;
+    margin: 5px 0 0;
+  }
+
+  .quantity {
+    font-size: 14px;
+  }
+
+  .row button {
+    font-size: 30px;
+    height: 44px;
+    min-height: 44px;
+    width: 44px;
+  }
+}
