@@ -16,6 +16,7 @@ import { requireUser } from "./queries";
 import type { ActionState } from "./types";
 
 const WINE_BUCKET = "wines";
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 
 function stringValue(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -45,6 +46,10 @@ async function uploadWineImage(formData: FormData, currentUrl?: string | null) {
 
   if (!(file instanceof File) || file.size === 0) {
     return currentUrl ?? null;
+  }
+
+  if (file.size > MAX_IMAGE_BYTES) {
+    throw new Error("La imagen supera los 5 MB. Subi una version mas liviana.");
   }
 
   const { supabase } = await requireUser();
@@ -662,6 +667,33 @@ export async function toggleWineActiveAction(formData: FormData) {
   });
 
   revalidateWinePaths(wineId);
+}
+
+export async function bulkWineAction(formData: FormData) {
+  const intent = stringValue(formData, "intent");
+  const wineIds = formData
+    .getAll("wine_ids")
+    .map(String)
+    .filter(Boolean);
+
+  await requireUser();
+
+  if (wineIds.length === 0) {
+    throw new Error("Seleccioná al menos un vino.");
+  }
+
+  if (intent === "activate" || intent === "deactivate") {
+    await prisma.wine.updateMany({
+      data: { active: intent === "activate" },
+      where: { id: { in: wineIds } },
+    });
+  } else if (intent === "delete") {
+    await prisma.wine.deleteMany({ where: { id: { in: wineIds } } });
+  } else {
+    throw new Error("Accion masiva invalida.");
+  }
+
+  revalidateWinePaths();
 }
 
 export async function deleteWineAction(formData: FormData) {

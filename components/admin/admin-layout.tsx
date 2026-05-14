@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { logoutAction } from "@/app/login/actions";
 import styles from "./admin-layout.module.css";
 
@@ -10,7 +11,15 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   return (
     <div className={styles.shell}>
       <aside className={styles.sidebar}>
-        <div>
+        <div className={styles.brand}>
+          <Image
+            alt="MDB Wines"
+            className={styles.logo}
+            height={96}
+            priority
+            src="/brand/mdb-wines-landing.png"
+            width={96}
+          />
           <p className={styles.kicker}>MDB</p>
           <h1>Admin</h1>
         </div>

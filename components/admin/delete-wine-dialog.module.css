@@ -4,6 +4,7 @@
   display: flex;
   inset: 0;
   justify-content: center;
+  padding: 20px;
   position: fixed;
   z-index: 50;
 }
@@ -29,10 +30,12 @@
   font-size: 14px;
   line-height: 1.5;
   margin: 0 0 24px;
+  overflow-wrap: anywhere;
 }
 
 .actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   justify-content: flex-end;
 }
@@ -51,4 +54,16 @@
   display: block;
   height: 18px;
   width: 18px;
+}
+
+@media (max-width: 520px) {
+  .dialog {
+    padding: 22px;
+  }
+
+  .actions,
+  .actions form,
+  .actions button {
+    width: 100%;
+  }
 }

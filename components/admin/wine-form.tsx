@@ -12,10 +12,25 @@ type WineFormProps = {
   initialData?: WineFormInitialData;
 };
 
+const IMAGE_MAX_BYTES = 5 * 1024 * 1024;
+const IMAGE_MIN_WIDTH = 800;
+const IMAGE_MIN_HEIGHT = 1200;
+const IMAGE_MIN_RATIO = 0.45;
+const IMAGE_MAX_RATIO = 0.85;
+
+type SelectedImage = {
+  error: string | null;
+  name: string;
+  previewUrl: string;
+  size: number;
+  width: number;
+  height: number;
+};
+
 export function WineForm({ action, mode, options, initialData }: WineFormProps) {
   const [state, formAction] = useActionState(action, {});
   const [selectedWineryId, setSelectedWineryId] = useState(initialData?.winery_id ?? "");
-  const [selectedImage, setSelectedImage] = useState<{ name: string; previewUrl: string; size: number } | null>(null);
+  const [selectedImage, setSelectedImage] = useState<SelectedImage | null>(null);
   const [isDraggingImage, setIsDraggingImage] = useState(false);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const availableWineLines = selectedWineryId
@@ -30,7 +45,7 @@ export function WineForm({ action, mode, options, initialData }: WineFormProps) 
     };
   }, [selectedImage]);
 
-  function setImageFile(file: File | null) {
+  async function setImageFile(file: File | null) {
     if (selectedImage?.previewUrl) {
       URL.revokeObjectURL(selectedImage.previewUrl);
     }
@@ -43,15 +58,21 @@ export function WineForm({ action, mode, options, initialData }: WineFormProps) 
       return;
     }
 
+    const previewUrl = URL.createObjectURL(file);
+    const metadata = await readImageMetadata(previewUrl);
+
     setSelectedImage({
+      error: validateImageFile(file, metadata.width, metadata.height),
       name: file.name,
-      previewUrl: URL.createObjectURL(file),
+      previewUrl,
       size: file.size,
+      width: metadata.width,
+      height: metadata.height,
     });
   }
 
   function onImageChange(event: ChangeEvent<HTMLInputElement>) {
-    setImageFile(event.currentTarget.files?.[0] ?? null);
+    void setImageFile(event.currentTarget.files?.[0] ?? null);
   }
 
   function onImageDrop(event: DragEvent<HTMLLabelElement>) {
@@ -60,25 +81,33 @@ export function WineForm({ action, mode, options, initialData }: WineFormProps) 
 
     const file = Array.from(event.dataTransfer.files).find((item) => item.type.startsWith("image/")) ?? null;
     if (!file || !imageInputRef.current || typeof DataTransfer === "undefined") {
-      setImageFile(file);
+      void setImageFile(file);
       return;
     }
 
     const transfer = new DataTransfer();
     transfer.items.add(file);
     imageInputRef.current.files = transfer.files;
-    setImageFile(file);
+    void setImageFile(file);
   }
 
   function clearSelectedImage() {
     if (imageInputRef.current) {
       imageInputRef.current.value = "";
     }
-    setImageFile(null);
+    void setImageFile(null);
   }
 
   return (
-    <form action={formAction} className={styles.form}>
+    <form
+      action={formAction}
+      className={styles.form}
+      onSubmit={(event) => {
+        if (selectedImage?.error) {
+          event.preventDefault();
+        }
+      }}
+    >
       {state.error ? <p className="alert error">{state.error}</p> : null}
 
       {initialData ? (
@@ -160,7 +189,8 @@ export function WineForm({ action, mode, options, initialData }: WineFormProps) 
           <div className={styles.currentImage}>
             <img src={selectedImage.previewUrl} alt="" />
             <span>
-              {selectedImage.name} · {Math.ceil(selectedImage.size / 1024)} KB
+              {selectedImage.name} · {selectedImage.width}x{selectedImage.height}px ·{" "}
+              {Math.ceil(selectedImage.size / 1024)} KB
             </span>
           </div>
         ) : initialData?.image_url ? (
@@ -180,7 +210,9 @@ export function WineForm({ action, mode, options, initialData }: WineFormProps) 
         >
           <span className={styles.dropTitle}>Soltar imagen</span>
           <span className={styles.dropCopy}>o seleccionar archivo</span>
-          <span className={styles.dropCopy}>Usá una imagen vertical de botella, con fondo limpio, para que entre completa en la tarjeta.</span>
+          <span className={styles.dropCopy}>
+            Imagen vertical de botella. Minimo 800x1200 px, maximo 5 MB, proporcion 0.45 a 0.85.
+          </span>
           <input
             accept="image/*"
             className={styles.fileInput}
@@ -191,6 +223,12 @@ export function WineForm({ action, mode, options, initialData }: WineFormProps) 
             type="file"
           />
         </label>
+
+        {selectedImage?.error ? (
+          <p aria-live="polite" className={styles.imageError} role="alert">
+            {selectedImage.error}
+          </p>
+        ) : null}
 
         {selectedImage ? (
           <div className={styles.imageActions}>
@@ -295,10 +333,37 @@ export function WineForm({ action, mode, options, initialData }: WineFormProps) 
 
       <div className={styles.footer}>
         <SubmitButton
+          disabled={Boolean(selectedImage?.error)}
           label={mode === "create" ? "Crear vino" : "Guardar cambios"}
           loadingLabel={mode === "create" ? "Creando..." : "Guardando..."}
         />
       </div>
     </form>
   );
+}
+
+function readImageMetadata(src: string) {
+  return new Promise<{ height: number; width: number }>((resolve) => {
+    const image = new Image();
+    image.onload = () => resolve({ height: image.naturalHeight, width: image.naturalWidth });
+    image.onerror = () => resolve({ height: 0, width: 0 });
+    image.src = src;
+  });
+}
+
+function validateImageFile(file: File, width: number, height: number) {
+  if (file.size > IMAGE_MAX_BYTES) {
+    return "La imagen supera los 5 MB. Subi una version mas liviana.";
+  }
+
+  if (width < IMAGE_MIN_WIDTH || height < IMAGE_MIN_HEIGHT) {
+    return "La imagen es muy chica. Usá minimo 800x1200 px.";
+  }
+
+  const ratio = width / height;
+  if (ratio < IMAGE_MIN_RATIO || ratio > IMAGE_MAX_RATIO) {
+    return "La imagen debe ser vertical de botella, con proporcion entre 0.45 y 0.85.";
+  }
+
+  return null;
 }

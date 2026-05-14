@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { AdminLayout } from "@/components/admin/admin-layout";
 import { WineForm } from "@/components/admin/wine-form";
 import { updateWineAction } from "@/lib/admin/actions";
@@ -20,6 +21,11 @@ export default async function EditWinePage({ params }: EditWinePageProps) {
         <div>
           <p className={styles.kicker}>Editar vino</p>
           <h2>{wine.name}</h2>
+        </div>
+        <div className={styles.actions}>
+          <Link className="button secondary" href="/admin">
+            Volver
+          </Link>
         </div>
       </div>
 

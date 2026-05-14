@@ -14,6 +14,8 @@ export type WineImageImportValidationRow = WineImageImportInputRow & {
   wine: WineImageImportOption;
 };
 
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+
 export function validateWineImageImportRows(rows: WineImageImportInputRow[], wines: WineImageImportOption[]) {
   const errors: string[] = [];
   const validRows: WineImageImportValidationRow[] = [];
@@ -40,6 +42,10 @@ export function validateWineImageImportRows(rows: WineImageImportInputRow[], win
 
     if (row.file.size === 0 || !row.file.type.startsWith("image/")) {
       errors.push(`El archivo "${row.file.name}" no es una imagen valida.`);
+    }
+
+    if (row.file.size > MAX_IMAGE_BYTES) {
+      errors.push(`La imagen "${row.file.name}" supera los 5 MB.`);
     }
 
     if (wine.imageUrl && !row.replaceExisting) {

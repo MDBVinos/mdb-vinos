@@ -13,6 +13,20 @@
   padding: 28px 22px;
 }
 
+.brand {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+}
+
+.logo {
+  height: auto;
+  max-width: 86px;
+  mix-blend-mode: screen;
+  object-fit: contain;
+  width: 86px;
+}
+
 .sidebar h1 {
   font-family: "Garamond", "Cormorant Garamond", Georgia, serif;
   font-size: 36px;

@@ -20,11 +20,20 @@ type ImportFormProps = {
   imageWines: WineImageImportOption[];
 };
 
+const IMAGE_MAX_BYTES = 5 * 1024 * 1024;
+const IMAGE_MIN_WIDTH = 800;
+const IMAGE_MIN_HEIGHT = 1200;
+const IMAGE_MIN_RATIO = 0.45;
+const IMAGE_MAX_RATIO = 0.85;
+
 type ImageRow = {
+  error: string | null;
   file: File;
+  height: number;
   id: string;
   previewUrl: string;
   replaceExisting: boolean;
+  width: number;
   wineId: string;
 };
 
@@ -53,33 +62,43 @@ export function ImportForm({ imageWines }: ImportFormProps) {
     imageInputRef.current.files = transfer.files;
   }
 
-  function addImageFiles(files: FileList | null) {
+  async function addImageFiles(files: FileList | null) {
     if (!files || files.length === 0) {
       return;
     }
 
-    const nextRows = Array.from(files).map((file, index) => ({
-      file,
-      id:
-        typeof crypto !== "undefined" && "randomUUID" in crypto
-          ? crypto.randomUUID()
-          : `${file.name}-${file.size}-${file.lastModified}-${index}`,
-      previewUrl: file.type.startsWith("image/") ? URL.createObjectURL(file) : "",
-      replaceExisting: false,
-      wineId: "",
-    }));
+    const nextRows = await Promise.all(
+      Array.from(files).map(async (file, index) => {
+        const previewUrl = file.type.startsWith("image/") ? URL.createObjectURL(file) : "";
+        const metadata = previewUrl ? await readImageMetadata(previewUrl) : { height: 0, width: 0 };
+
+        return {
+          error: validateImageFile(file, metadata.width, metadata.height),
+          file,
+          height: metadata.height,
+          id:
+            typeof crypto !== "undefined" && "randomUUID" in crypto
+              ? crypto.randomUUID()
+              : `${file.name}-${file.size}-${file.lastModified}-${index}`,
+          previewUrl,
+          replaceExisting: false,
+          width: metadata.width,
+          wineId: "",
+        };
+      }),
+    );
 
     syncImageInput([...imageRows, ...nextRows]);
   }
 
   function onImageInputChange(event: ChangeEvent<HTMLInputElement>) {
-    addImageFiles(event.currentTarget.files);
+    void addImageFiles(event.currentTarget.files);
   }
 
   function onDrop(event: DragEvent<HTMLLabelElement>) {
     event.preventDefault();
     setIsDragging(false);
-    addImageFiles(event.dataTransfer.files);
+    void addImageFiles(event.dataTransfer.files);
   }
 
   function removeImageRow(id: string) {
@@ -113,6 +132,15 @@ export function ImportForm({ imageWines }: ImportFormProps) {
       ) : null}
 
       <form action={previewAction} className={styles.panel}>
+        <div className={styles.panelHeader}>
+          <div>
+            <h3>Archivo Excel</h3>
+            <p>Subi tu base o descargá una plantilla con las columnas correctas.</p>
+          </div>
+          <a className="button secondary" href="/admin/import/template">
+            Descargar ejemplo
+          </a>
+        </div>
         <div className="field">
           <label htmlFor="file">Archivo Excel</label>
           <input id="file" name="file" type="file" accept=".xlsx" required />
@@ -250,7 +278,9 @@ export function ImportForm({ imageWines }: ImportFormProps) {
           >
             <span className={styles.dropTitle}>Soltar imagenes</span>
             <span className={styles.dropCopy}>o seleccionar archivos</span>
-            <span className={styles.dropCopy}>Usá imágenes verticales de botella, con fondo limpio, para que entren completas en las tarjetas.</span>
+            <span className={styles.dropCopy}>
+              Imagenes verticales de botella. Minimo 800x1200 px, maximo 5 MB, proporcion 0.45 a 0.85.
+            </span>
             <input
               accept="image/*"
               className={styles.fileInput}
@@ -274,7 +304,10 @@ export function ImportForm({ imageWines }: ImportFormProps) {
                     </div>
                     <div className={styles.imageMeta}>
                       <strong>{row.file.name}</strong>
-                      <span>{Math.ceil(row.file.size / 1024)} KB</span>
+                      <span>
+                        {row.width}x{row.height}px · {Math.ceil(row.file.size / 1024)} KB
+                      </span>
+                      {row.error ? <span className={styles.imageError}>{row.error}</span> : null}
                     </div>
                     <div className="field">
                       <label htmlFor={`wine-image-${row.id}`}>Vino</label>
@@ -332,7 +365,7 @@ export function ImportForm({ imageWines }: ImportFormProps) {
 
           <div className={styles.footer}>
             <SubmitButton
-              disabled={imageRows.length === 0}
+              disabled={imageRows.length === 0 || imageRows.some((row) => row.error)}
               label="Subir imagenes"
               loadingLabel="Subiendo..."
             />
@@ -341,6 +374,32 @@ export function ImportForm({ imageWines }: ImportFormProps) {
       </section>
     </div>
   );
+}
+
+function readImageMetadata(src: string) {
+  return new Promise<{ height: number; width: number }>((resolve) => {
+    const image = new Image();
+    image.onload = () => resolve({ height: image.naturalHeight, width: image.naturalWidth });
+    image.onerror = () => resolve({ height: 0, width: 0 });
+    image.src = src;
+  });
+}
+
+function validateImageFile(file: File, width: number, height: number) {
+  if (file.size > IMAGE_MAX_BYTES) {
+    return "Supera los 5 MB.";
+  }
+
+  if (width < IMAGE_MIN_WIDTH || height < IMAGE_MIN_HEIGHT) {
+    return "Minimo 800x1200 px.";
+  }
+
+  const ratio = width / height;
+  if (ratio < IMAGE_MIN_RATIO || ratio > IMAGE_MAX_RATIO) {
+    return "Debe ser vertical, proporcion 0.45 a 0.85.";
+  }
+
+  return null;
 }
 
 function PendingNotice({ message, title }: { message: string; title: string }) {
