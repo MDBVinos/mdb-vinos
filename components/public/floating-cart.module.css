@@ -53,8 +53,8 @@
 .item {
   align-items: center;
   display: grid;
-  gap: 28px;
-  grid-template-columns: 84px minmax(190px, 1.1fr) minmax(190px, 0.8fr) minmax(220px, 0.9fr) minmax(120px, 0.5fr);
+  gap: clamp(14px, 2vw, 28px);
+  grid-template-columns: 76px minmax(260px, 1.2fr) minmax(172px, 0.65fr) minmax(172px, 0.65fr) minmax(170px, 0.5fr);
 }
 
 .heading {
@@ -71,13 +71,13 @@
 .thumb {
   align-items: center;
   display: flex;
-  height: 110px;
+  height: 104px;
   justify-content: center;
-  width: 84px;
+  width: 76px;
 }
 
 .thumb img {
-  height: 110px;
+  height: 104px;
   object-fit: contain;
   width: auto;
 }
@@ -88,16 +88,21 @@
 }
 
 .item strong {
-  font-size: clamp(28px, 3vw, 44px);
+  font-size: clamp(26px, 2.7vw, 40px);
   font-weight: 500;
   line-height: 1.05;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .counter {
   align-items: center;
   display: grid;
-  gap: 14px;
-  grid-template-columns: minmax(86px, auto) 48px minmax(42px, 1fr) 48px;
+  gap: 12px;
+  grid-template-columns: 48px minmax(32px, 42px) 48px;
+  justify-content: center;
 }
 
 .counter button {
@@ -128,6 +133,7 @@
 
 .counterLabel {
   color: #8f8883;
+  display: none;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 15px;
   font-weight: 700;
@@ -135,7 +141,8 @@
 }
 
 .value {
-  font-size: clamp(30px, 3vw, 42px);
+  font-size: clamp(28px, 2.75vw, 40px);
+  text-align: right;
   white-space: nowrap;
 }
 
@@ -217,6 +224,7 @@
   }
 
   .counterLabel {
+    display: block;
     font-size: 13px;
   }
 }
