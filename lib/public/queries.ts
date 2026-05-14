@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { intersectIds, toWineView, unique } from "@/lib/wines/format";
+import { intersectIds, priceToNumber, toWineView, unique } from "@/lib/wines/format";
 import type {
   CatalogFilters,
   PublicIntensity,
@@ -19,6 +19,57 @@ const wineCatalogInclude = {
   varietal: true,
   wineLine: true,
 };
+
+type LineWithPrices = {
+  name: string;
+  wines: Array<{ priceUnit: Parameters<typeof priceToNumber>[0] }>;
+};
+
+function compareNameWithOthersLast(first: { name: string }, second: { name: string }) {
+  const firstIsOther = first.name.trim().toLowerCase() === "otros";
+  const secondIsOther = second.name.trim().toLowerCase() === "otros";
+
+  if (firstIsOther && !secondIsOther) {
+    return 1;
+  }
+
+  if (!firstIsOther && secondIsOther) {
+    return -1;
+  }
+
+  return first.name.localeCompare(second.name, "es");
+}
+
+function maxLineUnitPrice(line: LineWithPrices) {
+  const prices = line.wines
+    .map((wine) => priceToNumber(wine.priceUnit))
+    .filter((price): price is number => price != null);
+
+  return prices.length === 0 ? null : Math.max(...prices);
+}
+
+function compareLinesByPremiumPrice(first: LineWithPrices, second: LineWithPrices) {
+  const firstPrice = maxLineUnitPrice(first);
+  const secondPrice = maxLineUnitPrice(second);
+
+  if (firstPrice == null && secondPrice == null) {
+    return first.name.localeCompare(second.name, "es");
+  }
+
+  if (firstPrice == null) {
+    return 1;
+  }
+
+  if (secondPrice == null) {
+    return -1;
+  }
+
+  if (firstPrice !== secondPrice) {
+    return secondPrice - firstPrice;
+  }
+
+  return first.name.localeCompare(second.name, "es");
+}
 
 export async function getActiveWines(limit = 6): Promise<PublicWine[]> {
   const wines = await prisma.wine.findMany({
@@ -83,6 +134,12 @@ export async function getHeaderWineries(): Promise<HeaderWinery[]> {
   const wineries = await prisma.winery.findMany({
     include: {
       wineLines: {
+        include: {
+          wines: {
+            select: { priceUnit: true },
+            where: { active: true },
+          },
+        },
         orderBy: { name: "asc" },
         where: {
           wines: {
@@ -107,15 +164,17 @@ export async function getHeaderWineries(): Promise<HeaderWinery[]> {
     },
   });
 
-  return wineries.map((winery) => ({
-    id: winery.id,
-    name: winery.name,
-    lines: winery.wineLines.map((line) => ({
-      id: line.id,
-      name: line.name,
-      wineryId: line.wineryId,
-    })),
-  }));
+  return wineries
+    .sort(compareNameWithOthersLast)
+    .map((winery) => ({
+      id: winery.id,
+      name: winery.name,
+      lines: [...winery.wineLines].sort(compareLinesByPremiumPrice).map((line) => ({
+        id: line.id,
+        name: line.name,
+        wineryId: line.wineryId,
+      })),
+    }));
 }
 
 async function wineIdsForType(typeId: string) {
@@ -336,10 +395,12 @@ export async function getWineryCatalog(): Promise<WineryCatalog[]> {
   });
 
   return wineries
+    .sort(compareNameWithOthersLast)
     .map((winery) => ({
       id: winery.id,
       name: winery.name,
       lines: winery.wineLines
+        .sort(compareLinesByPremiumPrice)
         .map((line) => ({
           id: line.id,
           name: line.name,

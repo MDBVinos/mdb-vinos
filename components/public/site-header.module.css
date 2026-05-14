@@ -111,14 +111,40 @@
 
 .wineryMenuGroup {
   display: grid;
-  gap: 7px;
+  gap: 8px;
 }
 
-.wineryMenuGroup > a {
+.wineryMenuButton {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.24);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  font-family: "Cormorant Garamond", "Garamond", Georgia, serif;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 7px 0 9px;
+  text-align: left;
+  width: 100%;
+}
+
+.wineryMenuButton span {
   color: #fff !important;
-  font-size: 22px !important;
-  min-height: 0 !important;
-  padding: 0 !important;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+  overflow-wrap: anywhere;
+}
+
+.wineryMenuButton small {
+  color: rgba(255, 255, 255, 0.76);
+  flex: 0 0 auto;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
 }
 
 .wineryMenuGroup div {
@@ -244,5 +270,9 @@
     right: 12px;
     top: 182px;
     z-index: 90;
+  }
+
+  .wineryMenuButton span {
+    font-size: 22px;
   }
 }

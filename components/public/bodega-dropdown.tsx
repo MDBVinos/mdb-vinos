@@ -11,6 +11,7 @@ type BodegaDropdownProps = {
 
 export function BodegaDropdown({ wineries }: BodegaDropdownProps) {
   const [open, setOpen] = useState(false);
+  const [openWineryId, setOpenWineryId] = useState<string | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -56,20 +57,37 @@ export function BodegaDropdown({ wineries }: BodegaDropdownProps) {
 
           {wineries.length > 0 ? (
             <div className={styles.wineryMenu}>
-              {wineries.map((winery) => (
-                <section className={styles.wineryMenuGroup} key={winery.id}>
-                  <Link href={`/bodegas#winery-${winery.id}`} onClick={() => setOpen(false)}>
-                    {winery.name}
-                  </Link>
-                  <div>
-                    {winery.lines.map((line) => (
-                      <Link href={`/lineas/${line.id}`} key={line.id} onClick={() => setOpen(false)}>
-                        {line.name}
-                      </Link>
-                    ))}
-                  </div>
-                </section>
-              ))}
+              {wineries.map((winery) => {
+                const isOpen = openWineryId === winery.id;
+
+                return (
+                  <section className={styles.wineryMenuGroup} key={winery.id}>
+                    <button
+                      aria-controls={`header-winery-${winery.id}`}
+                      aria-expanded={isOpen}
+                      className={styles.wineryMenuButton}
+                      onClick={() => setOpenWineryId(isOpen ? null : winery.id)}
+                      type="button"
+                    >
+                      <span>{winery.name}</span>
+                      <small>{isOpen ? "Cerrar" : "Ver líneas"}</small>
+                    </button>
+
+                    {isOpen ? (
+                      <div id={`header-winery-${winery.id}`}>
+                        <Link href={`/bodegas#winery-${winery.id}`} onClick={() => setOpen(false)}>
+                          Ver bodega
+                        </Link>
+                        {winery.lines.map((line) => (
+                          <Link href={`/lineas/${line.id}`} key={line.id} onClick={() => setOpen(false)}>
+                            {line.name}
+                          </Link>
+                        ))}
+                      </div>
+                    ) : null}
+                  </section>
+                );
+              })}
             </div>
           ) : (
             <p className={styles.emptyMenu}>Todavía no hay bodegas cargadas.</p>
