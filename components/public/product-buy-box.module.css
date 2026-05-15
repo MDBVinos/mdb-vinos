@@ -14,7 +14,7 @@
 
 .row strong {
   color: #050304;
-  font-size: clamp(34px, 3.5vw, 54px);
+  font-size: clamp(28px, 2.9vw, 44px);
   line-height: 1;
   white-space: nowrap;
 }
@@ -32,7 +32,7 @@
 .quantity {
   color: #8f8883;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: clamp(24px, 2.3vw, 34px);
+  font-size: clamp(20px, 1.9vw, 28px);
   font-weight: 700;
   line-height: 1;
   text-align: center;
@@ -46,7 +46,7 @@
   border-radius: 999px;
   color: var(--olive);
   display: flex;
-  font-size: 44px;
+  font-size: 36px;
   height: 60px;
   justify-content: center;
   line-height: 1;
@@ -83,7 +83,7 @@
   }
 
   .row strong {
-    font-size: 28px;
+    font-size: 24px;
   }
 
   .row strong span {
@@ -97,7 +97,7 @@
   }
 
   .row button {
-    font-size: 30px;
+    font-size: 26px;
     height: 44px;
     min-height: 44px;
     width: 44px;

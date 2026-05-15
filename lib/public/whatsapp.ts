@@ -6,7 +6,7 @@ export const GENERAL_WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=${en
 )}`;
 
 export type WhatsAppItem = {
-  wine: Pick<PublicWine, "name" | "price_unit" | "price_box">;
+  wine: Pick<PublicWine, "name" | "price_unit" | "price_box" | "units_per_box">;
   quantity: number;
   format: "unit" | "box";
 };
@@ -25,9 +25,10 @@ export function buildWhatsAppMessage(items: WhatsAppItem[]) {
   const lines = items.map((item) => {
     const label = item.format === "box" ? "caja de" : "x";
     const price = item.format === "box" ? item.wine.price_box : item.wine.price_unit;
+    const units = item.wine.units_per_box ? ` x ${item.wine.units_per_box} unidades` : "";
 
     if (item.format === "box") {
-      return `* ${item.quantity} ${label} ${item.wine.name} (${formatPrice(price)})`;
+      return `* ${item.quantity} ${label} ${item.wine.name}${units} (${formatPrice(price)})`;
     }
 
     return `* ${item.quantity}${label} ${item.wine.name} (${formatPrice(price)})`;

@@ -21,6 +21,10 @@ function formatPrice(price: number | null) {
   return price == null ? "Consultar precio" : priceFormatter.format(price);
 }
 
+function boxLabel(unitsPerBox: number | null) {
+  return unitsPerBox ? `Valor caja x ${unitsPerBox} u.` : "Valor caja";
+}
+
 export function WineCard({ wine, note = "Etiqueta" }: WineCardProps) {
   const { addItem, decrementItem, items } = useCart();
   const [added, setAdded] = useState(false);
@@ -62,7 +66,7 @@ export function WineCard({ wine, note = "Etiqueta" }: WineCardProps) {
             <span>{formatPrice(wine.price_unit)}</span>
           </div>
           <div className={styles.priceRow}>
-            <strong>Valor caja</strong>
+            <strong>{boxLabel(wine.units_per_box)}</strong>
             <span>{formatPrice(wine.price_box)}</span>
           </div>
         </div>
@@ -78,7 +82,10 @@ export function WineCard({ wine, note = "Etiqueta" }: WineCardProps) {
             </button>
           </div>
           <div className={styles.quantityRow}>
-            <span>{boxQuantity} {boxQuantity === 1 ? "caja" : "cajas"}</span>
+            <span>
+              {boxQuantity} {boxQuantity === 1 ? "caja" : "cajas"}
+              {wine.units_per_box ? ` x ${wine.units_per_box} u.` : ""}
+            </span>
             <button disabled={boxQuantity === 0} onClick={() => decrementItem(boxId)} type="button" aria-label="Restar caja">
               -
             </button>

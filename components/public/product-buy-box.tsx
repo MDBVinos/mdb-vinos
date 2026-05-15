@@ -19,6 +19,10 @@ function formatPrice(price: number | null) {
   return price == null ? "Consultar precio" : priceFormatter.format(price);
 }
 
+function boxText(unitsPerBox: number | null) {
+  return unitsPerBox ? `x caja de ${unitsPerBox} unidades` : "x caja";
+}
+
 export function ProductBuyBox({ wine }: ProductBuyBoxProps) {
   const { addItem, decrementItem, items } = useCart();
   const [added, setAdded] = useState("");
@@ -30,7 +34,7 @@ export function ProductBuyBox({ wine }: ProductBuyBoxProps) {
 
   function onAdd(format: CartFormat) {
     addItem({ wine, quantity: 1, format });
-    setAdded(format === "box" ? "Caja sumada" : "Unidad sumada");
+    setAdded(format === "box" ? `Caja${wine.units_per_box ? ` x ${wine.units_per_box} u.` : ""} sumada` : "Unidad sumada");
     window.setTimeout(() => setAdded(""), 1500);
   }
 
@@ -47,11 +51,14 @@ export function ProductBuyBox({ wine }: ProductBuyBoxProps) {
         </button>
       </div>
       <div className={styles.row}>
-        <strong>{formatPrice(wine.price_box)} <span>x caja</span></strong>
+        <strong>{formatPrice(wine.price_box)} <span>{boxText(wine.units_per_box)}</span></strong>
         <button disabled={boxQuantity === 0} onClick={() => decrementItem(boxId)} type="button" aria-label="Restar caja">
           -
         </button>
-        <span className={styles.quantity}>{boxQuantity} {boxQuantity === 1 ? "caja" : "cajas"}</span>
+        <span className={styles.quantity}>
+          {boxQuantity} {boxQuantity === 1 ? "caja" : "cajas"}
+          {wine.units_per_box ? ` x ${wine.units_per_box} u.` : ""}
+        </span>
         <button disabled={!canBuyBox} onClick={() => onAdd("box")} type="button" aria-label="Sumar caja">
           +
         </button>

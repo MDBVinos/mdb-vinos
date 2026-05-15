@@ -44,7 +44,7 @@
 
 .logo strong {
   color: var(--accent);
-  font-size: clamp(28px, 3vw, 36px);
+  font-size: clamp(24px, 2.5vw, 32px);
   font-weight: 500;
   line-height: 1;
 }
@@ -65,7 +65,7 @@
   cursor: pointer;
   display: flex;
   font-family: "Cormorant Garamond", "Garamond", Georgia, serif;
-  font-size: clamp(24px, 2.35vw, 30px);
+  font-size: clamp(21px, 1.95vw, 26px);
   font-weight: 500;
   min-height: 100%;
   padding: 0 clamp(14px, 2vw, 26px);
@@ -134,7 +134,7 @@
 .wineryMenuButton span {
   color: #fff !important;
   flex: 1 1 auto;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
   line-height: 1;
   min-width: 0;
@@ -248,7 +248,7 @@
   .header nav a,
   .navButton {
     flex: 0 0 auto;
-    font-size: 24px;
+    font-size: 21px;
     justify-content: center;
     min-height: 62px;
     padding: 0 18px;
@@ -282,6 +282,6 @@
   }
 
   .wineryMenuButton span {
-    font-size: 20px;
+    font-size: 18px;
   }
 }

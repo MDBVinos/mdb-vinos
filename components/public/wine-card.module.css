@@ -34,7 +34,7 @@
   color: var(--accent);
   display: flex;
   font-family: "Garamond", "Cormorant Garamond", Georgia, serif;
-  font-size: 34px;
+  font-size: 30px;
   height: 205px;
   justify-content: center;
 }
@@ -58,7 +58,7 @@
 .wineName {
   color: var(--text);
   display: block;
-  font-size: 19px;
+  font-size: 17px;
   font-weight: 700;
   line-height: 1.05;
   text-align: center;

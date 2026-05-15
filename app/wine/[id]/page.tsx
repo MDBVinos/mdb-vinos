@@ -28,7 +28,9 @@ export default async function WinePage({ params }: WinePageProps) {
     wine.wineType ? `Tipo: ${wine.wineType.name}` : null,
     ...wine.intensities.map((intensity) => `Intensidad: ${intensity.name}`),
     wine.price_unit ? `Unidad: ${priceFormatter.format(wine.price_unit)}` : null,
-    wine.price_box ? `Caja: ${priceFormatter.format(wine.price_box)}` : null,
+    wine.price_box
+      ? `Caja${wine.units_per_box ? ` x ${wine.units_per_box} unidades` : ""}: ${priceFormatter.format(wine.price_box)}`
+      : null,
   ].filter((tag): tag is string => Boolean(tag));
 
   return (

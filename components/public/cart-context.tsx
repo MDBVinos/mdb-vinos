@@ -20,6 +20,7 @@ export type CartItem = {
   image_url?: string | null;
   price_unit: number | null;
   price_box: number | null;
+  units_per_box: number | null;
   quantity: number;
   format: CartFormat;
 };
@@ -54,6 +55,7 @@ function itemToWhatsApp(item: CartItem): WhatsAppItem {
       name: item.name,
       price_box: item.price_box,
       price_unit: item.price_unit,
+      units_per_box: item.units_per_box,
     },
     quantity: item.quantity,
     format: item.format,
@@ -91,6 +93,7 @@ function readStoredCart() {
         image_url: item.image_url ?? null,
         price_box: typeof item.price_box === "number" ? item.price_box : null,
         price_unit: typeof item.price_unit === "number" ? item.price_unit : null,
+        units_per_box: typeof item.units_per_box === "number" ? item.units_per_box : null,
         quantity: normalizeQuantity(item.quantity),
       }));
   } catch {
@@ -142,6 +145,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
               name: wine.name,
               price_box: wine.price_box,
               price_unit: wine.price_unit,
+              units_per_box: wine.units_per_box,
               quantity: safeQuantity,
               format,
             },

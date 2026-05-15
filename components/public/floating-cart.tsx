@@ -19,6 +19,7 @@ type CartGroup = {
   image_url: string | null;
   price_unit: number | null;
   price_box: number | null;
+  units_per_box: number | null;
   unitItem: CartItem | null;
   boxItem: CartItem | null;
   total: number;
@@ -50,7 +51,7 @@ function groupToWine(group: CartGroup): PublicWine {
     description: null,
     price_unit: group.price_unit,
     price_box: group.price_box,
-    units_per_box: null,
+    units_per_box: group.units_per_box,
     image_url: group.image_url,
     featured: false,
     active: true,
@@ -83,6 +84,7 @@ export function FloatingCart() {
           image_url: item.image_url ?? null,
           price_unit: item.price_unit,
           price_box: item.price_box,
+          units_per_box: item.units_per_box,
           unitItem: null,
           boxItem: null,
           total: 0,
@@ -140,7 +142,9 @@ export function FloatingCart() {
                   <strong>{group.name}</strong>
 
                   <div className={styles.counter}>
-                    <span className={styles.counterLabel}>Cajas</span>
+                    <span className={styles.counterLabel}>
+                      Cajas{group.units_per_box ? ` x ${group.units_per_box} u.` : ""}
+                    </span>
                     <button
                       disabled={!group.boxItem}
                       onClick={() => group.boxItem && decrementItem(group.boxItem.id)}
