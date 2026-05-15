@@ -3,7 +3,7 @@
   background: var(--bg);
   border-bottom: 1px solid rgba(44, 29, 60, 0.16);
   display: grid;
-  grid-template-columns: minmax(210px, 320px) minmax(0, 1fr);
+  grid-template-columns: minmax(190px, 300px) minmax(0, 1fr);
   min-height: 112px;
   position: sticky;
   top: 0;
@@ -14,8 +14,8 @@
 .logo {
   align-items: center;
   display: flex;
-  gap: 18px;
-  padding-left: clamp(20px, 4vw, 58px);
+  gap: clamp(10px, 1.4vw, 18px);
+  padding-left: clamp(16px, 3vw, 44px);
 }
 
 .logoMark {
@@ -65,10 +65,10 @@
   cursor: pointer;
   display: flex;
   font-family: "Cormorant Garamond", "Garamond", Georgia, serif;
-  font-size: clamp(21px, 1.95vw, 26px);
+  font-size: clamp(20px, 1.75vw, 25px);
   font-weight: 500;
   min-height: 100%;
-  padding: 0 clamp(14px, 2vw, 26px);
+  padding: 0 clamp(12px, 1.45vw, 22px);
 }
 
 .header nav a:hover,
@@ -184,8 +184,8 @@
   cursor: pointer;
   display: inline-flex;
   justify-content: center;
-  min-width: 76px;
-  padding: 0 22px !important;
+  min-width: 66px;
+  padding: 0 16px !important;
   position: relative;
 }
 
@@ -195,12 +195,12 @@
 
 .cartLink svg {
   fill: none;
-  height: 44px;
+  height: 40px;
   stroke: currentColor;
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 4;
-  width: 44px;
+  width: 40px;
 }
 
 .cartLink span {
@@ -215,7 +215,7 @@
   height: 22px;
   justify-content: center;
   position: absolute;
-  right: 12px;
+  right: 8px;
   top: 28px;
   width: 22px;
 }
@@ -235,9 +235,8 @@
     border-top: 1px solid rgba(44, 29, 60, 0.16);
     display: flex;
     justify-content: flex-start;
-    overflow-x: auto;
+    overflow-x: visible;
     overflow-y: visible;
-    scrollbar-width: thin;
     width: 100%;
   }
 
@@ -247,23 +246,23 @@
 
   .header nav a,
   .navButton {
-    flex: 0 0 auto;
-    font-size: 21px;
+    flex: 1 1 0;
+    font-size: clamp(18px, 4.5vw, 21px);
     justify-content: center;
     min-height: 62px;
-    padding: 0 18px;
+    padding: 0 clamp(8px, 2vw, 14px);
     white-space: nowrap;
   }
 
   .cartLink {
-    flex: 0 0 58px;
-    min-width: 58px;
+    flex: 0 0 54px;
+    min-width: 54px;
     padding: 0 !important;
   }
 
   .cartLink svg {
-    height: 40px;
-    width: 40px;
+    height: 36px;
+    width: 36px;
   }
 
   .cartLink span {
@@ -283,5 +282,19 @@
 
   .wineryMenuButton span {
     font-size: 18px;
+  }
+}
+
+@media (max-width: 380px) {
+  .header nav {
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  .header nav a,
+  .navButton {
+    flex: 0 0 auto;
+    font-size: 18px;
+    padding: 0 10px;
   }
 }

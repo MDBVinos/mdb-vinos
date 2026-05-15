@@ -14,7 +14,7 @@ export async function SiteHeader() {
         <strong>MDB Wines</strong>
       </Link>
       <nav aria-label="Principal">
-        <Link href="/#recomendaciones">Recomendaciones</Link>
+        <Link href="/#recomendaciones">Destacados</Link>
         <Link href="/wines">Catálogo</Link>
         <BodegaDropdown wineries={wineries} />
         <HeaderCartButton />

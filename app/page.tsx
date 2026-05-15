@@ -44,7 +44,7 @@ export default async function HomePage() {
         <section className={styles.section} id="recomendaciones">
           <div className={styles.sectionHeader}>
             <div className={styles.sectionTitle}>
-              <h2>Recomendaciones</h2>
+              <h2>Destacados</h2>
             </div>
           </div>
           <div className={styles.recommendationRail}>
