@@ -1,6 +1,8 @@
 .page {
+  --public-gutter: 16px;
+
   display: grid;
-  gap: 70px;
+  gap: 46px;
   margin: 0 auto;
   max-width: none;
   padding: 0 0 90px;
@@ -11,7 +13,7 @@
   display: grid;
   justify-items: center;
   min-height: 512px;
-  padding: 28px 24px 12px;
+  padding: 28px var(--public-gutter) 12px;
   text-align: center;
 }
 
@@ -70,17 +72,15 @@
 
 .heroSearch {
   margin-top: 58px;
-  width: min(700px, calc(100vw - 44px));
+  width: min(700px, calc(100vw - var(--public-gutter) - var(--public-gutter)));
 }
 
 .section {
   display: grid;
-  gap: 32px;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 1306px;
-  padding-left: 34px;
-  padding-right: 34px;
+  gap: 16px;
+  margin: 0 auto;
+  max-width: 1280px;
+  padding-inline: var(--public-gutter);
   width: 100%;
 }
 
@@ -119,7 +119,7 @@
 .momentGrid,
 .wineryChipGrid {
   display: grid;
-  gap: 36px;
+  gap: 16px;
 }
 
 .grid {
@@ -203,7 +203,7 @@
 
 .wineryList {
   display: grid;
-  gap: 32px;
+  gap: 16px;
 }
 
 .winerySection {
@@ -290,7 +290,7 @@
 .linePanel {
   display: grid;
   gap: 18px;
-  padding: 28px 34px 34px;
+  padding: 28px var(--public-gutter) 34px;
 }
 
 .lineHeader {
@@ -320,7 +320,7 @@
 .product {
   align-items: start;
   display: grid;
-  gap: 28px;
+  gap: 16px;
   grid-template-columns: minmax(280px, 0.82fr) minmax(0, 1.18fr);
 }
 
@@ -435,6 +435,49 @@
   }
 }
 
+@media (min-width: 641px) {
+  .page {
+    --public-gutter: 24px;
+    gap: 56px;
+  }
+
+  .section,
+  .grid,
+  .recommendationRail,
+  .momentGrid,
+  .wineryChipGrid,
+  .wineryList,
+  .product {
+    gap: 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .page {
+    --public-gutter: 40px;
+    gap: 70px;
+  }
+
+  .section {
+    gap: 32px;
+  }
+
+  .grid,
+  .recommendationRail,
+  .momentGrid,
+  .wineryChipGrid {
+    gap: 36px;
+  }
+
+  .wineryList {
+    gap: 32px;
+  }
+
+  .product {
+    gap: 28px;
+  }
+}
+
 @media (max-width: 900px) {
   .hero {
     min-height: auto;
@@ -457,14 +500,6 @@
 }
 
 @media (max-width: 640px) {
-  .page {
-    gap: 46px;
-  }
-
-  .hero {
-    padding-inline: 16px;
-  }
-
   .heroCopy h1 {
     font-size: 40px;
   }
@@ -477,11 +512,6 @@
   .smartButton,
   .heroActions a {
     font-size: 21px;
-  }
-
-  .section {
-    padding-left: 16px;
-    padding-right: 16px;
   }
 
   .sectionHeader,
@@ -502,7 +532,7 @@
   }
 
   .linePanel {
-    padding: 20px 16px 28px;
+    padding-block: 20px 28px;
   }
 
   .grid,
@@ -550,21 +580,11 @@
   }
 
   .recommendationRail {
-    gap: 18px;
     grid-auto-columns: minmax(220px, 74vw);
   }
 }
 
 @media (max-width: 420px) {
-  .section {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-
-  .grid {
-    gap: 12px;
-  }
-
   .momentGrid,
   .wineryChipGrid,
   .product {
