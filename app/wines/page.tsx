@@ -46,38 +46,42 @@ export default async function WinesPage({ searchParams }: WinesPageProps) {
           </div>
         </section>
 
-        <form className={styles.filters}>
-          {params.moment ? <input name="moment" type="hidden" value={params.moment} /> : null}
-          <div className="field">
-            <label htmlFor="type">Tipo</label>
-            <select defaultValue={params.type ?? ""} id="type" name="type">
-              <option value="">Todos</option>
-              {options.wineTypes.map((type) => (
-                <option key={type.id} value={type.id}>
-                  {type.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="field">
-            <label htmlFor="maxPrice">Precio máximo</label>
-            <input
-              defaultValue={params.maxPrice ?? ""}
-              id="maxPrice"
-              min="0"
-              name="maxPrice"
-              placeholder="Ej: 20000"
-              type="number"
-            />
-          </div>
-          <button type="submit">Filtrar</button>
-        </form>
+        <section className={styles.section}>
+          <form className={styles.filters}>
+            {params.moment ? <input name="moment" type="hidden" value={params.moment} /> : null}
+            <div className="field">
+              <label htmlFor="type">Tipo</label>
+              <select defaultValue={params.type ?? ""} id="type" name="type">
+                <option value="">Todos</option>
+                {options.wineTypes.map((type) => (
+                  <option key={type.id} value={type.id}>
+                    {type.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="field">
+              <label htmlFor="maxPrice">Precio máximo</label>
+              <input
+                defaultValue={params.maxPrice ?? ""}
+                id="maxPrice"
+                min="0"
+                name="maxPrice"
+                placeholder="Ej: 20000"
+                type="number"
+              />
+            </div>
+            <button type="submit">Filtrar</button>
+          </form>
+        </section>
 
         {wines.length > 0 ? (
-          <section className={styles.grid}>
-            {wines.map((wine) => (
-              <WineCard key={wine.id} wine={wine} />
-            ))}
+          <section className={styles.section}>
+            <div className={styles.grid}>
+              {wines.map((wine) => (
+                <WineCard key={wine.id} wine={wine} />
+              ))}
+            </div>
           </section>
         ) : (
           <section className={styles.section}>

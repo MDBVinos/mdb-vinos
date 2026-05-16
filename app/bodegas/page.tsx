@@ -14,7 +14,9 @@ export default async function WineriesPage() {
       <SiteHeader />
       <main className={styles.page}>
         {wineries.length > 0 ? (
-          <WineryAccordion wineries={wineries} />
+          <section className={styles.section}>
+            <WineryAccordion wineries={wineries} />
+          </section>
         ) : (
           <section className={styles.section}>
             <p>Todavía no hay bodegas normalizadas. Importá la base Excel para ver esta vista.</p>

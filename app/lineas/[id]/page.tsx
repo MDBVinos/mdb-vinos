@@ -19,13 +19,15 @@ export default async function LinePage({ params }: LinePageProps) {
     <>
       <SiteHeader />
       <main className={styles.page}>
-        <section className={styles.lineLanding}>
-          <h1>{line.name}</h1>
-          <p>{line.winery?.name ?? "Bodega"}</p>
-          <div className={styles.grid}>
-            {line.wines.map((wine) => (
-              <WineCard key={wine.id} wine={wine} />
-            ))}
+        <section className={styles.section}>
+          <div className={styles.lineLanding}>
+            <h1>{line.name}</h1>
+            <p>{line.winery?.name ?? "Bodega"}</p>
+            <div className={styles.grid}>
+              {line.wines.map((wine) => (
+                <WineCard key={wine.id} wine={wine} />
+              ))}
+            </div>
           </div>
         </section>
       </main>
