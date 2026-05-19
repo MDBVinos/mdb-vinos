@@ -17,7 +17,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
             className={styles.logo}
             height={96}
             priority
-            src="/brand/mdb-wines-landing.png"
+            src="/brand/mdb-admin-logo.png"
             width={96}
           />
           <p className={styles.kicker}>MDB</p>
