@@ -13,20 +13,21 @@
   background:
     linear-gradient(135deg, rgba(93, 20, 23, 0.08), rgba(124, 131, 86, 0.1)),
     var(--panel-soft);
-  align-items: end;
+  align-items: center;
+  aspect-ratio: 1;
   display: flex;
   justify-content: center;
-  min-height: 220px;
+  min-height: 0;
   overflow: hidden;
-  padding: 18px 16px 0;
+  padding: 14px;
 }
 
 .imageLink img {
   display: block;
-  height: 205px;
+  height: 92%;
   max-width: 100%;
   object-fit: contain;
-  width: auto;
+  width: 92%;
 }
 
 .placeholder {
@@ -35,8 +36,9 @@
   display: flex;
   font-family: "Garamond", "Cormorant Garamond", Georgia, serif;
   font-size: 30px;
-  height: 205px;
+  height: 100%;
   justify-content: center;
+  width: 100%;
 }
 
 .body {
@@ -172,13 +174,12 @@
 
 @media (max-width: 420px) {
   .imageLink {
-    min-height: 152px;
-    padding: 12px 8px 0;
+    padding: 10px;
   }
 
   .imageLink img,
   .placeholder {
-    height: 142px;
+    height: 92%;
   }
 
   .body {

@@ -14,9 +14,9 @@ type WineFormProps = {
 
 const IMAGE_MAX_BYTES = 5 * 1024 * 1024;
 const IMAGE_MIN_WIDTH = 800;
-const IMAGE_MIN_HEIGHT = 1200;
-const IMAGE_MIN_RATIO = 0.45;
-const IMAGE_MAX_RATIO = 0.85;
+const IMAGE_MIN_HEIGHT = 800;
+const IMAGE_MIN_RATIO = 0.9;
+const IMAGE_MAX_RATIO = 1.1;
 
 type SelectedImage = {
   error: string | null;
@@ -211,7 +211,7 @@ export function WineForm({ action, mode, options, initialData }: WineFormProps) 
           <span className={styles.dropTitle}>Soltar imagen</span>
           <span className={styles.dropCopy}>o seleccionar archivo</span>
           <span className={styles.dropCopy}>
-            Imagen vertical de botella. Minimo 800x1200 px, maximo 5 MB, proporcion 0.45 a 0.85.
+            Imagen cuadrada 800x800 px, fondo transparente o limpio, botella centrada, maximo 5 MB.
           </span>
           <input
             accept="image/*"
@@ -353,16 +353,16 @@ function readImageMetadata(src: string) {
 
 function validateImageFile(file: File, width: number, height: number) {
   if (file.size > IMAGE_MAX_BYTES) {
-    return "La imagen supera los 5 MB. Subi una version mas liviana.";
+    return "La imagen supera los 5 MB. Subi una version mas liviana en formato cuadrado 800x800 px.";
   }
 
   if (width < IMAGE_MIN_WIDTH || height < IMAGE_MIN_HEIGHT) {
-    return "La imagen es muy chica. Usá minimo 800x1200 px.";
+    return "La imagen es muy chica. Usá una imagen cuadrada de minimo 800x800 px.";
   }
 
   const ratio = width / height;
   if (ratio < IMAGE_MIN_RATIO || ratio > IMAGE_MAX_RATIO) {
-    return "La imagen debe ser vertical de botella, con proporcion entre 0.45 y 0.85.";
+    return "La imagen debe ser cuadrada tipo 800x800 px, con fondo transparente o limpio y la botella centrada.";
   }
 
   return null;

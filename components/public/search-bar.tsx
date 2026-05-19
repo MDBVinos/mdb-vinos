@@ -81,7 +81,7 @@ export function SearchBar() {
           {!loading
             ? results.map((wine) => (
                 <Link className={styles.result} href={`/wine/${wine.id}`} key={wine.id}>
-                  {wine.image_url ? <img src={wine.image_url} alt="" /> : <span>MDB</span>}
+                  {wine.image_url ? <img src={wine.image_url} alt="" /> : <span className={styles.thumb}>MDB</span>}
                   <div>
                     <strong>{wine.name}</strong>
                     {wine.winery_name ? <span>{wine.winery_name}</span> : null}
