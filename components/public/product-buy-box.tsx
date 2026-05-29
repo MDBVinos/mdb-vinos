@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { PublicWine } from "@/lib/public/types";
+import { discountedPrice, hasDiscount } from "@/lib/wines/discount";
 import { useCart, type CartFormat } from "./cart-context";
 import styles from "./product-buy-box.module.css";
 
@@ -17,6 +18,18 @@ const priceFormatter = new Intl.NumberFormat("es-AR", {
 
 function formatPrice(price: number | null) {
   return price == null ? "Consultar precio" : priceFormatter.format(price);
+}
+
+function PriceLabel({ label, price, wine }: { label: string; price: number | null; wine: PublicWine }) {
+  const finalPrice = discountedPrice(price, wine.discount_percent);
+  const discounted = hasDiscount(wine.discount_percent) && price != null && finalPrice !== price;
+
+  return (
+    <strong>
+      {discounted ? <del>{formatPrice(price)}</del> : null}
+      {formatPrice(finalPrice)} <span>{label}</span>
+    </strong>
+  );
 }
 
 function boxText(unitsPerBox: number | null) {
@@ -41,7 +54,7 @@ export function ProductBuyBox({ wine }: ProductBuyBoxProps) {
   return (
     <div className={styles.box}>
       <div className={styles.row}>
-        <strong>{formatPrice(wine.price_unit)} <span>x unidad</span></strong>
+        <PriceLabel label="x unidad" price={wine.price_unit} wine={wine} />
         <button disabled={unitQuantity === 0} onClick={() => decrementItem(unitId)} type="button" aria-label="Restar unidad">
           -
         </button>
@@ -51,7 +64,7 @@ export function ProductBuyBox({ wine }: ProductBuyBoxProps) {
         </button>
       </div>
       <div className={styles.row}>
-        <strong>{formatPrice(wine.price_box)} <span>{boxText(wine.units_per_box)}</span></strong>
+        <PriceLabel label={boxText(wine.units_per_box)} price={wine.price_box} wine={wine} />
         <button disabled={boxQuantity === 0} onClick={() => decrementItem(boxId)} type="button" aria-label="Restar caja">
           -
         </button>

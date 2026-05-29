@@ -10,6 +10,7 @@ import {
 } from "react";
 import type { PublicWine } from "@/lib/public/types";
 import { buildWhatsAppLink, GENERAL_WHATSAPP_LINK, type WhatsAppItem } from "@/lib/public/whatsapp";
+import { discountedPrice } from "@/lib/wines/discount";
 
 export type CartFormat = "unit" | "box";
 
@@ -143,8 +144,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
               image_url: wine.image_url,
               wineId: wine.id,
               name: wine.name,
-              price_box: wine.price_box,
-              price_unit: wine.price_unit,
+              price_box: discountedPrice(wine.price_box, wine.discount_percent),
+              price_unit: discountedPrice(wine.price_unit, wine.discount_percent),
               units_per_box: wine.units_per_box,
               quantity: safeQuantity,
               format,

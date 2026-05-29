@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { PublicWine } from "@/lib/public/types";
+import { discountedPrice } from "@/lib/wines/discount";
 import styles from "./search-bar.module.css";
 
 const priceFormatter = new Intl.NumberFormat("es-AR", {
@@ -89,7 +90,9 @@ export function SearchBar() {
                       <em>{[wine.wine_line_name, wine.varietal_name].filter(Boolean).join(" · ")}</em>
                     ) : null}
                     <small>
-                      {wine.price_unit == null ? "Consultar precio" : priceFormatter.format(wine.price_unit)}
+                      {wine.price_unit == null
+                        ? "Consultar precio"
+                        : priceFormatter.format(discountedPrice(wine.price_unit, wine.discount_percent) ?? wine.price_unit)}
                     </small>
                   </div>
                 </Link>

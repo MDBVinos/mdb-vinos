@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import type { PublicWine } from "@/lib/public/types";
+import { discountedPrice, hasDiscount } from "@/lib/wines/discount";
 import { useCart, type CartFormat } from "./cart-context";
 import styles from "./wine-card.module.css";
 
@@ -19,6 +20,22 @@ const priceFormatter = new Intl.NumberFormat("es-AR", {
 
 function formatPrice(price: number | null) {
   return price == null ? "Consultar precio" : priceFormatter.format(price);
+}
+
+function PriceValue({ price, wine }: { price: number | null; wine: PublicWine }) {
+  const finalPrice = discountedPrice(price, wine.discount_percent);
+  const discounted = hasDiscount(wine.discount_percent) && price != null && finalPrice !== price;
+
+  if (!discounted) {
+    return <span>{formatPrice(price)}</span>;
+  }
+
+  return (
+    <span className={styles.discountedPrice}>
+      <del>{formatPrice(price)}</del>
+      <em>{formatPrice(finalPrice)}</em>
+    </span>
+  );
 }
 
 function boxLabel(unitsPerBox: number | null) {
@@ -63,11 +80,11 @@ export function WineCard({ wine, note = "Etiqueta" }: WineCardProps) {
         <div className={styles.prices}>
           <div className={styles.priceRow}>
             <strong>Valor unidad</strong>
-            <span>{formatPrice(wine.price_unit)}</span>
+            <PriceValue price={wine.price_unit} wine={wine} />
           </div>
           <div className={styles.priceRow}>
             <strong>{boxLabel(wine.units_per_box)}</strong>
-            <span>{formatPrice(wine.price_box)}</span>
+            <PriceValue price={wine.price_box} wine={wine} />
           </div>
         </div>
 

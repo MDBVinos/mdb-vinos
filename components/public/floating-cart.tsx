@@ -49,6 +49,7 @@ function groupToWine(group: CartGroup): PublicWine {
     varietal_id: null,
     varietal_name: null,
     description: null,
+    discount_percent: null,
     price_unit: group.price_unit,
     price_box: group.price_box,
     units_per_box: group.units_per_box,

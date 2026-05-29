@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ProductBuyBox } from "@/components/public/product-buy-box";
 import { SiteHeader } from "@/components/public/site-header";
 import { getWineDetails } from "@/lib/public/queries";
+import { discountedPrice } from "@/lib/wines/discount";
 import styles from "../../public.module.css";
 
 export const dynamic = "force-dynamic";
@@ -23,13 +24,15 @@ export default async function WinePage({ params }: WinePageProps) {
   const wine = await getWineDetails(id);
   const title = [wine.wine_line_name, wine.varietal_name ?? wine.name].filter(Boolean).join(" - ") || wine.name;
   const wineryName = wine.winery_name ?? wine.winery ?? "Bodega";
+  const unitPrice = discountedPrice(wine.price_unit, wine.discount_percent);
+  const boxPrice = discountedPrice(wine.price_box, wine.discount_percent);
   const filterTags = [
     ...wine.moments.map((moment) => `Momento: ${moment.name}`),
     wine.wineType ? `Tipo: ${wine.wineType.name}` : null,
     ...wine.intensities.map((intensity) => `Intensidad: ${intensity.name}`),
-    wine.price_unit ? `Unidad: ${priceFormatter.format(wine.price_unit)}` : null,
-    wine.price_box
-      ? `Caja${wine.units_per_box ? ` x ${wine.units_per_box} unidades` : ""}: ${priceFormatter.format(wine.price_box)}`
+    unitPrice ? `Unidad: ${priceFormatter.format(unitPrice)}` : null,
+    boxPrice
+      ? `Caja${wine.units_per_box ? ` x ${wine.units_per_box} unidades` : ""}: ${priceFormatter.format(boxPrice)}`
       : null,
   ].filter((tag): tag is string => Boolean(tag));
 
