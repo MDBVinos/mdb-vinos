@@ -9,6 +9,9 @@ export type PublicWine = {
   varietal_id: string | null;
   varietal_name: string | null;
   description: string | null;
+  discount_id?: string | null;
+  discount_name?: string | null;
+  discount_percent: number | null;
   price_unit: number | null;
   price_box: number | null;
   units_per_box: number | null;

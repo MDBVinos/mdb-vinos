@@ -14,6 +14,9 @@ test("toWineView exposes the existing snake_case app contract", () => {
     toWineView({
       active: true,
       description: "Reserva",
+      discount: { id: "discount-id", name: "Promo 15%" },
+      discountId: "discount-id",
+      discountPercent: 15,
       featured: true,
       id: "wine-id",
       imageUrl: "https://example.com/wine.jpg",
@@ -26,6 +29,9 @@ test("toWineView exposes the existing snake_case app contract", () => {
     {
       active: true,
       description: "Reserva",
+      discount_id: "discount-id",
+      discount_name: "Promo 15%",
+      discount_percent: 15,
       featured: true,
       id: "wine-id",
       image_url: "https://example.com/wine.jpg",

@@ -37,6 +37,25 @@ function checkedValue(formData: FormData, key: string) {
   return formData.get(key) === "on";
 }
 
+function stringListValue(formData: FormData, key: string) {
+  return [...new Set(formData.getAll(key).map(String).filter(Boolean))];
+}
+
+function discountPayload(formData: FormData) {
+  const name = stringValue(formData, "name");
+  const percent = integerValue(formData, "percent");
+
+  if (!name) {
+    throw new Error("El nombre del descuento es obligatorio.");
+  }
+
+  if (percent == null || percent < 1 || percent > 99) {
+    throw new Error("El descuento tiene que ser un numero entre 1 y 99.");
+  }
+
+  return { name, percent };
+}
+
 function sanitizeFileName(name: string) {
   return name.toLowerCase().replace(/[^a-z0-9.\-_]+/g, "-");
 }
@@ -148,12 +167,38 @@ async function replaceWineRelations(
 function revalidateWinePaths(wineId?: string) {
   revalidatePath("/");
   revalidatePath("/admin");
+  revalidatePath("/admin/descuentos");
   revalidatePath("/admin/import");
   revalidatePath("/wines");
   revalidatePath("/discover");
 
   if (wineId) {
     revalidateWineDetailPaths(wineId);
+  }
+}
+
+async function replaceDiscountWines(
+  tx: Prisma.TransactionClient,
+  discountId: string,
+  percent: number,
+  wineIds: string[],
+) {
+  await tx.wine.updateMany({
+    data: {
+      discountId: null,
+      discountPercent: null,
+    },
+    where: { discountId },
+  });
+
+  if (wineIds.length > 0) {
+    await tx.wine.updateMany({
+      data: {
+        discountId,
+        discountPercent: percent,
+      },
+      where: { id: { in: wineIds } },
+    });
   }
 }
 
@@ -671,10 +716,7 @@ export async function toggleWineActiveAction(formData: FormData) {
 
 export async function bulkWineAction(formData: FormData) {
   const intent = stringValue(formData, "intent");
-  const wineIds = formData
-    .getAll("wine_ids")
-    .map(String)
-    .filter(Boolean);
+  const wineIds = stringListValue(formData, "wine_ids");
 
   await requireUser();
 
@@ -687,6 +729,35 @@ export async function bulkWineAction(formData: FormData) {
       data: { active: intent === "activate" },
       where: { id: { in: wineIds } },
     });
+  } else if (intent === "feature" || intent === "unfeature") {
+    await prisma.wine.updateMany({
+      data: { featured: intent === "feature" },
+      where: { id: { in: wineIds } },
+    });
+  } else if (intent === "discount") {
+    const { name, percent } = discountPayload(formData);
+    await prisma.$transaction(async (tx) => {
+      const discount = await tx.discount.create({
+        data: { name, percent },
+        select: { id: true },
+      });
+
+      await tx.wine.updateMany({
+        data: {
+          discountId: discount.id,
+          discountPercent: percent,
+        },
+        where: { id: { in: wineIds } },
+      });
+    });
+  } else if (intent === "clear-discount") {
+    await prisma.wine.updateMany({
+      data: {
+        discountId: null,
+        discountPercent: null,
+      },
+      where: { id: { in: wineIds } },
+    });
   } else if (intent === "delete") {
     await prisma.wine.deleteMany({ where: { id: { in: wineIds } } });
   } else {
@@ -694,6 +765,84 @@ export async function bulkWineAction(formData: FormData) {
   }
 
   revalidateWinePaths();
+}
+
+export async function createDiscountAction(formData: FormData) {
+  const { name, percent } = discountPayload(formData);
+  const wineIds = stringListValue(formData, "wine_ids");
+
+  await requireUser();
+
+  if (wineIds.length === 0) {
+    throw new Error("Seleccioná al menos un vino para crear el descuento.");
+  }
+
+  await prisma.$transaction(async (tx) => {
+    const discount = await tx.discount.create({
+      data: { name, percent },
+      select: { id: true },
+    });
+
+    await tx.wine.updateMany({
+      data: {
+        discountId: discount.id,
+        discountPercent: percent,
+      },
+      where: { id: { in: wineIds } },
+    });
+  });
+
+  revalidateWinePaths();
+  redirect("/admin/descuentos?created=1");
+}
+
+export async function updateDiscountAction(formData: FormData) {
+  const discountId = stringValue(formData, "discount_id");
+  const { name, percent } = discountPayload(formData);
+  const wineIds = stringListValue(formData, "wine_ids");
+
+  await requireUser();
+
+  if (!discountId) {
+    throw new Error("Falta el descuento a actualizar.");
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.discount.update({
+      data: { name, percent },
+      where: { id: discountId },
+    });
+
+    await replaceDiscountWines(tx, discountId, percent, wineIds);
+  });
+
+  revalidateWinePaths();
+  redirect("/admin/descuentos?updated=1");
+}
+
+export async function deleteDiscountAction(formData: FormData) {
+  const discountId = stringValue(formData, "discount_id");
+
+  await requireUser();
+
+  if (!discountId) {
+    throw new Error("Falta el descuento a eliminar.");
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.wine.updateMany({
+      data: {
+        discountId: null,
+        discountPercent: null,
+      },
+      where: { discountId },
+    });
+
+    await tx.discount.delete({ where: { id: discountId } });
+  });
+
+  revalidateWinePaths();
+  redirect("/admin/descuentos?deleted=1");
 }
 
 export async function deleteWineAction(formData: FormData) {

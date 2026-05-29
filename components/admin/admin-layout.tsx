@@ -26,6 +26,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
 
         <nav className={styles.nav} aria-label="Admin">
           <Link href="/admin">Vinos</Link>
+          <Link href="/admin/descuentos">Descuentos</Link>
           <Link href="/admin/new">Nuevo vino</Link>
           <Link href="/admin/import">Importar Excel</Link>
         </nav>

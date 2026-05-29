@@ -20,8 +20,10 @@ export function WinesTable({ wines }: WinesTableProps) {
   const [selectedWinery, setSelectedWinery] = useState("");
   const [selectedLine, setSelectedLine] = useState("");
   const [selectedVarietal, setSelectedVarietal] = useState("");
+  const [selectedFeatured, setSelectedFeatured] = useState("");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
+  const [bulkDiscountOpen, setBulkDiscountOpen] = useState(false);
   const selectedSet = useMemo(() => new Set(selectedIds), [selectedIds]);
 
   const filterOptions = useMemo(() => {
@@ -38,10 +40,13 @@ export function WinesTable({ wines }: WinesTableProps) {
       const lineMatches = !selectedLine || (selectedLine === "__none" ? !wine.wine_line_id : wine.wine_line_id === selectedLine);
       const varietalMatches =
         !selectedVarietal || (selectedVarietal === "__none" ? !wine.varietal_id : wine.varietal_id === selectedVarietal);
+      const featuredMatches =
+        !selectedFeatured ||
+        (selectedFeatured === "featured" ? wine.featured : !wine.featured);
 
-      return wineryMatches && lineMatches && varietalMatches;
+      return wineryMatches && lineMatches && varietalMatches && featuredMatches;
     });
-  }, [selectedLine, selectedVarietal, selectedWinery, wines]);
+  }, [selectedFeatured, selectedLine, selectedVarietal, selectedWinery, wines]);
 
   const visibleIds = filteredWines.map((wine) => wine.id);
   const allVisibleSelected = visibleIds.length > 0 && visibleIds.every((id) => selectedSet.has(id));
@@ -51,6 +56,7 @@ export function WinesTable({ wines }: WinesTableProps) {
     setSelectedWinery("");
     setSelectedLine("");
     setSelectedVarietal("");
+    setSelectedFeatured("");
   }
 
   function toggleWineSelection(wineId: string) {
@@ -97,6 +103,7 @@ export function WinesTable({ wines }: WinesTableProps) {
             options={filterOptions.varietals}
             value={selectedVarietal}
           />
+          <FeaturedFilterSelect onChange={setSelectedFeatured} value={selectedFeatured} />
         </div>
         <div className={styles.filterMeta}>
           <span>
@@ -117,6 +124,12 @@ export function WinesTable({ wines }: WinesTableProps) {
           <div className={styles.bulkActions}>
             <BulkActionForm intent="activate" selectedIds={selectedIds} label="Activar" />
             <BulkActionForm intent="deactivate" selectedIds={selectedIds} label="Desactivar" />
+            <BulkActionForm intent="feature" selectedIds={selectedIds} label="Destacar" />
+            <BulkActionForm intent="unfeature" selectedIds={selectedIds} label="Quitar destacado" />
+            <button onClick={() => setBulkDiscountOpen(true)} type="button">
+              Aplicar descuento
+            </button>
+            <BulkActionForm intent="clear-discount" selectedIds={selectedIds} label="Quitar descuento" />
             <button className="danger" onClick={() => setBulkDeleteOpen(true)} type="button">
               Eliminar
             </button>
@@ -146,6 +159,7 @@ export function WinesTable({ wines }: WinesTableProps) {
               <th>Varietal</th>
               <th>Precio unidad</th>
               <th>Caja</th>
+              <th>Desc.</th>
               <th>Activo</th>
               <th className={styles.actionsCol}>Acciones</th>
             </tr>
@@ -171,6 +185,7 @@ export function WinesTable({ wines }: WinesTableProps) {
                     {wine.price_box == null ? "-" : currencyFormatter.format(wine.price_box)}
                     {wine.units_per_box == null ? null : <span className={styles.units}> x {wine.units_per_box}</span>}
                   </td>
+                  <td>{wine.discount_percent ? <span className={styles.discount}>{wine.discount_percent}%</span> : "-"}</td>
                   <td>
                     <span className={wine.active ? styles.active : styles.inactive}>
                       {wine.active ? "true" : "false"}
@@ -214,7 +229,7 @@ export function WinesTable({ wines }: WinesTableProps) {
               ))
             ) : (
               <tr>
-                <td className={styles.noResults} colSpan={9}>
+                <td className={styles.noResults} colSpan={10}>
                   No hay vinos para esos filtros.
                 </td>
               </tr>
@@ -245,6 +260,37 @@ export function WinesTable({ wines }: WinesTableProps) {
                 </button>
               </form>
             </div>
+          </div>
+        </div>
+      ) : null}
+
+      {bulkDiscountOpen ? (
+        <div className={styles.backdrop} onClick={() => setBulkDiscountOpen(false)}>
+          <div className={styles.dialog} onClick={(event) => event.stopPropagation()}>
+            <p className={styles.dialogTitle}>Aplicar descuento</p>
+            <p className={styles.dialogCopy}>
+              Ingresá el porcentaje para {selectedIds.length} {selectedIds.length === 1 ? "vino seleccionado" : "vinos seleccionados"}.
+            </p>
+            <form action={bulkWineAction} className={styles.discountForm}>
+              <input type="hidden" name="intent" value="discount" />
+              {selectedIds.map((id) => (
+                <input key={id} type="hidden" name="wine_ids" value={id} />
+              ))}
+              <label>
+                <span>Nombre del descuento</span>
+                <input name="name" placeholder="Ej: Promo Malbec" required />
+              </label>
+              <label>
+                <span>Descuento porcentual</span>
+                <input min="1" max="99" name="percent" placeholder="Ej: 10" required type="number" />
+              </label>
+              <div className={styles.dialogActions}>
+                <button className="secondary" onClick={() => setBulkDiscountOpen(false)} type="button">
+                  Cancelar
+                </button>
+                <button type="submit">Aplicar descuento</button>
+              </div>
+            </form>
           </div>
         </div>
       ) : null}
@@ -279,12 +325,31 @@ function FilterSelect({
   );
 }
 
+function FeaturedFilterSelect({
+  onChange,
+  value,
+}: {
+  onChange: (value: string) => void;
+  value: string;
+}) {
+  return (
+    <label className={styles.filter}>
+      <span>Destacado</span>
+      <select onChange={(event) => onChange(event.currentTarget.value)} value={value}>
+        <option value="">Todos</option>
+        <option value="featured">Solo destacados</option>
+        <option value="unfeatured">No destacados</option>
+      </select>
+    </label>
+  );
+}
+
 function BulkActionForm({
   intent,
   label,
   selectedIds,
 }: {
-  intent: "activate" | "deactivate";
+  intent: "activate" | "deactivate" | "feature" | "unfeature" | "clear-discount";
   label: string;
   selectedIds: string[];
 }) {

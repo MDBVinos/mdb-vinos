@@ -47,6 +47,11 @@ export { Prisma }
  */
 export type Wine = Prisma.WineModel
 /**
+ * Model Discount
+ *
+ */
+export type Discount = Prisma.DiscountModel
+/**
  * Model Winery
  *
  */

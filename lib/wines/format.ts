@@ -3,6 +3,9 @@ export type DecimalInput = number | string | { toNumber: () => number } | null |
 export type PrismaWineView = {
   active: boolean;
   description: string | null;
+  discountId?: string | null;
+  discountPercent?: number | null;
+  discount?: { id: string; name: string } | null;
   featured: boolean;
   id: string;
   imageUrl: string | null;
@@ -39,6 +42,9 @@ export function toWineView(wine: PrismaWineView) {
   return {
     active: wine.active,
     description: wine.description,
+    discount_id: wine.discount?.id ?? wine.discountId ?? null,
+    discount_name: wine.discount?.name ?? null,
+    discount_percent: wine.discountPercent ?? null,
     featured: wine.featured,
     id: wine.id,
     image_url: wine.imageUrl,

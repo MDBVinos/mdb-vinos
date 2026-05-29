@@ -52,6 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Wine: 'Wine',
+  Discount: 'Discount',
   Winery: 'Winery',
   WineLine: 'WineLine',
   Varietal: 'Varietal',
@@ -91,6 +92,8 @@ export const WineScalarFieldEnum = {
   priceBox: 'priceBox',
   unitsPerBox: 'unitsPerBox',
   imageUrl: 'imageUrl',
+  discountId: 'discountId',
+  discountPercent: 'discountPercent',
   featured: 'featured',
   active: 'active',
   createdAt: 'createdAt',
@@ -98,6 +101,17 @@ export const WineScalarFieldEnum = {
 } as const
 
 export type WineScalarFieldEnum = (typeof WineScalarFieldEnum)[keyof typeof WineScalarFieldEnum]
+
+
+export const DiscountScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  percent: 'percent',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DiscountScalarFieldEnum = (typeof DiscountScalarFieldEnum)[keyof typeof DiscountScalarFieldEnum]
 
 
 export const WineryScalarFieldEnum = {

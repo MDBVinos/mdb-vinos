@@ -19,10 +19,13 @@ model Wine {
   priceBox        Decimal?           @map("price_box") @db.Decimal(10, 2)
   unitsPerBox     Int?               @map("units_per_box")
   imageUrl        String?            @map("image_url")
+  discountId      String?            @map("discount_id") @db.Uuid
+  discountPercent Int?               @map("discount_percent")
   featured        Boolean            @default(false)
   active          Boolean            @default(true)
   createdAt       DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt       DateTime           @updatedAt @map("updated_at") @db.Timestamptz(6)
+  discount        Discount?          @relation(fields: [discountId], references: [id], onDelete: SetNull)
   normalizedWinery Winery?           @relation(fields: [wineryId], references: [id], onDelete: SetNull)
   varietal        Varietal?          @relation(fields: [varietalId], references: [id], onDelete: SetNull)
   wineLine        WineLine?          @relation(fields: [wineLineId], references: [id], onDelete: SetNull)
@@ -31,11 +34,24 @@ model Wine {
   wineTypes       WineTypeRelation[]
 
   @@index([active])
+  @@index([discountId])
   @@index([name])
   @@index([varietalId])
   @@index([wineLineId])
   @@index([wineryId])
   @@map("wines")
+}
+
+model Discount {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String
+  percent   Int
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  wines     Wine[]
+
+  @@index([name])
+  @@map("discounts")
 }
 
 model Winery {

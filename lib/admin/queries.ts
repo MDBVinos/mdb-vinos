@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { toWineView } from "@/lib/wines/format";
-import type { Wine, WineFormInitialData, WineFormOptions } from "./types";
+import type { AdminDiscount, Wine, WineFormInitialData, WineFormOptions } from "./types";
 
 export async function requireUser() {
   const supabase = await createClient();
@@ -22,6 +22,7 @@ export async function getAdminWines(): Promise<Wine[]> {
 
   const wines = await prisma.wine.findMany({
     include: {
+      discount: true,
       normalizedWinery: true,
       varietal: true,
       wineLine: true,
@@ -30,6 +31,39 @@ export async function getAdminWines(): Promise<Wine[]> {
   });
 
   return wines.map(toWineView);
+}
+
+export async function getAdminDiscounts(): Promise<AdminDiscount[]> {
+  await requireUser();
+
+  const discounts = await prisma.discount.findMany({
+    include: {
+      wines: {
+        include: {
+          discount: true,
+          normalizedWinery: true,
+          varietal: true,
+          wineLine: true,
+        },
+        orderBy: { name: "asc" },
+      },
+    },
+    orderBy: { name: "asc" },
+  });
+
+  return discounts.map((discount) => ({
+    id: discount.id,
+    name: discount.name,
+    percent: discount.percent,
+    wine_count: discount.wines.length,
+    wines: discount.wines.map(toWineView),
+  }));
+}
+
+export async function getAdminDiscountPageData() {
+  const [discounts, wines] = await Promise.all([getAdminDiscounts(), getAdminWines()]);
+
+  return { discounts, wines };
 }
 
 export async function getWineFormOptions(): Promise<WineFormOptions> {
@@ -59,6 +93,7 @@ export async function getWineForEdit(id: string): Promise<WineFormInitialData> {
 
   const wine = await prisma.wine.findUnique({
     include: {
+      discount: true,
       normalizedWinery: true,
       varietal: true,
       wineLine: true,

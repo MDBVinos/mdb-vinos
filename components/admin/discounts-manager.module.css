@@ -1,0 +1,296 @@
+.wrap {
+  display: grid;
+  gap: 18px;
+}
+
+.panel,
+.empty {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 18px;
+  padding: 22px;
+}
+
+.panel h3,
+.empty h3 {
+  font-size: 26px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.panel p,
+.empty p {
+  color: var(--muted);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  margin: 5px 0 0;
+}
+
+.list {
+  display: grid;
+  gap: 16px;
+}
+
+.discountHeader {
+  align-items: start;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.discountDetails {
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+
+.discountDetails summary {
+  align-items: center;
+  color: var(--accent);
+  cursor: pointer;
+  display: flex;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 900;
+  gap: 10px;
+  justify-content: space-between;
+  list-style: none;
+  min-height: 44px;
+  text-transform: uppercase;
+}
+
+.discountDetails summary::-webkit-details-marker {
+  display: none;
+}
+
+.detailLabelClose {
+  display: none;
+}
+
+.discountDetails[open] .detailLabelOpen {
+  display: none;
+}
+
+.discountDetails[open] .detailLabelClose {
+  display: inline;
+}
+
+.detailArrow {
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--success);
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 20px;
+  height: 36px;
+  justify-content: center;
+  line-height: 1;
+  transition: transform 160ms ease;
+  width: 36px;
+}
+
+.discountDetails[open] .detailArrow {
+  transform: rotate(180deg);
+}
+
+.detailBody {
+  display: grid;
+  gap: 16px;
+  padding-top: 12px;
+}
+
+.deleteForm {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.kicker {
+  color: var(--accent);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  margin: 0 0 5px;
+  text-transform: uppercase;
+}
+
+.form {
+  display: grid;
+  gap: 16px;
+}
+
+.grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(0, 1.4fr) minmax(160px, 0.6fr);
+}
+
+.wines {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin: 0;
+  padding: 16px;
+}
+
+.wines legend {
+  color: var(--muted);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 0 7px;
+}
+
+.search {
+  display: grid;
+  gap: 7px;
+  margin-bottom: 10px;
+}
+
+.search span,
+.searchCount,
+.noResults {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.search span {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.search input {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  font: 600 14px Arial, Helvetica, sans-serif;
+  min-height: 42px;
+  padding: 10px 12px;
+  width: 100%;
+}
+
+.searchCount {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  margin: 0 0 12px;
+}
+
+.wineGroups {
+  display: grid;
+  gap: 16px;
+}
+
+.wineGroup {
+  display: grid;
+  gap: 10px;
+}
+
+.wineGroup + .wineGroup {
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+
+.wineGroup h4 {
+  align-items: center;
+  color: var(--accent);
+  display: flex;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  font-weight: 900;
+  gap: 8px;
+  letter-spacing: 0.04em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.wineGroup h4 span {
+  background: var(--panel-soft);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 12px;
+  padding: 3px 8px;
+}
+
+.wineList {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-height: 360px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.wineOption {
+  align-items: start;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 18px minmax(0, 1fr);
+  padding: 12px;
+}
+
+.wineOption input {
+  height: 18px;
+  margin: 2px 0 0;
+  width: 18px;
+}
+
+.wineOption span {
+  display: grid;
+  gap: 3px;
+}
+
+.wineOption strong,
+.wineOption small {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.wineOption strong {
+  color: var(--text);
+  font-size: 14px;
+}
+
+.wineOption small {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.noResults {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0;
+  padding: 12px 0;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 760px) {
+  .discountHeader,
+  .deleteForm,
+  .footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .grid,
+  .wineList {
+    grid-template-columns: 1fr;
+  }
+
+  .discountHeader form,
+  .discountHeader button,
+  .deleteForm button,
+  .footer button {
+    width: 100%;
+  }
+}
