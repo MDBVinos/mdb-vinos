@@ -63,6 +63,8 @@
   font-size: 17px;
   font-weight: 700;
   line-height: 1.05;
+  min-width: 0;
+  overflow-wrap: anywhere;
   text-align: center;
   text-decoration: none;
 }
@@ -94,6 +96,9 @@
   color: var(--text);
   font-size: 14px;
   line-height: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -205,32 +210,32 @@
   }
 
   .wineName {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .winery {
-    font-size: 11px;
+    font-size: 10px;
   }
 
   .priceRow strong {
-    font-size: 11px;
+    font-size: 10px;
   }
 
   .priceRow span,
   .quantityRow span {
-    font-size: 9px;
+    font-size: 8.5px;
   }
 
   .quantityRow {
     gap: 4px;
-    grid-template-columns: minmax(0, 1fr) 22px 22px;
+    grid-template-columns: minmax(0, 1fr) 20px 20px;
   }
 
   .quantityRow button {
-    font-size: 15px;
-    height: 22px;
-    min-height: 22px;
-    width: 22px;
+    font-size: 14px;
+    height: 20px;
+    min-height: 20px;
+    width: 20px;
   }
 
   .momentDescription {
@@ -244,25 +249,31 @@
   }
 
   .wineName {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .priceRow {
-    gap: 5px;
+    gap: 4px;
   }
 
   .priceRow strong {
-    font-size: 10px;
+    font-size: 9px;
+  }
+
+  .priceRow span,
+  .quantityRow span {
+    font-size: 8px;
   }
 
   .quantityRow {
-    grid-template-columns: minmax(0, 1fr) 20px 20px;
+    gap: 3px;
+    grid-template-columns: minmax(0, 1fr) 18px 18px;
   }
 
   .quantityRow button {
-    font-size: 14px;
-    height: 20px;
-    min-height: 20px;
-    width: 20px;
+    font-size: 13px;
+    height: 18px;
+    min-height: 18px;
+    width: 18px;
   }
 }
