@@ -9,6 +9,7 @@ export async function GET(request: Request) {
   const budget = Number(searchParams.get("budget") ?? 0);
   const typeId = searchParams.get("typeId") ?? "";
   const intensityId = searchParams.get("intensityId") ?? "";
+  const order = searchParams.get("order") === "asc" ? "asc" : "desc";
 
   if (!moment) {
     return NextResponse.json({ wines: [] });
@@ -19,6 +20,7 @@ export async function GET(request: Request) {
     budget: budget > 0 ? budget : undefined,
     typeId: typeId || undefined,
     intensityId: intensityId || undefined,
+    order,
   });
 
   return NextResponse.json({ wines });

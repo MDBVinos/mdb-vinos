@@ -68,6 +68,7 @@ export type RecommendationFilters = {
   budget?: number;
   typeId?: string;
   intensityId?: string;
+  order?: "asc" | "desc";
 };
 
 export type WineryCatalog = PublicWinery & {

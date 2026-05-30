@@ -10,6 +10,7 @@ import styles from "./wine-card.module.css";
 type WineCardProps = {
   wine: PublicWine;
   note?: string;
+  detailHref?: string;
 };
 
 const priceFormatter = new Intl.NumberFormat("es-AR", {
@@ -42,7 +43,7 @@ function boxLabel(unitsPerBox: number | null) {
   return unitsPerBox ? `Valor caja x ${unitsPerBox} u.` : "Valor caja";
 }
 
-export function WineCard({ wine, note = "Etiqueta" }: WineCardProps) {
+export function WineCard({ detailHref, wine, note = "Etiqueta" }: WineCardProps) {
   const { addItem, decrementItem, items } = useCart();
   const [added, setAdded] = useState(false);
   const canBuyBox = wine.price_box != null;
@@ -54,6 +55,7 @@ export function WineCard({ wine, note = "Etiqueta" }: WineCardProps) {
   const boxId = `${wine.id}:box`;
   const unitQuantity = items.find((item) => item.id === unitId)?.quantity ?? 0;
   const boxQuantity = items.find((item) => item.id === boxId)?.quantity ?? 0;
+  const href = detailHref ?? `/wine/${wine.id}`;
 
   function onAdd(format: CartFormat) {
     addItem({ wine, quantity: 1, format });
@@ -63,7 +65,7 @@ export function WineCard({ wine, note = "Etiqueta" }: WineCardProps) {
 
   return (
     <article className={styles.card}>
-      <Link className={styles.imageLink} href={`/wine/${wine.id}`}>
+      <Link className={styles.imageLink} href={href}>
         {wine.image_url ? (
           <img src={wine.image_url} alt={wine.name} />
         ) : (
@@ -72,7 +74,7 @@ export function WineCard({ wine, note = "Etiqueta" }: WineCardProps) {
       </Link>
 
       <div className={styles.body}>
-        <Link className={styles.wineName} href={`/wine/${wine.id}`}>
+        <Link className={styles.wineName} href={href}>
           {lineAndVarietal || wine.name}
         </Link>
         <p className={styles.winery}>{wineryName}</p>

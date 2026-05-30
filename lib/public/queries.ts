@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { discountedPrice } from "@/lib/wines/discount";
 import { intersectIds, priceToNumber, toWineView, unique } from "@/lib/wines/format";
 import type {
   CatalogFilters,
@@ -332,16 +333,47 @@ export async function getRecommendedWines(filters: RecommendationFilters): Promi
 
   const wines = await prisma.wine.findMany({
     include: wineCatalogInclude,
-    orderBy: { priceUnit: "asc" },
-    take: 4,
+    orderBy: { name: "asc" },
     where: {
       active: true,
       id: { in: matchingIds },
-      priceUnit: filters.budget ? { lte: filters.budget } : undefined,
     },
   });
 
-  return wines.map(toWineView);
+  const order = filters.order === "asc" ? "asc" : "desc";
+
+  return wines
+    .map(toWineView)
+    .filter((wine) => {
+      if (!filters.budget) {
+        return true;
+      }
+
+      const finalUnitPrice = discountedPrice(wine.price_unit, wine.discount_percent);
+      return finalUnitPrice != null && finalUnitPrice <= filters.budget;
+    })
+    .sort((first, second) => {
+      const firstPrice = discountedPrice(first.price_unit, first.discount_percent);
+      const secondPrice = discountedPrice(second.price_unit, second.discount_percent);
+
+      if (firstPrice == null && secondPrice == null) {
+        return first.name.localeCompare(second.name, "es");
+      }
+
+      if (firstPrice == null) {
+        return 1;
+      }
+
+      if (secondPrice == null) {
+        return -1;
+      }
+
+      if (firstPrice !== secondPrice) {
+        return order === "asc" ? firstPrice - secondPrice : secondPrice - firstPrice;
+      }
+
+      return first.name.localeCompare(second.name, "es");
+    });
 }
 
 export async function getWineDetails(id: string): Promise<WineDetails> {

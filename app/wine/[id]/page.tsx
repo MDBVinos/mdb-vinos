@@ -17,11 +17,15 @@ type WinePageProps = {
   params: Promise<{
     id: string;
   }>;
+  searchParams: Promise<{
+    from?: string;
+  }>;
 };
 
-export default async function WinePage({ params }: WinePageProps) {
-  const { id } = await params;
+export default async function WinePage({ params, searchParams }: WinePageProps) {
+  const [{ id }, { from }] = await Promise.all([params, searchParams]);
   const wine = await getWineDetails(id);
+  const returnToDiscover = from?.startsWith("/discover") ? from : null;
   const title = [wine.wine_line_name, wine.varietal_name ?? wine.name].filter(Boolean).join(" - ") || wine.name;
   const wineryName = wine.winery_name ?? wine.winery ?? "Bodega";
   const unitPrice = discountedPrice(wine.price_unit, wine.discount_percent);
@@ -62,8 +66,8 @@ export default async function WinePage({ params }: WinePageProps) {
 
             <ProductBuyBox wine={wine} />
 
-            <Link className="button secondary" href="/wines">
-              Seguir viendo catálogo
+            <Link className="button secondary" href={returnToDiscover ?? "/wines"}>
+              {returnToDiscover ? "Volver a búsqueda inteligente" : "Seguir viendo catálogo"}
             </Link>
           </div>
         </section>
