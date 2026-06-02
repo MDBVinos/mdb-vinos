@@ -319,9 +319,14 @@
 
 .product {
   align-items: start;
+  box-sizing: border-box;
   display: grid;
   gap: 16px;
   grid-template-columns: minmax(280px, 0.82fr) minmax(0, 1.18fr);
+  margin: 0 auto;
+  max-width: 1280px;
+  padding-inline: var(--public-gutter);
+  width: 100%;
 }
 
 .productImage {
