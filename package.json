@@ -19,6 +19,7 @@
     "@prisma/client": "^7.8.0",
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
+    "@vercel/analytics": "^2.0.1",
     "dotenv": "^17.4.2",
     "exceljs": "^4.4.0",
     "next": "latest",

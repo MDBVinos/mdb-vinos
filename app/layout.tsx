@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/react";
 import { CartProvider } from "@/components/public/cart-context";
 import { FloatingCart } from "@/components/public/floating-cart";
 import { FloatingWhatsApp } from "@/components/public/floating-whatsapp";
@@ -44,6 +45,7 @@ export default function RootLayout({
           <FloatingCart />
           <FloatingWhatsApp />
         </CartProvider>
+        <Analytics />
       </body>
     </html>
   );
