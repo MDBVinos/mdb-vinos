@@ -7,22 +7,27 @@ import "./globals.css";
 const siteTitle = "MDB Wines | Vinos Argentinos y Recomendaciones";
 const siteDescription =
   "Distribuidora de vinos argentinos. Descubrí el vino perfecto para cada momento y explorá nuestro catálogo online de bodegas y etiquetas seleccionadas.";
+const siteUrl = "https://mdbwines.com";
+const socialImage = `${siteUrl}/og-image.png`;
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://mdbwines.com"),
+  metadataBase: new URL(siteUrl),
   title: siteTitle,
   description: siteDescription,
   openGraph: {
     title: siteTitle,
     description: siteDescription,
+    url: siteUrl,
     siteName: "MDB Wines",
+    images: [socialImage],
+    locale: "es_AR",
     type: "website",
-    url: "/",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: siteTitle,
     description: siteDescription,
+    images: [socialImage],
   },
 };
 
