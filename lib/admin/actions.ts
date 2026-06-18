@@ -169,8 +169,11 @@ function revalidateWinePaths(wineId?: string) {
   revalidatePath("/admin");
   revalidatePath("/admin/descuentos");
   revalidatePath("/admin/import");
+  revalidatePath("/bodegas");
   revalidatePath("/wines");
   revalidatePath("/discover");
+  revalidatePath("/lineas/[id]", "page");
+  revalidatePath("/wine/[id]", "page");
 
   if (wineId) {
     revalidateWineDetailPaths(wineId);
@@ -181,6 +184,7 @@ async function replaceDiscountWines(
   tx: Prisma.TransactionClient,
   discountId: string,
   percent: number,
+  active: boolean,
   wineIds: string[],
 ) {
   await tx.wine.updateMany({
@@ -195,7 +199,7 @@ async function replaceDiscountWines(
     await tx.wine.updateMany({
       data: {
         discountId,
-        discountPercent: percent,
+        discountPercent: active ? percent : null,
       },
       where: { id: { in: wineIds } },
     });
@@ -808,16 +812,61 @@ export async function updateDiscountAction(formData: FormData) {
   }
 
   await prisma.$transaction(async (tx) => {
-    await tx.discount.update({
+    const discount = await tx.discount.update({
       data: { name, percent },
+      select: { active: true },
       where: { id: discountId },
     });
 
-    await replaceDiscountWines(tx, discountId, percent, wineIds);
+    await replaceDiscountWines(tx, discountId, percent, discount.active, wineIds);
   });
 
   revalidateWinePaths();
   redirect("/admin/descuentos?updated=1");
+}
+
+export async function toggleDiscountActiveAction(formData: FormData) {
+  const discountId = stringValue(formData, "discount_id");
+
+  await requireUser();
+
+  if (!discountId) {
+    throw new Error("Falta el descuento a pausar o reactivar.");
+  }
+
+  const result = await prisma.$queryRaw<Array<{ active: boolean }>>(Prisma.sql`
+    WITH toggled AS (
+      UPDATE "discounts"
+      SET
+        "active" = NOT "active",
+        "updated_at" = CURRENT_TIMESTAMP
+      WHERE "id" = ${discountId}::uuid
+      RETURNING "active", "percent"
+    ),
+    updated_wines AS (
+      UPDATE "wines" AS wine
+      SET
+        "discount_percent" = CASE
+          WHEN toggled."active" THEN toggled."percent"
+          ELSE NULL
+        END,
+        "updated_at" = CURRENT_TIMESTAMP
+      FROM toggled
+      WHERE wine."discount_id" = ${discountId}::uuid
+      RETURNING wine."id"
+    )
+    SELECT "active"
+    FROM toggled
+  `);
+
+  const active = result[0]?.active;
+
+  if (active == null) {
+    throw new Error("El descuento no existe.");
+  }
+
+  revalidateWinePaths();
+  redirect(`/admin/descuentos?${active ? "reactivated" : "paused"}=1`);
 }
 
 export async function deleteDiscountAction(formData: FormData) {

@@ -1,6 +1,7 @@
 import {
   createDiscountAction,
   deleteDiscountAction,
+  toggleDiscountActiveAction,
   updateDiscountAction,
 } from "@/lib/admin/actions";
 import type { AdminDiscount, Wine } from "@/lib/admin/types";
@@ -26,13 +27,31 @@ export function DiscountsManager({ discounts, wines }: DiscountsManagerProps) {
       <section className={styles.list}>
         {discounts.length > 0 ? (
           discounts.map((discount) => (
-            <article className={styles.panel} key={discount.id}>
+            <article
+              className={`${styles.panel} ${discount.active ? "" : styles.pausedPanel}`}
+              key={discount.id}
+            >
               <div className={styles.discountHeader}>
                 <div>
-                  <p className={styles.kicker}>{discount.wine_count} {discount.wine_count === 1 ? "vino" : "vinos"}</p>
+                  <div className={styles.statusRow}>
+                    <p className={styles.kicker}>
+                      {discount.wine_count} {discount.wine_count === 1 ? "vino" : "vinos"}
+                    </p>
+                    <span className={discount.active ? styles.activeStatus : styles.pausedStatus}>
+                      {discount.active ? "Activo" : "Pausado"}
+                    </span>
+                  </div>
                   <h3>{discount.name}</h3>
-                  <p>{discount.percent}% de descuento aplicado.</p>
+                  <p>
+                    {discount.percent}% de descuento {discount.active ? "aplicado." : "guardado, sin aplicar."}
+                  </p>
                 </div>
+                <form action={toggleDiscountActiveAction} className={styles.statusForm}>
+                  <input type="hidden" name="discount_id" value={discount.id} />
+                  <button className="secondary" type="submit">
+                    {discount.active ? "Pausar descuento" : "Reactivar descuento"}
+                  </button>
+                </form>
               </div>
               <details className={styles.discountDetails}>
                 <summary>

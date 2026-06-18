@@ -52,6 +52,7 @@ export async function getAdminDiscounts(): Promise<AdminDiscount[]> {
   });
 
   return discounts.map((discount) => ({
+    active: discount.active,
     id: discount.id,
     name: discount.name,
     percent: discount.percent,

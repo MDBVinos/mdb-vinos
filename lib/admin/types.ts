@@ -21,6 +21,7 @@ export type Wine = {
 };
 
 export type AdminDiscount = {
+  active: boolean;
   id: string;
   name: string;
   percent: number;
